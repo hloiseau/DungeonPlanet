@@ -20,6 +20,8 @@ namespace ShooterTEST.Sprites
         public Vector2 Position;
         public Vector2 Origin;
 
+        public Vector2 distance;
+
         public Vector2 Direction;
         public float RotationVelocity = 3f;
         public float LinearVelocity = 4f;

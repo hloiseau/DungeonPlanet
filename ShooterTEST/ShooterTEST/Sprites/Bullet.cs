@@ -10,10 +10,17 @@ namespace ShooterTEST.Sprites
 {
     public class Bullet : Sprite
     {
+        Weapon _context;
         private float _timer;
         public Bullet(Texture2D Texture) : base(Texture)
         {
+            Origin = new Vector2(1, 12);
+        }
 
+        public Bullet(Texture2D Texture, Weapon context) : base(Texture)
+        {
+            _context = context;
+            Origin = new Vector2(1, 12);
         }
         public override void Update(GameTime gameTime, List<Sprite> sprites)
         {
@@ -23,5 +30,6 @@ namespace ShooterTEST.Sprites
 
             Position += Direction * LinearVelocity;
         }
+        //public BulletRotation{ _context.rotation; }
     }
 }

@@ -11,8 +11,10 @@ namespace ShooterTEST
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
         private List<Sprite> _sprites;
+
+        public float ScreenHeight { get => GraphicsDevice.Viewport.Height; }
+        public float ScreenWidth { get => GraphicsDevice.Viewport.Width; }
 
         public Game1()
         {
@@ -29,13 +31,18 @@ namespace ShooterTEST
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            var shipTexture = Content.Load<Texture2D>("caracter");
+            var weaponTexture = Content.Load<Texture2D>("caracter_arm");
+            var playerTexture = Content.Load<Texture2D>("caracter");
             _sprites = new List<Sprite>()
             {
-                new Ship(shipTexture)
+                new Weapon(weaponTexture, this)
                 {
                     Position = new Vector2(100, 100),
                     Bullet = new Bullet(Content.Load<Texture2D>("bullet")),
+                },
+                new Player(playerTexture, this)
+                {
+                    Position = new Vector2(100, 100)
                 }
             };
         }

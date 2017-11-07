@@ -45,7 +45,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprites\Bullet.cs" />
-    <Compile Include="Sprites\Ship.cs" />
+    <Compile Include="Sprites\Player.cs" />
+    <Compile Include="Sprites\Weapon.cs" />
     <Compile Include="Sprites\Sprite.cs" />
   </ItemGroup>
   <ItemGroup>

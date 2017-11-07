@@ -37,7 +37,7 @@ namespace Platformer
 
         private void SimulateFriction()
         {
-            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .08f; }
+            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
             else { Movement -= Movement * Vector2.One * .02f; }
         }
 
