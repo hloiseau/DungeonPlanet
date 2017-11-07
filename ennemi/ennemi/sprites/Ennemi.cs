@@ -28,9 +28,9 @@ namespace ennemi.sprites
 
         public override void Update(GameTime gametime, List<Sprite> sprites)
         {
-            Vector2 destination = FindHero(sprites);
+           /* Vector2 destination = FindHero(sprites);
             if (Position == FindHero(sprites))
-            {
+            {*/
                 Position += _velocity;
                 if (_distance == 0)
                 {
@@ -45,7 +45,7 @@ namespace ennemi.sprites
 
                 if (right) _distance += 1;
                 else _distance -= 1;
-            }
+            //}
         }
 
         Vector2 FindHero(List<Sprite> sprites)
