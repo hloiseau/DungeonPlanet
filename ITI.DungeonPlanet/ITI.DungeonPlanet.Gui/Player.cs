@@ -4,11 +4,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Platformer
 {
-    public class Jumper : Sprite
+    public class Player : Sprite
     {
         public Vector2 Movement { get; set; }
         private Vector2 oldPosition;
-        public Jumper(Texture2D texture, Vector2 position, SpriteBatch spritebatch)
+        public Player(Texture2D texture, Vector2 position, SpriteBatch spritebatch)
             : base(texture, position, spritebatch)
         { }
 

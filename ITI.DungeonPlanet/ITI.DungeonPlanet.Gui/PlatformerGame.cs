@@ -13,18 +13,18 @@ namespace Platformer
     /// Distribute and reuse freely, but please leave this comment
     /// </summary>
 
-    public class SimplePlatformerGame : Game
+    public class PlatformerGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Texture2D _tileTexture, _jumperTexture;
-        private Jumper _jumper;
+        private Player _player;
         private Board _board;
         private Random _rnd = new Random();
         private SpriteFont _debugFont;
         private Camera _camera;
 
-        public SimplePlatformerGame()
+        public PlatformerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -37,7 +37,7 @@ namespace Platformer
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
             _jumperTexture = Content.Load<Texture2D>("jumper");
-            _jumper = new Jumper(_jumperTexture, new Vector2(80, 80), _spriteBatch);
+            _player = new Player(_jumperTexture, new Vector2(80, 80), _spriteBatch);
             _board = new Board(_spriteBatch, _tileTexture, 15, 10);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
@@ -48,8 +48,8 @@ namespace Platformer
         {
             base.Update(gameTime);
             _camera.Update(gameTime);
-            _jumper.Update(gameTime);
-            _camera.Position = _jumper.Position;
+            _player.Update(gameTime);
+            _camera.Position = _player.Position;
             CheckKeyboardAndReact();
         }
 
@@ -70,8 +70,8 @@ namespace Platformer
 
         private void PutJumperInTopLeftCorner()
         {
-            _jumper.Position = Vector2.One * 80;
-            _jumper.Movement = Vector2.Zero;
+            _player.Position = Vector2.One * 80;
+            _player.Movement = Vector2.Zero;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -81,16 +81,16 @@ namespace Platformer
             base.Draw(gameTime);
             _board.Draw();
             WriteDebugInformation();
-            _jumper.Draw();
+            _player.Draw();
             _spriteBatch.End();
             _spriteBatch.Draw(gameTime, _camera.Debug);
         }
 
         private void WriteDebugInformation()
         {
-            string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", _jumper.Position.X, _jumper.Position.Y);
-            string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _jumper.Movement.X, _jumper.Movement.Y);
-            string isOnFirmGroundText = string.Format("On firm ground? : {0}", _jumper.IsOnFirmGround());
+            string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", _player.Position.X, _player.Position.Y);
+            string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _player.Movement.X, _player.Movement.Y);
+            string isOnFirmGroundText = string.Format("On firm ground? : {0}", _player.IsOnFirmGround());
 
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));

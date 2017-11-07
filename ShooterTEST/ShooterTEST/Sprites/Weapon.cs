@@ -92,7 +92,7 @@ namespace ShooterTEST.Sprites
             bullet.LinearVelocity = this.LinearVelocity * 2;
             bullet.LifeSpan = 2f;
             bullet.Parent = this;
-
+            bullet.Rotation = _rotation;
             sprites.Add(bullet);
         }
     }

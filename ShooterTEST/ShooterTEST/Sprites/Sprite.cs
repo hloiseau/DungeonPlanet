@@ -17,6 +17,12 @@ namespace ShooterTEST.Sprites
         protected KeyboardState _previousKey;
         protected MouseState _currentMouse;
 
+        public float Rotation
+        {
+            get { return _rotation; }
+            set { _rotation = value; }
+        }
+
         public Vector2 Position;
         public Vector2 Origin;
 
