@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Platformer
+namespace DungeonPlanet
 {
     public class Sprite
     {
         public Vector2 Position { get; set; }
         public Texture2D Texture { set; get; }
         public SpriteBatch SpriteBatch { get; set; }
-
-        public Rectangle Bounds
+        public System.Drawing.Rectangle Bounds
         {
-            get { return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height); }
+            get { return new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height); }
         }
-
         public Sprite(Texture2D texture, Vector2 position, SpriteBatch batch)
         {
             Texture = texture;

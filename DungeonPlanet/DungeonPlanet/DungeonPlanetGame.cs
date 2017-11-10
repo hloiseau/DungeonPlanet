@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Comora;
 
-namespace Platformer
+namespace DungeonPlanet
 {
     /// <summary>
     /// Simple code for a platformer game
@@ -13,7 +13,7 @@ namespace Platformer
     /// Distribute and reuse freely, but please leave this comment
     /// </summary>
 
-    public class PlatformerGame : Game
+    public class DungeonPlanetGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -24,7 +24,7 @@ namespace Platformer
         private SpriteFont _debugFont;
         private Camera _camera;
 
-        public PlatformerGame()
+        public DungeonPlanetGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -70,8 +70,8 @@ namespace Platformer
 
         private void PutJumperInTopLeftCorner()
         {
-            _player.Position = Vector2.One * 80;
-            _player.Movement = Vector2.Zero;
+            _player.PlayerLib.Position = System.Numerics.Vector2.One * 80;
+            _player.PlayerLib.Movement = System.Numerics.Vector2.Zero;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -88,9 +88,9 @@ namespace Platformer
 
         private void WriteDebugInformation()
         {
-            string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", _player.Position.X, _player.Position.Y);
-            string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _player.Movement.X, _player.Movement.Y);
-            string isOnFirmGroundText = string.Format("On firm ground? : {0}", _player.IsOnFirmGround());
+            string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", _player.PlayerLib.Position.X, _player.Position.Y);
+            string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _player.PlayerLib.Movement.X, _player.PlayerLib.Movement.Y);
+            string isOnFirmGroundText = string.Format("On firm ground? : {0}", _player.PlayerLib.IsOnFirmGround());
 
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));

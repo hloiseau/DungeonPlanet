@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
+using System.Numerics;
+using System.Drawing;
 
-namespace Platformer
+namespace DungeonPlanet.Library
 {
     public struct MovementWrapper
     {

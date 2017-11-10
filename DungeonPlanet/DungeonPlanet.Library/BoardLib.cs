@@ -1,55 +1,54 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Numerics;
+using System.Drawing;
 
-namespace Platformer
+namespace DungeonPlanet.Library
 {
-    public class Board
+
+    public class BoardLib
     {
-        public Tile[,] Tiles { get; set; }
+        public TileLib[,] Tiles { get; set; }
         public int Columns { get; set; }
         public int Rows { get; set; }
-        public Texture2D TileTexture { get; set; }
-        private SpriteBatch SpriteBatch { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         private Random _rnd = new Random();
-        public static Board CurrentBoard { get; private set; }
+        public static BoardLib CurrentBoard { get; private set; }
 
-        public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
+        public BoardLib(int columns, int rows, int width, int height)
         {
             Columns = columns;
             Rows = rows;
-            TileTexture = tileTexture;
-            SpriteBatch = spritebatch;
-            Tiles = new Tile[Columns, Rows];
-            CreateNewBoard();
-            Board.CurrentBoard = this;
+            Width = width;
+            Height = height;
+            Tiles = new TileLib[Columns, Rows];
+            CurrentBoard = this;
         }
 
-        public void CreateNewBoard()
-        {
-            InitializeAllTilesAndBlockSomeRandomly();
-            SetAllBorderTilesBlocked();
-            SetTopLeftTileUnblocked();
-        }
-
-        private void SetTopLeftTileUnblocked()
+        public void SetTopLeftTileUnblocked()
         {
             Tiles[1, 1].IsBlocked = false;
         }
 
-        private void InitializeAllTilesAndBlockSomeRandomly()
+        public void InitializeAllTilesAndBlockSomeRandomly()
         {
             for (int x = 0; x < Columns; x++)
             {
                 for (int y = 0; y < Rows; y++)
                 {
-                    Vector2 tilePosition = new Vector2(x * TileTexture.Width, y * TileTexture.Height);
-                    Tiles[x, y] = new Tile(TileTexture, tilePosition, SpriteBatch, _rnd.Next(5) == 0);
+                    Vector2 tilePosition = new Vector2(x * Width, y * Height);
+                    Rectangle tileBounds = new Rectangle((int)tilePosition.X, (int)tilePosition.Y, Width, Height);
+                    TileLib tile = new TileLib(tilePosition, tileBounds, _rnd.Next(5) == 0);
+                    Tiles[x, y] = tile;
                 }
             }
         }
 
-        private void SetAllBorderTilesBlocked()
+        public void SetAllBorderTilesBlocked()
         {
             for (int x = 0; x < Columns; x++)
             {
@@ -60,20 +59,11 @@ namespace Platformer
                 }
             }
         }
-
-        public void Draw()
-        {
-            foreach (var tile in Tiles)
-            {
-                tile.Draw();
-            }
-        }
-
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
         {
             foreach (var tile in Tiles)
             {
-                if (tile.IsBlocked && tile.Bounds.Intersects(rectangleToCheck))
+                if (tile.IsBlocked && tile.Bounds.IntersectsWith(rectangleToCheck))
                 {
                     return false;
                 }
@@ -102,12 +92,12 @@ namespace Platformer
             return move.FurthestAvailableLocationSoFar;
         }
 
-        private Rectangle CreateRectangleAtPosition(Vector2 positionToTry, int width, int height)
+        public Rectangle CreateRectangleAtPosition(Vector2 positionToTry, int width, int height)
         {
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
-        private Vector2 CheckPossibleNonDiagonalMovement(MovementWrapper wrapper, int i)
+        public Vector2 CheckPossibleNonDiagonalMovement(MovementWrapper wrapper, int i)
         {
             if (wrapper.IsDiagonalMove)
             {

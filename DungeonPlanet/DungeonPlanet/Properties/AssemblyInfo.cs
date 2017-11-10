@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ITI.DungeonPlanet.Gui")]
-[assembly: AssemblyProduct("ITI.DungeonPlanet.Gui")]
+[assembly: AssemblyTitle("DungeonPlanet")]
+[assembly: AssemblyProduct("DungeonPlanet")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("db509ac7-4394-4bec-8609-ceb5c0a4eddd")]
+[assembly: Guid("3924472f-441a-4770-812b-03f1b213558b")]
 
 // Version information for an assembly consists of the following four values:
 //
