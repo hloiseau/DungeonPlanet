@@ -17,7 +17,7 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _jumperTexture;
+        private Texture2D _tileTexture, _playerTexture, _weaponTexture, _bulletTexture;
         private Player _player;
         private Board _board;
         private Random _rnd = new Random();
@@ -28,17 +28,20 @@ namespace DungeonPlanet
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            _graphics.PreferredBackBufferWidth = 960;
-            _graphics.PreferredBackBufferHeight = 640;
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            IsMouseVisible = true;
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
-            _jumperTexture = Content.Load<Texture2D>("jumper");
-            _player = new Player(_jumperTexture, new Vector2(80, 80), _spriteBatch);
-            _board = new Board(_spriteBatch, _tileTexture, 15, 10);
+            _playerTexture = Content.Load<Texture2D>("player");
+            _weaponTexture = Content.Load<Texture2D>("player_arm");
+            _bulletTexture = Content.Load<Texture2D>("bullet"); 
+            _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch);
+            _board = new Board(_spriteBatch, _tileTexture, 62, 50);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent(GraphicsDevice);
