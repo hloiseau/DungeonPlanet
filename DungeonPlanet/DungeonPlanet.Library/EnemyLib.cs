@@ -16,6 +16,7 @@ namespace DungeonPlanet.Library
 
         int _height;
         int _width;
+        float _timer;
 
         public Rectangle Bounds
         {
@@ -73,6 +74,16 @@ namespace DungeonPlanet.Library
             Movement += Vector2.UnitX * .65f;
         }
 
+        public void Timer(float gameTime)
+        {
+            _timer += gameTime;
+        }
+
+        public void MakeDamage()
+        {
+
+        }
+
         public void StopMovingIfBlocked()
         {
             Vector2 lastMovement = Position - OldPosition;
@@ -80,15 +91,6 @@ namespace DungeonPlanet.Library
             if (lastMovement.Y == 0) { Movement *= Vector2.UnitX; }
         }
 
-        public void MovementPatterns()
-        {
-           
-        }
-
-        public void followingTheHero()
-        {
-
-        }
         public Vector2 GetDistanceTo(Vector2 destination)
         {
             return new Vector2(destination.X - Position.X, destination.Y - Position.Y);

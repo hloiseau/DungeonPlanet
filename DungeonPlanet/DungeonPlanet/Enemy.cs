@@ -1,11 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using DungeonPlanet.Library;
 
 namespace DungeonPlanet
@@ -15,16 +13,14 @@ namespace DungeonPlanet
         public EnemyLib EnemyLib { get; set; }
         public PlayerLib PlayerLib { get; set; }
 
-        int _time;
         Player _player;
 
-        public Enemy(Player player,Texture2D texture, Vector2 position, SpriteBatch spritebatch)
+        public Enemy(Player player, Texture2D texture, Vector2 position, SpriteBatch spritebatch)
             : base(texture, position, spritebatch)
         {
             EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height);
             _player = player;
             PlayerLib = _player.PlayerLib;
-            _time = 0;
         }
 
         public void Update(GameTime gameTime)
@@ -41,10 +37,11 @@ namespace DungeonPlanet
         {
             if (EnemyLib.Vision.IntersectsWith(PlayerLib.Bounds))
             {
-                if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 1) { EnemyLib.Left(); }
-                if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 1) { EnemyLib.Right(); }
+                if (EnemyLib.Bounds.IntersectsWith(PlayerLib.Bounds)) { EnemyLib.MakeDamage(); }
+                if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1) { EnemyLib.Left(); }
+                if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 0.1) { EnemyLib.Right(); }
                 /*if (EnemyLib.GetDistanceTo(PlayerLib.Position).X == 0) { EnemyLib.Position = PlayerLib.Position; };*/
-                if (EnemyLib.GetDistanceTo(PlayerLib.Position).X == 0) { EnemyLib.Position = PlayerLib.Position; };
+
             }
         }
     }
