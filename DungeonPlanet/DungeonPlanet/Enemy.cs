@@ -15,6 +15,7 @@ namespace DungeonPlanet
         public PlayerLib PlayerLib { get; set; }
 
         Player _player;
+        public int Life { get; set; }
 
         public Enemy(Player player, Texture2D texture, Vector2 position, SpriteBatch spritebatch)
             : base(texture, position, spritebatch)
@@ -22,6 +23,7 @@ namespace DungeonPlanet
             EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height);
             _player = player;
             PlayerLib = _player.PlayerLib;
+            Life = 30;
         }
 
         public void Update(GameTime gameTime)
@@ -38,7 +40,11 @@ namespace DungeonPlanet
         {
             if (EnemyLib.Vision.IntersectsWith(PlayerLib.Bounds))
             {
-                if (EnemyLib.Bounds.IntersectsWith(PlayerLib.Bounds)) { EnemyLib.MakeDamage(); }
+                if (EnemyLib.Bounds.IntersectsWith(PlayerLib.Bounds))
+                {
+                    _player.Life -= 10;
+                    EnemyLib.MakeDamage(PlayerLib);
+                }
                 if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1) { EnemyLib.Left(); }
                 if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 0.1) { EnemyLib.Right(); }
                 /*if (EnemyLib.GetDistanceTo(PlayerLib.Position).X == 0) { EnemyLib.Position = PlayerLib.Position; };*/

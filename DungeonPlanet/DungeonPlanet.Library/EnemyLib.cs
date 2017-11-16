@@ -79,9 +79,25 @@ namespace DungeonPlanet.Library
             _timer += gameTime;
         }
 
-        public void MakeDamage()
+        public void MakeDamage(PlayerLib playerLib)
         {
+            if(GetDistanceTo(playerLib.Position).X < 0.1 )
+            {
+                Movement += Vector2.UnitX * 50f;
+                playerLib.Movement -= Vector2.UnitX * 10f;
+                playerLib.Movement -= Vector2.UnitY * 5f;
+            }
+            if (GetDistanceTo(playerLib.Position).X > 0.1)
+            {
+                Movement -= Vector2.UnitX * 50f;
+                playerLib.Movement += Vector2.UnitX * 10f;
+                playerLib.Movement -= Vector2.UnitY * 5f;
+            }
 
+            if(_timer < 10)
+            {
+                
+            }
         }
 
         public void StopMovingIfBlocked()

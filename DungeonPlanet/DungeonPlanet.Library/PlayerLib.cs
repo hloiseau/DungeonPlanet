@@ -13,12 +13,14 @@ namespace DungeonPlanet.Library
         public Vector2 Movement { get; set; }
         public Vector2 Position { get; set; }
         public Vector2  OldPosition{ get; set; }
+
         int _height;
         int _width;
         public Rectangle Bounds
         {
             get { return new Rectangle((int)Position.X, (int)Position.Y, _width, _height); }
         }
+
         public bool IsDead(int life)
         {
             return life <= 0;

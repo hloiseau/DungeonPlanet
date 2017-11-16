@@ -17,8 +17,9 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _playerTexture, _weaponTexture, _bulletTexture, _mediTexture;
+        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _weaponTexture, _bulletTexture, _mediTexture;
         private Player _player;
+        private Enemy _enemy;
         private Board _board;
         private Random _rnd = new Random();
         private MediPack _mediPack;
@@ -39,10 +40,12 @@ namespace DungeonPlanet
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
+            _enemyTexture = Content.Load<Texture2D>("enemy");
             _weaponTexture = Content.Load<Texture2D>("player_arm");
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _mediTexture = Content.Load<Texture2D>("Medipack");
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch);
+            _enemy = new Enemy(_player, _enemyTexture, new Vector2(500, 200), _spriteBatch);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _board = new Board(_spriteBatch, _tileTexture, 15, 10);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
@@ -55,7 +58,8 @@ namespace DungeonPlanet
             base.Update(gameTime);
             _camera.Update(gameTime);
             _player.Update(gameTime);
-            if(_mediPack != null)
+            _enemy.Update(gameTime);
+            if (_mediPack != null)
             {
                 _mediPack.Update();
                 if (_mediPack.IsFinished)
@@ -101,6 +105,7 @@ namespace DungeonPlanet
             if (_mediPack != null) _mediPack.Draw();
             WriteDebugInformation();
             _player.Draw();
+            _enemy.Draw();
             _spriteBatch.End();
             _spriteBatch.Draw(gameTime, _camera.Debug);
         }

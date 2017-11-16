@@ -21,7 +21,7 @@ namespace DungeonPlanet
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X,position.Y), texturePlayer.Width, texturePlayer.Height);
             Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, PlayerLib);
-            Life = 20;
+            Life = 70;
         }
         
         public void Update(GameTime gameTime)
