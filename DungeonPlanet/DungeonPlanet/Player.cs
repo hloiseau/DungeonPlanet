@@ -14,13 +14,14 @@ namespace DungeonPlanet
     {
         public PlayerLib PlayerLib { get; set; }
         public  Weapon Weapon { get; set; }
-
+        public int Life { get; set; }
 
         public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch)
             : base(texturePlayer, position, spritebatch)
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X,position.Y), texturePlayer.Width, texturePlayer.Height);
             Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, PlayerLib);
+            Life = 20;
         }
         
         public void Update(GameTime gameTime)
@@ -30,8 +31,10 @@ namespace DungeonPlanet
             PlayerLib.SimulateFriction();
             PlayerLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             PlayerLib.StopMovingIfBlocked();
+            PlayerLib.IsDead(Life);
             Position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y);
             Weapon.Update(gameTime);
+            Life = MathHelper.Clamp(Life, 0, 100);
         }
 
         private void CheckKeyboardAndUpdateMovement()

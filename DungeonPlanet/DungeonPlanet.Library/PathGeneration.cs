@@ -9,7 +9,7 @@ using System.Drawing;
 namespace DungeonPlanet.Library
 {
 
-    public class BoardLib
+    public class PathGeneration
     {
         public TileLib[,] Tiles { get; set; }
         public int Columns { get; set; }
@@ -17,22 +17,14 @@ namespace DungeonPlanet.Library
         public int Width { get; set; }
         public int Height { get; set; }
         private Random _rnd = new Random();
-        public static BoardLib CurrentBoard { get; private set; }
 
-        public BoardLib(int columns, int rows, int width, int height)
+        public PathGeneration(int columns, int rows, int width, int height)
         {
             Columns = columns;
             Rows = rows;
             Width = width;
             Height = height;
             Tiles = new TileLib[Columns, Rows];
-            CurrentBoard = this;
-        }
-
-        public void SetTopLeftTileUnblocked()
-        {
-            Tiles[1, 1].IsBlocked = false;
-            Tiles[1, 2].IsBlocked = false;
         }
 
         public void InitializeAllTilesAndBlockSomeRandomly()

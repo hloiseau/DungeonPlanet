@@ -19,7 +19,10 @@ namespace DungeonPlanet.Library
         {
             get { return new Rectangle((int)Position.X, (int)Position.Y, _width, _height); }
         }
-
+        public bool IsDead(int life)
+        {
+            return life <= 0;
+        }
         public PlayerLib( Vector2 position, int width, int height)
         {
             Position = position;

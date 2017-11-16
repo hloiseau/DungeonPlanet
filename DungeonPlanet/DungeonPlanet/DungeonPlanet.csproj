@@ -45,6 +45,7 @@
     <Compile Include="Board.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="DungeonPlanetGame.cs" />
+    <Compile Include="MediPack.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
