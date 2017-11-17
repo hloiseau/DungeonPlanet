@@ -15,6 +15,7 @@ namespace DungeonPlanet
         public PlayerLib PlayerLib { get; set; }
 
         Player _player;
+        int _count;
 
         public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch)
             : base(texture, position, spritebatch)
@@ -22,11 +23,12 @@ namespace DungeonPlanet
             EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 30);
             _player = Player.CurrentPlayer;
             PlayerLib = Player.CurrentPlayer.PlayerLib;
+            _count = 0;
         }
 
         public void Update(GameTime gameTime)
         {
-            CheckKeyboardAndUpdateMovement();
+            CheckKeyboardAndUpdateMovement(gameTime);
             EnemyLib.AffectWithGravity();
             EnemyLib.SimulateFriction();
             EnemyLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 40);
@@ -35,7 +37,7 @@ namespace DungeonPlanet
             EnemyLib.Life = MathHelper.Clamp(EnemyLib.Life, 0, 100);
         }
 
-        private void CheckKeyboardAndUpdateMovement()
+        private void CheckKeyboardAndUpdateMovement(GameTime gameTime)
         {
             if (EnemyLib.Vision.IntersectsWith(PlayerLib.Bounds))
             {
@@ -49,6 +51,25 @@ namespace DungeonPlanet
                 /*if (EnemyLib.GetDistanceTo(PlayerLib.Position).X == 0) { EnemyLib.Position = PlayerLib.Position; };*/
 
             }
+            else
+            {
+                if (_count <= 100)
+                {
+                    EnemyLib.Left();
+                    _count++;
+                }
+                else if(_count <= 200 && _count > 100)
+                {
+                    EnemyLib.Right();
+                    _count++;
+                }
+                else
+                {
+                    _count = 0;
+                }
+
+            }
+
         }
     }
 }
