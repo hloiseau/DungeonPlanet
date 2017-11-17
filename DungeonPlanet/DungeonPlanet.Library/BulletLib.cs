@@ -17,18 +17,18 @@ namespace DungeonPlanet.Library
         Vector2 _position;
         int _height;
         int _width;
-        public BulletLib(WeaponLib ctx,Vector2 position,int height, int width)
+        int _damage;
+
+        public BulletLib(WeaponLib ctx, Vector2 position, int height, int width)
         {
             _direction = ctx.Direction;
             _position = position;
             _height = height;
             _width = width;
+            _damage = 10;
         }
 
-        public Rectangle Bounds
-        {
-            get { return new Rectangle((int)_position.X, (int)_position.Y, _width, _height); }
-        }
+
         public void Timer(float gameTime)
         {
             _timer += gameTime;
@@ -41,5 +41,8 @@ namespace DungeonPlanet.Library
         {
             return _position = _direction * _linearVelocity;
         }
+
+
+        
     }
 }

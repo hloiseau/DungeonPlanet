@@ -13,20 +13,46 @@ namespace DungeonPlanet
     {
         float _rotation;
         Vector2 _origin;
-
+        List<Enemy> _enemys;
         public BulletLib BulletLib { get; set; }
-        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx)
+        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx, List<Enemy> enemys)
             : base(texture, position, spritebatch)
         {
             _origin = new Vector2(1, 12);
             _rotation = ctx.Rotation;
-            BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(Position.X, Position.Y),texture.Height,texture.Width);
+            BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(Position.X, Position.Y), texture.Height, texture.Width);
+            _enemys = enemys;
         }
         public void Update(GameTime gameTime)
         {
             BulletLib.Timer((float)gameTime.ElapsedGameTime.TotalSeconds);
-            BulletLib.IsDead();
             Position += new Vector2(BulletLib.PositionUpdate().X,BulletLib.PositionUpdate().Y);
+        }
+        public bool HasTouchedEnemy()
+        {
+            foreach (Enemy enemy in _enemys)
+            {
+                if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(enemy.EnemyLib.Bounds))
+                {
+                    enemy.EnemyLib.Life -= 10;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool HasTouchedTile()
+        {
+            foreach(TileLib tile in BoardLib.CurrentBoard.Tiles)
+            {
+                if (tile.IsBlocked)
+                {
+                    if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         public override void Draw()
         {

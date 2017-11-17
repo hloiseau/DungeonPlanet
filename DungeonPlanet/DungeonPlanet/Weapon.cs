@@ -20,8 +20,9 @@ namespace DungeonPlanet
         Texture2D _bulletTexture;
         int _time;
         DungeonPlanetGame _ctx;
+        List<Enemy> _enemys;
 
-        public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx,Vector2 position, SpriteBatch spritebatch, PlayerLib playerLib)
+        public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx,Vector2 position, SpriteBatch spritebatch, PlayerLib playerLib, List<Enemy> enemys)
             : base(weaponTexture, position, spritebatch)
         {
             _playerLib = playerLib;
@@ -32,6 +33,7 @@ namespace DungeonPlanet
             _time = 0;
             _ctx = ctx;
             _bulletTexture = bulletTexture;
+            _enemys = enemys;
         }
 
         public void Update(GameTime gameTime)
@@ -54,7 +56,7 @@ namespace DungeonPlanet
             {
                 if(_time >= 15)
                 {
-                    bullet = new Bullet(_bulletTexture, Position, SpriteBatch, WeaponLib);
+                    bullet = new Bullet(_bulletTexture, Position, SpriteBatch, WeaponLib, _enemys);
                     Bullets.Add(bullet);
                     _time = 0;
                 }
@@ -68,7 +70,7 @@ namespace DungeonPlanet
         {
             for (int i = 0; i < Bullets.Count; i++)
             {
-                if (Bullets[i].BulletLib.IsDead())
+                if (Bullets[i].BulletLib.IsDead() || Bullets[i].HasTouchedEnemy() || Bullets[i].HasTouchedTile())
                 {
                     Bullets.Remove(Bullets[i]);
                 }

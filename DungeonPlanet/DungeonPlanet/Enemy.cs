@@ -15,15 +15,13 @@ namespace DungeonPlanet
         public PlayerLib PlayerLib { get; set; }
 
         Player _player;
-        public int Life { get; set; }
 
-        public Enemy(Player player, Texture2D texture, Vector2 position, SpriteBatch spritebatch)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch)
             : base(texture, position, spritebatch)
         {
-            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height);
-            _player = player;
-            PlayerLib = _player.PlayerLib;
-            Life = 30;
+            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 30);
+            _player = Player.CurrentPlayer;
+            PlayerLib = Player.CurrentPlayer.PlayerLib;
         }
 
         public void Update(GameTime gameTime)
@@ -34,6 +32,7 @@ namespace DungeonPlanet
             EnemyLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 40);
             EnemyLib.StopMovingIfBlocked();
             Position = new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y);
+            EnemyLib.Life = MathHelper.Clamp(EnemyLib.Life, 0, 100);
         }
 
         private void CheckKeyboardAndUpdateMovement()

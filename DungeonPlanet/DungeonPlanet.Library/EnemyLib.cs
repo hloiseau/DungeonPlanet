@@ -13,10 +13,11 @@ namespace DungeonPlanet.Library
         public Vector2 Movement { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 OldPosition { get; set; }
-
+        public int Life { get; set; }
         int _height;
         int _width;
         float _timer;
+        public static EnemyLib CurrentEnemyLib { get; private set; }
 
         public Rectangle Bounds
         {
@@ -28,11 +29,13 @@ namespace DungeonPlanet.Library
             get { return new Rectangle((int)Position.X - 375, (int)Position.Y, _width * 20, _height); }
         }
 
-        public EnemyLib(Vector2 position, int width, int height)
+        public EnemyLib(Vector2 position, int width, int height,int life)
         {
             Position = position;
             _height = height;
             _width = width;
+            Life = life;
+            CurrentEnemyLib = this;
         }
 
         public void MoveAsFarAsPossible(float gameTime)

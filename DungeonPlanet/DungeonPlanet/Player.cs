@@ -15,13 +15,14 @@ namespace DungeonPlanet
         public PlayerLib PlayerLib { get; set; }
         public  Weapon Weapon { get; set; }
         public int Life { get; set; }
-
-        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch)
+        public static Player CurrentPlayer { get; private set; }
+        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys)
             : base(texturePlayer, position, spritebatch)
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X,position.Y), texturePlayer.Width, texturePlayer.Height);
-            Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, PlayerLib);
+            Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, PlayerLib, enemys);
             Life = 70;
+            CurrentPlayer = this;
         }
         
         public void Update(GameTime gameTime)
