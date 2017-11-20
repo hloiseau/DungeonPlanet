@@ -32,11 +32,12 @@ namespace DungeonPlanet
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             IsMouseVisible = true;
-            Enemys = new List<Enemy>();
+            
         }
 
         protected override void LoadContent()
         {
+            Enemys = new List<Enemy>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
@@ -47,7 +48,7 @@ namespace DungeonPlanet
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys);
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
-            _board = new Board(_spriteBatch, _tileTexture, 15, 10);
+            _board = new Board(_spriteBatch, _tileTexture, 25, 10);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent(GraphicsDevice);

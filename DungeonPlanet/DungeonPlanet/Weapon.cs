@@ -26,8 +26,8 @@ namespace DungeonPlanet
             : base(weaponTexture, position, spritebatch)
         {
             _playerLib = playerLib;
-            _origin = new Vector2(6, 30);
-            Position = new Vector2(_playerLib.Position.X, _playerLib.Position.Y);
+            _origin = new Vector2(5, 20);
+            Position = new Vector2(_playerLib.Position.X + 28, _playerLib.Position.Y + 28);
             WeaponLib = new WeaponLib();
             Bullets = new List<Bullet>();
             _time = 0;
@@ -40,7 +40,7 @@ namespace DungeonPlanet
         {
             CheckMouseAndUpdateMovement();
             BulletUpdate(gameTime);
-            Position = new Vector2(_playerLib.Position.X, _playerLib.Position.Y);
+            Position = new Vector2(_playerLib.Position.X + 28, _playerLib.Position.Y + 28);
             WeaponLib.Update(_currentMouse.X - _ctx.GraphicsDevice.Viewport.Width/2, _currentMouse.Y - _ctx.GraphicsDevice.Viewport.Height / 2);
 
         }

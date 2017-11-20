@@ -20,6 +20,7 @@ namespace DungeonPlanet
         {
             _origin = new Vector2(1, 12);
             _rotation = ctx.Rotation;
+            Position = new Vector2(Position.X + 50, Position.Y);
             BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(Position.X, Position.Y), texture.Height, texture.Width);
             _enemys = enemys;
         }

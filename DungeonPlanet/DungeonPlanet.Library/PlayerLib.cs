@@ -64,7 +64,7 @@ namespace DungeonPlanet.Library
 
         public void Left()
         {
-            Movement -= Vector2.UnitX * .5f;
+            Movement -= Vector2.UnitX;
         }
         public void Right()
         {
