@@ -41,6 +41,7 @@ namespace DungeonPlanet
             CheckMouseAndUpdateMovement();
             BulletUpdate(gameTime);
             Position = new Vector2(_playerLib.Position.X + 28, _playerLib.Position.Y + 28);
+
             WeaponLib.Update(_currentMouse.X - _ctx.GraphicsDevice.Viewport.Width/2, _currentMouse.Y - _ctx.GraphicsDevice.Viewport.Height / 2);
 
         }

@@ -67,9 +67,7 @@ namespace DungeonPlanet
                 {
                     _count = 0;
                 }
-
             }
-
         }
     }
 }
