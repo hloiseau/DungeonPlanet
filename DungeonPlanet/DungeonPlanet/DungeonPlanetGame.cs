@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Comora;
+using DungeonPlanet.Library;
 
 namespace DungeonPlanet
 {
@@ -24,7 +25,8 @@ namespace DungeonPlanet
         private SpriteFont _debugFont;
         private Camera _camera;
         public List<Enemy> Enemys { get; private set; }
-       
+        public PathGeneration PathGeneration { get; private set; }
+
         public DungeonPlanetGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -32,11 +34,14 @@ namespace DungeonPlanet
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             IsMouseVisible = true;
-            
+            PathGeneration = new PathGeneration(4, 4);
         }
 
         protected override void LoadContent()
         {
+            PathGeneration.InitializeBoard();
+            PathGeneration.CreatePath();
+            int[,] a = PathGeneration.Board;
             Enemys = new List<Enemy>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
