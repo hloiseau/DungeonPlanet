@@ -139,15 +139,11 @@ namespace DungeonPlanet
                 DrawWithShadow(enemyLifeText, new Vector2(70, 620));
             }
                 
-
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));
             DrawWithShadow("F5 for random board", new Vector2(70, 580));
             DrawWithShadow(playerLifeText, new Vector2(70, 600));
-            
-
-
         }
 
         private void DrawWithShadow(string text, Vector2 position)
