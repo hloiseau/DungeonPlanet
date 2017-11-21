@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using DungeonPlanet.Library;
+
+namespace DungeonPlanet
+{
+    public class Bullet : Sprite
+    {
+        float _rotation;
+        Vector2 _origin;
+        List<Enemy> _enemys;
+        public BulletLib BulletLib { get; set; }
+        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx, List<Enemy> enemys)
+            : base(texture, position, spritebatch)
+        {
+            _origin = new Vector2(1, 12);
+            _rotation = ctx.Rotation;
+            Position = new Vector2(Position.X + 50, Position.Y);
+            BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(Position.X, Position.Y), texture.Height, texture.Width);
+            _enemys = enemys;
+        }
+        public void Update(GameTime gameTime)
+        {
+            BulletLib.Timer((float)gameTime.ElapsedGameTime.TotalSeconds);
+            Position += new Vector2(BulletLib.PositionUpdate().X,BulletLib.PositionUpdate().Y);
+        }
+        public bool HasTouchedEnemy()
+        {
+            foreach (Enemy enemy in _enemys)
+            {
+                if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(enemy.EnemyLib.Bounds))
+                {
+                    enemy.EnemyLib.Life -= 10;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool HasTouchedTile()
+        {
+            foreach(TileLib tile in BoardLib.CurrentBoard.Tiles)
+            {
+                if (tile.IsBlocked)
+                {
+                    if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public override void Draw()
+        {
+            SpriteBatch.Draw(Texture, Position, null, Color.White, _rotation, _origin, 1, SpriteEffects.None, 0);
+        }
+    }
+}
