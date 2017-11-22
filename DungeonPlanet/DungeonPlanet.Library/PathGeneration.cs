@@ -14,49 +14,60 @@ namespace DungeonPlanet.Library
         public int Columns { get; set; }
         public int Rows { get; set; }
         private Random _rnd = new Random();
-        public int[,] Board { get; private set; }
+        public Direction[,] Board { get; private set; }
+
+        [Flags]
+        public enum Direction
+        {
+            None = 0,
+            Left = 1,
+            Right = 2,
+            Top = 4,
+            Bottom = 8
+        }
 
         public PathGeneration(int columns, int rows)
         {
             Columns = columns;
             Rows = rows;
-            Board = new int[columns, rows];
+            Board = new Direction[columns, rows];
         }
-        
+
         public void InitializeBoard()
         {
-            for(int x = 0; x < Columns; x++)
+            for (int x = 0; x < Columns; x++)
             {
-                for(int y = 0; y < Rows; y++)
+                for (int y = 0; y < Rows; y++)
                 {
                     Board[x, y] = 0;
                 }
             }
         }
-           
+
         public void CreatePath()
         {
             int x = 0;
             int y = _rnd.Next(Columns);
             int whereToGo;
             bool isOk = true;
-            Board[x,y] = 1;
             while (isOk)
             {
-                whereToGo = _rnd.Next(5);
-
-                if(whereToGo == 0)
+                whereToGo = _rnd.Next(1, 6);
+                if (whereToGo == 1)
                 {
                     isOk = Down(x, y);
                     x++;
-                    
                 }
-                else if (whereToGo == 1 || whereToGo == 2)
+                else if (whereToGo == 2 || whereToGo == 3)
                 {
                     y++;
                     if (y < Rows)
                     {
-                        Board[x, y] = 1;
+                        if ((Board[x, y] & Direction.Left) == Direction.None)
+                        {
+                            Board[x, y - 1] |= Direction.Right;
+                            Board[x, y] |= Direction.Left;
+                        }
                     }
                     else
                     {
@@ -64,13 +75,17 @@ namespace DungeonPlanet.Library
                         isOk = Down(x, y);
                         x++;
                     }
-                } 
-                else if (whereToGo == 3 || whereToGo == 4)
+                }
+                else if (whereToGo == 4 || whereToGo == 5)
                 {
                     y--;
                     if (y >= 0)
                     {
-                        Board[x, y] = 1;
+                        if ((Board[x, y] & Direction.Right) == Direction.None)
+                        {
+                            Board[x, y + 1] |= Direction.Left;
+                            Board[x, y] |= Direction.Right;
+                        }
                     }
                     else
                     {
@@ -82,14 +97,13 @@ namespace DungeonPlanet.Library
             }
         }
 
-
         private bool Down(int x, int y)
         {
-            Board[x, y] = 2;
+            Board[x, y] |= Direction.Bottom;
             x++;
             if (x < Rows)
             {
-                Board[x, y] = 3;
+                Board[x, y] |= Direction.Top;
                 return true;
             }
             else

@@ -8,12 +8,12 @@ using System.Drawing;
 
 namespace DungeonPlanet.Library
 {
-    public class TileLib
+    public class Tile
     {
         public Vector2 Position { get; set; }
         public Rectangle Bounds { get; set; }
         public bool IsBlocked { get; set; }
-        public TileLib(Vector2 position, Rectangle bounds, bool isBlocked)
+        public Tile(Vector2 position, Rectangle bounds, bool isBlocked)
         {
             Position = position;
             Bounds = bounds;

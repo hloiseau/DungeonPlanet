@@ -41,7 +41,7 @@ namespace DungeonPlanet
         {
             PathGeneration.InitializeBoard();
             PathGeneration.CreatePath();
-            int[,] a = PathGeneration.Board;
+            PathGeneration.Direction[,] a = PathGeneration.Board;
             Enemys = new List<Enemy>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
