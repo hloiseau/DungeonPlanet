@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Comora;
 using DungeonPlanet.Library;
-using DungeonPlanet.Library;
 namespace DungeonPlanet
 {
 
@@ -16,16 +15,18 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _enemyWeaponTexture, _weaponTexture, _bulletTexture, _bulletETexture, _mediTexture;
+        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _enemyWeaponTexture, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture, _mediTexture;
         private Player _player;
         private Enemy _enemy;
         private Enemy _enemy2;
+        private Boss _boss;
         private Board _board;
         private Random _rnd = new Random();
         private MediPack _mediPack;
         private SpriteFont _debugFont;
         private Camera _camera;
         public static List<Enemy> Enemys { get; private set; }
+        public List<Boss> Bosses { get; private set; }
         public PathGeneration PathGeneration { get; private set; }
 
         public DungeonPlanetGame()
@@ -44,11 +45,13 @@ namespace DungeonPlanet
             PathGeneration.CreatePath();
             PathGeneration.Direction[,] a = PathGeneration.Board;
             Enemys = new List<Enemy>();
+            Bosses = new List<Boss>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
+            _bossTexture = Content.Load<Texture2D>("boss");
             _weaponTexture = Content.Load<Texture2D>("player_arm");
             _enemyWeaponTexture = Content.Load<Texture2D>("player_arm");
             _bulletTexture = Content.Load<Texture2D>("bullet");
@@ -57,6 +60,7 @@ namespace DungeonPlanet
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys);
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
             _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
+            _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _board = new Board(_spriteBatch, _tileTexture, 25, 10);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
@@ -64,6 +68,7 @@ namespace DungeonPlanet
             _camera.LoadContent(GraphicsDevice);
             Enemys.Add(_enemy);
             Enemys.Add(_enemy2);
+            Bosses.Add(_boss);
         }
 
         protected override void Update(GameTime gameTime)
@@ -82,7 +87,19 @@ namespace DungeonPlanet
                     Enemys[i].Update(gameTime);
                 }
             }
-            
+
+            for (int i = 0; i < Bosses.Count; i++)
+            {
+                if (Bosses[i].BossLib.Life <= 0)
+                {
+                    Bosses.Remove(Bosses[i]);
+                }
+                else
+                {
+                    Bosses[i].Update(gameTime);
+                }
+            }
+
             if (_mediPack != null)
             {
                 _mediPack.Update();
@@ -128,6 +145,7 @@ namespace DungeonPlanet
             WriteDebugInformation();
             _player.Draw();
             foreach (Enemy enemy in Enemys) enemy.Draw();
+            foreach (Boss boss in Bosses) boss.Draw();
             _spriteBatch.End();
             _spriteBatch.Draw(gameTime, _camera.Debug);
         }
@@ -149,11 +167,14 @@ namespace DungeonPlanet
                 enemyLifeText = string.Format("ELife2: {0}/100", _enemy2.EnemyLib.Life);
                 DrawWithShadow(enemyLifeText, new Vector2(70, 640));
             }
+            string bossLifeText = string.Format("BLife: {0}/200", _boss.BossLib.Life);
+
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));
             DrawWithShadow("F5 for random board", new Vector2(70, 580));
             DrawWithShadow(playerLifeText, new Vector2(70, 600));
+            DrawWithShadow(bossLifeText, new Vector2(1300, 600));
         }
 
         private void DrawWithShadow(string text, Vector2 position)

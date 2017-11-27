@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
+    <Compile Include="Boss.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="DungeonPlanetGame.cs" />
     <Compile Include="Enemy.cs" />
