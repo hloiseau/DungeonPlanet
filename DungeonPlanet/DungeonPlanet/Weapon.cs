@@ -21,8 +21,9 @@ namespace DungeonPlanet
         Texture2D _bulletTexture;
         int _time;
         DungeonPlanetGame _ctx;
+        List<Boss> _bosses;
 
-        public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch)
+        public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Boss> bosses)
             : base(weaponTexture, position, spritebatch)
         {
             _origin = new Vector2(5, 20);
@@ -33,6 +34,7 @@ namespace DungeonPlanet
             _time = 0;
             _ctx = ctx;
             _bulletTexture = bulletTexture;
+            _bosses = bosses;
         }
         public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, EnemyLib enemyLib)
            : base(weaponTexture, position, spritebatch)
@@ -77,7 +79,7 @@ namespace DungeonPlanet
                 {
                     if (_time >= 15)
                     {
-                        bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib);
+                        bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib, _bosses);
                         Bullets.Add(bullet);
                         _time = 0;
                     }
@@ -109,7 +111,7 @@ namespace DungeonPlanet
         {
             for (int i = 0; i < Bullets.Count; i++)
             {
-                if (Bullets[i].BulletLib.IsDead() || Bullets[i].HasTouchedEnemy() || Bullets[i].HasTouchedTile())
+                if (Bullets[i].BulletLib.IsDead() || Bullets[i].HasTouchedEnemy() || Bullets[i].HasTouchedTile() || Bullets[i].HasTouchedBoss(Player.CurrentPlayer.PlayerLib))
                 {
                     Bullets.Remove(Bullets[i]);
                 }

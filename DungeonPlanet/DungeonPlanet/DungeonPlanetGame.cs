@@ -57,7 +57,7 @@ namespace DungeonPlanet
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
-            _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys);
+            _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
             _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch);

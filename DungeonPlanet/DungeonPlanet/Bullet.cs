@@ -14,15 +14,25 @@ namespace DungeonPlanet
         float _rotation;
         Vector2 _origin;
         List<Enemy> _enemys = DungeonPlanetGame.Enemys;
+        List<Boss> _bosses;
         public BulletLib BulletLib { get; set; }
-        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx)
+        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx, List<Boss> bosses)
             : base(texture, position, spritebatch)
         {
             _origin = new Vector2(1, 12);
             _rotation = ctx.Rotation;
             base.position = new Vector2(base.position.X + 50, base.position.Y);
             BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(base.position.X, base.position.Y), texture.Height, texture.Width);
-        }        
+            _bosses = bosses;
+        }
+        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx)
+           : base(texture, position, spritebatch)
+        {
+            _origin = new Vector2(1, 12);
+            _rotation = ctx.Rotation;
+            base.position = new Vector2(base.position.X + 50, base.position.Y);
+            BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(base.position.X, base.position.Y), texture.Height, texture.Width);
+        }
 
         public void Update(GameTime gameTime)
         {
@@ -37,6 +47,20 @@ namespace DungeonPlanet
                 {
                     enemy.EnemyLib.GotDamage();
                     enemy.EnemyLib.Life -= 10;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool HasTouchedBoss(PlayerLib playerLib)
+        {
+            foreach (Boss boss in _bosses)
+            {
+                if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(boss.BossLib.Bounds))
+                {
+                    boss.BossLib.Life -= 10;
+                    boss.BossLib.ReceiveDamage(playerLib);
                     return true;
                 }
             }
