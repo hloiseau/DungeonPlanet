@@ -56,7 +56,7 @@ namespace DungeonPlanet
 
         public bool HasTouchedTile()
         {
-            foreach(TileLib tile in BoardLib.CurrentBoard.Tiles)
+            foreach(Tile tile in BoardLib.CurrentBoard.Tiles)
             {
                 if (tile.IsBlocked)
                 {

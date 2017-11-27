@@ -11,7 +11,7 @@ namespace DungeonPlanet.Library
 
     public class BoardLib
     {
-        public TileLib[,] Tiles { get; set; }
+        public Tile[,] Tiles { get; set; }
         public int Columns { get; set; }
         public int Rows { get; set; }
         public int Width { get; set; }
@@ -25,7 +25,7 @@ namespace DungeonPlanet.Library
             Rows = rows;
             Width = width;
             Height = height;
-            Tiles = new TileLib[Columns, Rows];
+            Tiles = new Tile[Columns, Rows];
             CurrentBoard = this;
         }
 
@@ -43,7 +43,7 @@ namespace DungeonPlanet.Library
                 {
                     Vector2 tilePosition = new Vector2(x * Width, y * Height);
                     Rectangle tileBounds = new Rectangle((int)tilePosition.X, (int)tilePosition.Y, Width, Height);
-                    TileLib tile = new TileLib(tilePosition, tileBounds, /*_rnd.Next(5) == 0*/ false);
+                    Tile tile = new Tile(tilePosition, tileBounds, /*_rnd.Next(5) == 0*/ false);
                     Tiles[x, y] = tile;
                 }
             }

@@ -8,7 +8,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Comora;
 using DungeonPlanet.Library;
-using DungeonPlanet.Library;
+<<<<<<< HEAD
+=======
+
+>>>>>>> e657a8457b5f46e14f7c0965105c93bae7ab1e71
 namespace DungeonPlanet
 {
 
@@ -25,9 +28,14 @@ namespace DungeonPlanet
         private MediPack _mediPack;
         private SpriteFont _debugFont;
         private Camera _camera;
+<<<<<<< HEAD
         public static List<Enemy> Enemys { get; private set; }
+       
+=======
+        public List<Enemy> Enemys { get; private set; }
         public PathGeneration PathGeneration { get; private set; }
 
+>>>>>>> e657a8457b5f46e14f7c0965105c93bae7ab1e71
         public DungeonPlanetGame()
         {
             _graphics = new GraphicsDeviceManager(this);
