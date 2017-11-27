@@ -13,7 +13,11 @@ namespace DungeonPlanet.Library
         public Vector2 Movement { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 OldPosition { get; set; }
+        public Vector2 Distance { get; set; }
+        public float Rotation { get; set; }
+        public Vector2 Direction { get; set; }
         public int Life { get; set; }
+        public bool IsShooting { get; set; }
         int _height;
         int _width;
         float _timer;
@@ -84,22 +88,32 @@ namespace DungeonPlanet.Library
 
         public void MakeDamage(PlayerLib playerLib)
         {
-            if(GetDistanceTo(playerLib.Position).X < 0.1 )
+            if (GetDistanceTo(PlayerLib.Position).X < 0.1)
             {
                 Movement += Vector2.UnitX * 50f;
                 playerLib.Movement -= Vector2.UnitX * 10f;
                 playerLib.Movement -= Vector2.UnitY * 5f;
             }
-            if (GetDistanceTo(playerLib.Position).X > 0.1)
+            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
             {
                 Movement -= Vector2.UnitX * 50f;
                 playerLib.Movement += Vector2.UnitX * 10f;
                 playerLib.Movement -= Vector2.UnitY * 5f;
             }
-
-            if(_timer < 10)
+        }
+        public void GotDamage()
+        {
+            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
             {
-                
+                Movement += Vector2.UnitX * 50f;
+                this.Movement -= Vector2.UnitX * 10f;
+                this.Movement -= Vector2.UnitY * 5f;
+            }
+            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
+            {
+                Movement -= Vector2.UnitX * 50f;
+                this.Movement += Vector2.UnitX * 10f;
+                this.Movement -= Vector2.UnitY * 5f;
             }
         }
 
@@ -113,6 +127,22 @@ namespace DungeonPlanet.Library
         public Vector2 GetDistanceTo(Vector2 destination)
         {
             return new Vector2(destination.X - Position.X, destination.Y - Position.Y);
+        }
+
+        public void Update(float X, float Y)
+        {
+            Distance = new Vector2(X, Y);
+            Rotation = RotationSet(Distance);
+            Direction = DirectionSet(Rotation);
+        }
+
+        public float RotationSet(Vector2 distance)
+        {
+            return (float)Math.Atan2(distance.Y, distance.X);
+        }
+        public Vector2 DirectionSet(float rotation)
+        {
+            return new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
         }
     }
 }

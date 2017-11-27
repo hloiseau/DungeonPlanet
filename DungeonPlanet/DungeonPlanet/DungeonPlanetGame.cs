@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Comora;
-
+using DungeonPlanet.Library;
 namespace DungeonPlanet
 {
 
@@ -15,15 +15,16 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _weaponTexture, _bulletTexture, _mediTexture;
+        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _enemyWeaponTexture, _weaponTexture, _bulletTexture, _bulletETexture, _mediTexture;
         private Player _player;
         private Enemy _enemy;
+        private Enemy _enemy2;
         private Board _board;
         private Random _rnd = new Random();
         private MediPack _mediPack;
         private SpriteFont _debugFont;
         private Camera _camera;
-        public List<Enemy> Enemys { get; private set; }
+        public static List<Enemy> Enemys { get; private set; }
        
         public DungeonPlanetGame()
         {
@@ -42,17 +43,22 @@ namespace DungeonPlanet
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
             _enemyTexture = Content.Load<Texture2D>("enemy");
+            _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _weaponTexture = Content.Load<Texture2D>("player_arm");
+            _enemyWeaponTexture = Content.Load<Texture2D>("player_arm");
             _bulletTexture = Content.Load<Texture2D>("bullet");
+            _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys);
-            _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch);
+            _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
+            _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _board = new Board(_spriteBatch, _tileTexture, 25, 10);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent(GraphicsDevice);
             Enemys.Add(_enemy);
+            Enemys.Add(_enemy2);
         }
 
         protected override void Update(GameTime gameTime)
@@ -81,7 +87,7 @@ namespace DungeonPlanet
                 }
             }
             if (_player.PlayerLib.IsDead(_player.Life)) RestartGame();
-            _camera.Position = _player.Position;
+            _camera.Position = _player.position;
             CheckKeyboardAndReact();
         }
 
@@ -103,7 +109,7 @@ namespace DungeonPlanet
 
         private void PutJumperInTopLeftCorner()
         {
-            _player.PlayerLib.Position = System.Numerics.Vector2.One * 80;
+            PlayerLib.Position = System.Numerics.Vector2.One * 80;
             _player.PlayerLib.Movement = System.Numerics.Vector2.Zero;
         }
 
@@ -116,7 +122,7 @@ namespace DungeonPlanet
             if (_mediPack != null) _mediPack.Draw();
             WriteDebugInformation();
             _player.Draw();
-            foreach (Enemy enemy in Enemys) _enemy.Draw();
+            foreach (Enemy enemy in Enemys) enemy.Draw();
             _spriteBatch.End();
             _spriteBatch.Draw(gameTime, _camera.Debug);
         }
@@ -124,7 +130,7 @@ namespace DungeonPlanet
         private void WriteDebugInformation()
         {
             string enemyLifeText;
-            string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", _player.PlayerLib.Position.X, _player.Position.Y);
+            string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", PlayerLib.Position.X, _player.position.Y);
             string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _player.PlayerLib.Movement.X, _player.PlayerLib.Movement.Y);
             string isOnFirmGroundText = string.Format("On firm ground?: {0}", _player.PlayerLib.IsOnFirmGround());
             string playerLifeText = string.Format("PLife: {0}/100", _player.Life);
@@ -133,7 +139,11 @@ namespace DungeonPlanet
                 enemyLifeText = string.Format("ELife: {0}/100", _enemy.EnemyLib.Life);
                 DrawWithShadow(enemyLifeText, new Vector2(70, 620));
             }
-                
+            if (_enemy2 != null)
+            {
+                enemyLifeText = string.Format("ELife2: {0}/100", _enemy2.EnemyLib.Life);
+                DrawWithShadow(enemyLifeText, new Vector2(70, 640));
+            }
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));

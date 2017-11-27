@@ -8,7 +8,6 @@ namespace DungeonPlanet.Library
 {
     public class WeaponLib
     {
-        public Vector2 Distance { get; set; }
         public float Rotation { get; set; }
         public Vector2 Direction { get; set; }
         public WeaponLib()
@@ -17,8 +16,8 @@ namespace DungeonPlanet.Library
 
         public void Update(float X, float Y)
         {
-            Distance = new Vector2( X, Y);
-            Rotation = RotationSet(Distance);
+            Vector2 distance = new Vector2( X, Y);
+            Rotation = RotationSet(distance);
             Direction = DirectionSet(Rotation);
         }
         

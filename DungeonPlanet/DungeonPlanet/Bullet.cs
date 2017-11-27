@@ -13,41 +13,54 @@ namespace DungeonPlanet
     {
         float _rotation;
         Vector2 _origin;
-        List<Enemy> _enemys;
+        List<Enemy> _enemys = DungeonPlanetGame.Enemys;
         public BulletLib BulletLib { get; set; }
-        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx, List<Enemy> enemys)
+        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx)
             : base(texture, position, spritebatch)
         {
             _origin = new Vector2(1, 12);
             _rotation = ctx.Rotation;
-            Position = new Vector2(Position.X + 50, Position.Y);
-            BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(Position.X, Position.Y), texture.Height, texture.Width);
-            _enemys = enemys;
-        }
+            base.position = new Vector2(base.position.X + 50, base.position.Y);
+            BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(base.position.X, base.position.Y), texture.Height, texture.Width);
+        }        
+
         public void Update(GameTime gameTime)
         {
             BulletLib.Timer((float)gameTime.ElapsedGameTime.TotalSeconds);
-            Position += new Vector2(BulletLib.PositionUpdate().X,BulletLib.PositionUpdate().Y);
+            position += new Vector2(BulletLib.PositionUpdate().X,BulletLib.PositionUpdate().Y);
         }
         public bool HasTouchedEnemy()
         {
             foreach (Enemy enemy in _enemys)
             {
-                if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(enemy.EnemyLib.Bounds))
+                if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(enemy.EnemyLib.Bounds))
                 {
+                    enemy.EnemyLib.GotDamage();
                     enemy.EnemyLib.Life -= 10;
                     return true;
                 }
             }
             return false;
         }
+
+        public bool HasTouchedPlayer(EnemyLib enemylib)
+        {
+            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(Player.CurrentPlayer.PlayerLib.Bounds))
+            {
+                enemylib.MakeDamage(Player.CurrentPlayer.PlayerLib);
+                Player.CurrentPlayer.Life -= 10;
+                return true;
+            }
+            return false;
+        }
+
         public bool HasTouchedTile()
         {
             foreach(TileLib tile in BoardLib.CurrentBoard.Tiles)
             {
                 if (tile.IsBlocked)
                 {
-                    if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                    if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
                     {
                         return true;
                     }
@@ -57,7 +70,7 @@ namespace DungeonPlanet
         }
         public override void Draw()
         {
-            SpriteBatch.Draw(Texture, Position, null, Color.White, _rotation, _origin, 1, SpriteEffects.None, 0);
+            SpriteBatch.Draw(Texture, position, null, Color.White, _rotation, _origin, 1, SpriteEffects.None, 0);
         }
     }
 }
