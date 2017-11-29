@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Comora;
 using DungeonPlanet.Library;
+using GeonBit.UI;
+using GeonBit.UI.Entities;
+
 namespace DungeonPlanet
 {
 
@@ -25,6 +25,7 @@ namespace DungeonPlanet
         private MediPack _mediPack;
         private SpriteFont _debugFont;
         private Camera _camera;
+        private ProgressBar _healthBar;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
 
@@ -34,7 +35,23 @@ namespace DungeonPlanet
             Content.RootDirectory = "Content";
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
-            IsMouseVisible = true;
+            //IsMouseVisible = true;
+        }
+        protected override void Initialize()
+        {
+            UserInterface.Initialize(Content, BuiltinThemes.hd);
+            //change the cursor to a custom or built-in
+            UserInterface.Active.SetCursor(CursorType.Default);
+            // create a panel at the top-left corner of with 10x10 offset from it, with 'Golden' panel skin.
+            // to see more skins check out the PanelSkin enum options or look at the panel examples in the example project.
+            /*Panel panel = new Panel(size: new Vector2(500, 500), skin: PanelSkin.Golden, anchor: Anchor.TopLeft, offset: new Vector2(10, 10));
+            UserInterface.Active.AddEntity(panel);*/
+            //life bar test
+            _healthBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
+            _healthBar.ProgressFill.FillColor = Color.Red;
+            _healthBar.Locked = true;
+            UserInterface.Active.AddEntity(_healthBar);
+            base.Initialize();
         }
 
         protected override void LoadContent()
@@ -66,11 +83,13 @@ namespace DungeonPlanet
             Enemys.Add(_enemy);
             Enemys.Add(_enemy2);
             Bosses.Add(_boss);
+
         }
 
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
             _player.Update(gameTime);
             for (int i = 0; i < Enemys.Count; i++)
@@ -107,6 +126,7 @@ namespace DungeonPlanet
             }
             if (_player.PlayerLib.IsDead(_player.Life)) RestartGame();
             _camera.Position = _player.position;
+            _healthBar.Value = _player.Life;
             CheckKeyboardAndReact();
         }
 
@@ -135,7 +155,6 @@ namespace DungeonPlanet
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-           
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
             _board.Draw();
@@ -147,8 +166,10 @@ namespace DungeonPlanet
             _spriteBatch.End();
             
             _spriteBatch.Draw(gameTime, _camera.Debug);
+            UserInterface.Active.Draw(_spriteBatch);
+
         }
-        
+
         private void WriteDebugInformation()
         {
             string enemyLifeText;
