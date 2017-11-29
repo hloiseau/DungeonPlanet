@@ -24,7 +24,10 @@ namespace DungeonPlanet.Library
             _position = position;
             _height = height;
             _width = width;
+<<<<<<< HEAD
+=======
  
+>>>>>>> abdd3421e6b727b4d424d38a7c24d8c859c64b95
         }
  
         public void Timer(float gameTime)

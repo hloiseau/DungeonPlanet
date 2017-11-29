@@ -84,9 +84,13 @@ namespace DungeonPlanet
             {
                 foreach (Tile tile in Case.Tiles)
                 {
+<<<<<<< HEAD
                     if (tile.IsBlocked)
-                    {
+=======
                     if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+>>>>>>> abdd3421e6b727b4d424d38a7c24d8c859c64b95
+                    {
+                        if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
                         {
                             return true;
                         }

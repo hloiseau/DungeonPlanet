@@ -8,20 +8,15 @@ using System.Threading.Tasks;
 
 namespace DungeonPlanet.Library
 {
-    public class EnemyLib
+    public class BossLib
     {
         public Vector2 Movement { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 OldPosition { get; set; }
-        public Vector2 Distance { get; set; }
-        public float Rotation { get; set; }
-        public Vector2 Direction { get; set; }
         public int Life { get; set; }
-        public bool IsShooting { get; set; }
+
         int _height;
         int _width;
-        float _timer;
-        public static EnemyLib CurrentEnemyLib { get; private set; }
 
         public Rectangle Bounds
         {
@@ -30,23 +25,29 @@ namespace DungeonPlanet.Library
 
         public Rectangle Vision
         {
-            get { return new Rectangle((int)Position.X - 375, (int)Position.Y, _width * 20, _height); }
+            get { return new Rectangle((int)Position.X - 425, (int)Position.Y, _width * 3, _height); }
         }
 
-        public EnemyLib(Vector2 position, int width, int height,int life)
+        public BossLib(Vector2 position, int width, int height, int life)
         {
+            OldPosition = Position;
             Position = position;
             _height = height;
             _width = width;
             Life = life;
-            CurrentEnemyLib = this;
+        }
+
+        public bool IsDead()
+        {
+            int life = Life;
+            return life <= 0;
         }
 
         public void MoveAsFarAsPossible(float gameTime)
         {
             OldPosition = Position;
             UpdatePositionBasedOnMovement(gameTime);
-            Position = Level.CurrentBoard.WhereCanIGetTo(OldPosition, Position, Bounds);
+            Position = BoardLib.CurrentBoard.WhereCanIGetTo(OldPosition, Position, Bounds);
         }
 
         public void UpdatePositionBasedOnMovement(float gameTime)
@@ -69,23 +70,17 @@ namespace DungeonPlanet.Library
         {
             Rectangle onePixelLower = Bounds;
             onePixelLower.Offset(0, 1);
-            return !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
+            return !BoardLib.CurrentBoard.HasRoomForRectangle(onePixelLower);
         }
 
         public void Left()
         {
-            Movement -= Vector2.UnitX * .65f;
+            Movement -= Vector2.UnitX * .50f;
         }
         public void Right()
         {
-            Movement += Vector2.UnitX * .65f;
+            Movement += Vector2.UnitX * .50f;
         }
-
-        public void Timer(float gameTime)
-        {
-            _timer += gameTime;
-        }
-
         public void MakeDamage(PlayerLib playerLib)
         {
             if (GetDistanceTo(PlayerLib.Position).X < 0.1)
@@ -101,21 +96,19 @@ namespace DungeonPlanet.Library
                 playerLib.Movement -= Vector2.UnitY * 5f;
             }
         }
-        public void GotDamage()
+
+        public void ReceiveDamage(PlayerLib playerLib)
         {
-            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
+            if (GetDistanceTo(PlayerLib.Position).X < 0.1)
             {
-                Movement += Vector2.UnitX * 50f;
-                this.Movement -= Vector2.UnitX * 10f;
-                this.Movement -= Vector2.UnitY * 5f;
+                Movement += Vector2.UnitX * 5f;
             }
             if (GetDistanceTo(PlayerLib.Position).X > 0.1)
             {
-                Movement -= Vector2.UnitX * 50f;
-                this.Movement += Vector2.UnitX * 10f;
-                this.Movement -= Vector2.UnitY * 5f;
+                Movement -= Vector2.UnitX * 5f;
             }
         }
+
 
         public void StopMovingIfBlocked()
         {
@@ -127,22 +120,6 @@ namespace DungeonPlanet.Library
         public Vector2 GetDistanceTo(Vector2 destination)
         {
             return new Vector2(destination.X - Position.X, destination.Y - Position.Y);
-        }
-
-        public void Update(float X, float Y)
-        {
-            Distance = new Vector2(X, Y);
-            Rotation = RotationSet(Distance);
-            Direction = DirectionSet(Rotation);
-        }
-
-        public float RotationSet(Vector2 distance)
-        {
-            return (float)Math.Atan2(distance.Y, distance.X);
-        }
-        public Vector2 DirectionSet(float rotation)
-        {
-            return new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
         }
     }
 }

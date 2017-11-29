@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BossLib.cs" />
     <Compile Include="Case.cs" />
     <Compile Include="EnemyLib.cs" />
     <Compile Include="MediPackLib.cs" />

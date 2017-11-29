@@ -25,7 +25,14 @@ namespace DungeonPlanet
         private MediPack _mediPack;
         private SpriteFont _debugFont;
         private Camera _camera;
+<<<<<<< HEAD
+        public List<Enemy> Enemys { get; private set; }
+        public Path PathGeneration { get; private set; }
+=======
         public static List<Enemy> Enemys { get; private set; }
+        public List<Boss> Bosses { get; private set; }
+        public PathGeneration PathGeneration { get; private set; }
+>>>>>>> abdd3421e6b727b4d424d38a7c24d8c859c64b95
 
         public DungeonPlanetGame()
         {
@@ -51,10 +58,16 @@ namespace DungeonPlanet
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
+<<<<<<< HEAD
+            _board = new Board(_spriteBatch, _tileTexture, 25, 10);
+            _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys);
+            _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch);
+=======
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
             _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch);
+>>>>>>> abdd3421e6b727b4d424d38a7c24d8c859c64b95
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             
             _debugFont = Content.Load<SpriteFont>("DebugFont");

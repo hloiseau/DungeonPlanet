@@ -11,7 +11,7 @@ namespace DungeonPlanet.Library
     public class PlayerLib
     {
         public Vector2 Movement { get; set; }
-        public Vector2 Position { get; set; }
+        public static Vector2 Position { get; set; }
         public Vector2  OldPosition{ get; set; }
 
         int _height;

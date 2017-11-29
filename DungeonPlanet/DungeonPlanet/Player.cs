@@ -16,11 +16,11 @@ namespace DungeonPlanet
         public  Weapon Weapon { get; set; }
         public int Life { get; set; }
         public static Player CurrentPlayer { get; private set; }
-        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys)
+        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
             : base(texturePlayer, position, spritebatch)
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X,position.Y), texturePlayer.Width, texturePlayer.Height);
-            Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, PlayerLib, enemys);
+            Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, bosses);
             Life = 70;
             CurrentPlayer = this;
         }
@@ -33,7 +33,7 @@ namespace DungeonPlanet
             PlayerLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             PlayerLib.StopMovingIfBlocked();
             PlayerLib.IsDead(Life);
-            Position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y);
+            position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y);
             Weapon.Update(gameTime);
             Life = MathHelper.Clamp(Life, 0, 100);
         }
