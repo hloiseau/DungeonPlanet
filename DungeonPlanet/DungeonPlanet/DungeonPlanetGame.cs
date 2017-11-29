@@ -26,6 +26,7 @@ namespace DungeonPlanet
         private SpriteFont _debugFont;
         private Camera _camera;
         public static List<Enemy> Enemys { get; private set; }
+        public static List<Boss> Bosses { get; private set; }
 
         public DungeonPlanetGame()
         {
@@ -51,6 +52,7 @@ namespace DungeonPlanet
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
+            _board = new Board(_spriteBatch, _tileTexture, 2, 2);
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
             _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
