@@ -15,36 +15,35 @@ namespace DungeonPlanet
         private SpriteBatch SpriteBatch { get; set; }
         private Random _rnd = new Random();
         public static Board CurrentBoard { get; private set; }
-        public BoardLib _boardLib;
         public Sprite _sprite;
-      
+        public Level Level { get; private set; }
 
         public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
         {
 
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-
-            _boardLib = new BoardLib(columns, rows, tileTexture.Width, tileTexture.Height);
+            Level = new Level(2, 2);
             CreateNewBoard();
             Board.CurrentBoard = this;
         }
 
         public void CreateNewBoard()
         {
-            _boardLib.InitializeAllTilesAndBlockSomeRandomly();
-            _boardLib.SetAllBorderTilesBlocked();
-            _boardLib.SetTopLeftTileUnblocked();
+            Level.NewLevel();
         }
 
         public void Draw()
         {
-            foreach (var tile in _boardLib.Tiles)
+            foreach(Case Case in Level.Cases)
             {
-                if(tile.IsBlocked)
+                foreach (var tile in Case.Tiles)
                 {
-                    Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
-                    sprite.Draw();
+                    if (tile.IsBlocked)
+                    {
+                        Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
+                        sprite.Draw();
+                    }
                 }
             }
         }

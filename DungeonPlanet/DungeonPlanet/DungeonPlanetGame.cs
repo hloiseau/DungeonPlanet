@@ -25,23 +25,19 @@ namespace DungeonPlanet
         private SpriteFont _debugFont;
         private Camera _camera;
         public List<Enemy> Enemys { get; private set; }
-        public PathGeneration PathGeneration { get; private set; }
+        public Path PathGeneration { get; private set; }
 
         public DungeonPlanetGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
             IsMouseVisible = true;
-            PathGeneration = new PathGeneration(4, 4);
         }
 
         protected override void LoadContent()
         {
-            PathGeneration.InitializeBoard();
-            PathGeneration.CreatePath();
-            PathGeneration.Direction[,] a = PathGeneration.Board;
             Enemys = new List<Enemy>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
@@ -50,13 +46,15 @@ namespace DungeonPlanet
             _weaponTexture = Content.Load<Texture2D>("player_arm");
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _mediTexture = Content.Load<Texture2D>("Medipack");
+            _board = new Board(_spriteBatch, _tileTexture, 25, 10);
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys);
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
-            _board = new Board(_spriteBatch, _tileTexture, 25, 10);
+            
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent(GraphicsDevice);
+            
             Enemys.Add(_enemy);
         }
 
@@ -115,6 +113,7 @@ namespace DungeonPlanet
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+           
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
             _board.Draw();
@@ -123,6 +122,7 @@ namespace DungeonPlanet
             _player.Draw();
             foreach (Enemy enemy in Enemys) _enemy.Draw();
             _spriteBatch.End();
+            
             _spriteBatch.Draw(gameTime, _camera.Debug);
         }
         

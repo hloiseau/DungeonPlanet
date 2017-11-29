@@ -36,7 +36,7 @@ namespace DungeonPlanet.Library
         {
             OldPosition = Position;
             UpdatePositionBasedOnMovement(gameTime);
-            Position = BoardLib.CurrentBoard.WhereCanIGetTo(OldPosition, Position, Bounds);
+            Position = Level.CurrentBoard.WhereCanIGetTo(OldPosition, Position, Bounds);
         }
 
         public void UpdatePositionBasedOnMovement(float gameTime)
@@ -59,7 +59,9 @@ namespace DungeonPlanet.Library
         {
             Rectangle onePixelLower = Bounds;
             onePixelLower.Offset(0, 1);
-            return !BoardLib.CurrentBoard.HasRoomForRectangle(onePixelLower);
+            if (Level.CurrentBoard != null)
+                return  !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
+            return false;
         }
 
         public void Left()

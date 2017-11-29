@@ -45,10 +45,9 @@
   <ItemGroup>
     <Compile Include="Case.cs" />
     <Compile Include="EnemyLib.cs" />
-    <Compile Include="LevelGeneration.cs" />
     <Compile Include="MediPackLib.cs" />
-    <Compile Include="PathGeneration.cs" />
-    <Compile Include="BoardLib.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="BulletLib.cs" />
     <Compile Include="MovementWrapper.cs" />
     <Compile Include="PlayerLib.cs" />

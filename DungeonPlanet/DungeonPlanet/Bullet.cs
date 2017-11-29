@@ -43,13 +43,16 @@ namespace DungeonPlanet
         }
         public bool HasTouchedTile()
         {
-            foreach(Tile tile in BoardLib.CurrentBoard.Tiles)
+            foreach (Case Case in Level.CurrentBoard.Cases)
             {
-                if (tile.IsBlocked)
+                foreach (Tile tile in Case.Tiles)
                 {
-                    if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                    if (tile.IsBlocked)
                     {
-                        return true;
+                        if (new System.Drawing.Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
