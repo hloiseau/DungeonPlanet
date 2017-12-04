@@ -16,7 +16,6 @@ namespace DungeonPlanet
         public PlayerLib PlayerLib { get; set; }
 
         Player _player;
-        Camera _camera;
 
         public Boss(Texture2D texture, Vector2 position, SpriteBatch spritebatch)
             : base(texture, position, spritebatch)

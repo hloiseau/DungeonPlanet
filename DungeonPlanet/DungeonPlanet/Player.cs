@@ -16,6 +16,8 @@ namespace DungeonPlanet
         public  Weapon Weapon { get; set; }
         public int Life { get; set; }
         public static Player CurrentPlayer { get; private set; }
+        public Shield Shield { get; set; }
+
         public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
             : base(texturePlayer, position, spritebatch)
         {
@@ -49,8 +51,11 @@ namespace DungeonPlanet
 
         public override void Draw()
         {
+            KeyboardState keyboardState = Keyboard.GetState();
             base.Draw();
             Weapon.Draw();
+
+            if (keyboardState.IsKeyDown(Keys.A)) { Shield.Draw(); }
         }
 
     }
