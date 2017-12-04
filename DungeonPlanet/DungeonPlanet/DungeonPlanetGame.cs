@@ -17,6 +17,7 @@ namespace DungeonPlanet
         private SpriteBatch _spriteBatch;
         private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _enemyWeaponTexture, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture, _mediTexture;
         private Player _player;
+        private NPC _NPC;
         private Enemy _enemy;
         private Enemy _enemy2;
         private Boss _boss;
@@ -26,6 +27,7 @@ namespace DungeonPlanet
         private SpriteFont _debugFont;
         private Camera _camera;
         private ProgressBar _healthBar;
+        private Door _door;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
 
@@ -39,7 +41,7 @@ namespace DungeonPlanet
         }
         protected override void Initialize()
         {
-            UserInterface.Initialize(Content, BuiltinThemes.hd);
+            UserInterface.Initialize(Content, BuiltinThemes.editor);
             //change the cursor to a custom or built-in
             UserInterface.Active.SetCursor(CursorType.Default);
             // create a panel at the top-left corner of with 10x10 offset from it, with 'Golden' panel skin.
@@ -59,13 +61,13 @@ namespace DungeonPlanet
             Enemys = new List<Enemy>();
             Bosses = new List<Boss>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _bossTexture = Content.Load<Texture2D>("boss");
             _weaponTexture = Content.Load<Texture2D>("player_arm");
-            _enemyWeaponTexture = Content.Load<Texture2D>("player_arm");
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
@@ -75,14 +77,19 @@ namespace DungeonPlanet
             _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
-            
+            _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
+            _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
-            _camera.LoadContent(GraphicsDevice);
+            _camera.LoadContent();
+
+            if(Level.ActualState == Level.State.LevelOne)
+            {
+                Enemys.Add(_enemy);
+                Enemys.Add(_enemy2);
+                Bosses.Add(_boss);
+            }
             
-            Enemys.Add(_enemy);
-            Enemys.Add(_enemy2);
-            Bosses.Add(_boss);
 
         }
 
@@ -92,6 +99,12 @@ namespace DungeonPlanet
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
             _player.Update(gameTime);
+            if(Level.ActualState == Level.State.Hub)
+            {
+                _NPC.Update(gameTime);
+                _door.Update(gameTime);
+            }
+
             for (int i = 0; i < Enemys.Count; i++)
             {
                 if (Enemys[i].EnemyLib.Life <= 0)
@@ -124,7 +137,7 @@ namespace DungeonPlanet
                     _mediPack = null;
                 }
             }
-            if (_player.PlayerLib.IsDead(_player.Life)) RestartGame();
+            if (_player.PlayerLib.IsDead(_player.Life)) RestartLevelOne();
             _camera.Position = _player.position;
             _healthBar.Value = _player.Life;
             CheckKeyboardAndReact();
@@ -133,16 +146,23 @@ namespace DungeonPlanet
         private void CheckKeyboardAndReact()
         {
             KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.F5)) { RestartGame(); }
+            if (state.IsKeyDown(Keys.F5)) { RestartHub(); }
             if (state.IsKeyDown(Keys.Escape)) { Exit(); }
+            if (state.IsKeyDown(Keys.F6)) { RestartLevelOne(); }
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
-
         }
 
-        private void RestartGame()
+        private void RestartHub()
         {
             /*Board.CurrentBoard.CreateNewBoard();
             PutJumperInTopLeftCorner();*/
+            Level.ActualState = Level.State.Hub;
+            LoadContent();
+        }
+
+        internal void RestartLevelOne()
+        {
+            Level.ActualState = Level.State.LevelOne;
             LoadContent();
         }
 
@@ -157,6 +177,11 @@ namespace DungeonPlanet
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
+            if (Level.ActualState == Level.State.Hub)
+            {
+                _NPC.Draw();
+                _door.Draw();
+            }
             _board.Draw();
             if (_mediPack != null) _mediPack.Draw();
             WriteDebugInformation();
@@ -164,8 +189,7 @@ namespace DungeonPlanet
             foreach (Enemy enemy in Enemys) enemy.Draw();
             foreach (Boss boss in Bosses) boss.Draw();
             _spriteBatch.End();
-            
-            _spriteBatch.Draw(gameTime, _camera.Debug);
+            _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
 
         }
