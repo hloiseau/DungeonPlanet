@@ -15,7 +15,8 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _enemyWeaponTexture, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture, _mediTexture;
+        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _enemyWeaponTexture, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
+        private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Player _player;
         private NPC _NPC;
         private Enemy _enemy;
@@ -24,12 +25,15 @@ namespace DungeonPlanet
         private Board _board;
         private Random _rnd = new Random();
         private MediPack _mediPack;
+        private Shield _shield;
+        private Bomb _bomb;
         private SpriteFont _debugFont;
         private Camera _camera;
         private ProgressBar _healthBar;
         private Door _door;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
+        public List<Item> Items { get; set; }
 
         public DungeonPlanetGame()
         {
@@ -60,6 +64,7 @@ namespace DungeonPlanet
         {
             Enemys = new List<Enemy>();
             Bosses = new List<Boss>();
+            Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
             _tileTexture = Content.Load<Texture2D>("tile");
@@ -71,6 +76,8 @@ namespace DungeonPlanet
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
+            _bombTexture = Content.Load<Texture2D>("bomb");
+            _shieldTexture = Content.Load<Texture2D>("shield");
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
@@ -79,6 +86,8 @@ namespace DungeonPlanet
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
+            _bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
+            _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent();
@@ -88,9 +97,10 @@ namespace DungeonPlanet
                 Enemys.Add(_enemy);
                 Enemys.Add(_enemy2);
                 Bosses.Add(_boss);
+            Items.Add(_mediPack);
+            _player.Shield = _shield;
             }
             
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -99,6 +109,7 @@ namespace DungeonPlanet
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
             _player.Update(gameTime);
+            _shield.Update(gameTime);
             if(Level.ActualState == Level.State.Hub)
             {
                 _NPC.Update(gameTime);
@@ -129,12 +140,12 @@ namespace DungeonPlanet
                 }
             }
 
-            if (_mediPack != null)
+            for (int i = 0; i < Items.Count; i++)
             {
-                _mediPack.Update();
-                if (_mediPack.IsFinished)
+                Items[i].Update(gameTime);
+                if (Items[i].IsFinished && !(Items[i] is Shield))
                 {
-                    _mediPack = null;
+                    Items.Remove(Items[i]);
                 }
             }
             if (_player.PlayerLib.IsDead(_player.Life)) RestartLevelOne();
@@ -150,6 +161,7 @@ namespace DungeonPlanet
             if (state.IsKeyDown(Keys.Escape)) { Exit(); }
             if (state.IsKeyDown(Keys.F6)) { RestartLevelOne(); }
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
+
         }
 
         private void RestartHub()
@@ -183,11 +195,14 @@ namespace DungeonPlanet
                 _door.Draw();
             }
             _board.Draw();
-            if (_mediPack != null) _mediPack.Draw();
             WriteDebugInformation();
             _player.Draw();
             foreach (Enemy enemy in Enemys) enemy.Draw();
             foreach (Boss boss in Bosses) boss.Draw();
+            foreach (Item item in Items)
+            {
+                if (item != null) item.Draw();
+            }
             _spriteBatch.End();
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);

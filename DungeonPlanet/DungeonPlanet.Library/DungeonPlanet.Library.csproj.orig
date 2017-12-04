@@ -46,8 +46,11 @@
     <Compile Include="BossLib.cs" />
     <Compile Include="Case.cs" />
     <Compile Include="EnemyLib.cs" />
+<<<<<<< HEAD
     <Compile Include="Hub.cs" />
+=======
     <Compile Include="ItemLib.cs" />
+>>>>>>> origin/develop
     <Compile Include="MediPackLib.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Level.cs" />
