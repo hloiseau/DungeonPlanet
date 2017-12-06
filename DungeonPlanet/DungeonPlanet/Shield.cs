@@ -22,13 +22,9 @@ namespace DungeonPlanet
 
         public override void Update(GameTime gameTime)
         {
-            CheckStatusAndUpdateMovement();
             base.Update(gameTime);
             position = new Vector2(Player.position.X - 15, Player.position.Y - 20);
         }
 
-        private void CheckStatusAndUpdateMovement()
-        {
-        }
     }
 }

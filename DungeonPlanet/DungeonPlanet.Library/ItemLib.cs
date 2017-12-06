@@ -64,6 +64,11 @@ namespace DungeonPlanet.Library
             onePixelLower.Offset(0, 1);
             return !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
         }
+        public void SimulateFriction()
+        {
+            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
+            else { Movement -= Movement * Vector2.One * .02f; }
+        }
         public void StopMovingIfBlocked()
         {
             Vector2 lastMovement = Position - OldPosition;

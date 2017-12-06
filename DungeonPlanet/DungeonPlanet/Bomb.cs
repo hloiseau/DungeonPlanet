@@ -35,10 +35,10 @@ namespace DungeonPlanet
             }
             else if (_count <= 301 && _count > 300)
             {
-                if (_itemLib.BombRadius.IntersectsWith(Player.PlayerLib.Bounds)) { Player.Life -= 20; }
+                if (ItemLib.BombRadius.IntersectsWith(Player.PlayerLib.Bounds)) { Player.Life -= 20; }
                 foreach (Enemy enemy in _enemy)
                 {
-                    if (_itemLib.BombRadius.IntersectsWith(enemy.EnemyLib.Bounds)) { enemy.EnemyLib.Life -= 20; }
+                    if (ItemLib.BombRadius.IntersectsWith(enemy.EnemyLib.Bounds)) { enemy.EnemyLib.Life -= 20; }
                 }
                 _count++;
             }

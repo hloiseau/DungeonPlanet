@@ -30,6 +30,7 @@ namespace DungeonPlanet
         private SpriteFont _debugFont;
         private Camera _camera;
         private ProgressBar _healthBar;
+        private ProgressBar _energyBar;
         private Door _door;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
@@ -56,7 +57,11 @@ namespace DungeonPlanet
             _healthBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
             _healthBar.ProgressFill.FillColor = Color.Red;
             _healthBar.Locked = true;
+            _energyBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
+            _energyBar.ProgressFill.FillColor = Color.LightSteelBlue;
+            _energyBar.Locked = true;
             UserInterface.Active.AddEntity(_healthBar);
+            UserInterface.Active.AddEntity(_energyBar);
             base.Initialize();
         }
 
@@ -148,9 +153,10 @@ namespace DungeonPlanet
                     Items.Remove(Items[i]);
                 }
             }
-            if (_player.PlayerLib.IsDead(_player.Life)) RestartLevelOne();
+            if (_player.PlayerLib.IsDead(_player.Life)) RestartHub();
             _camera.Position = _player.position;
             _healthBar.Value = _player.Life;
+            _energyBar.Value = _player.Energy;
             CheckKeyboardAndReact();
         }
 
@@ -165,9 +171,7 @@ namespace DungeonPlanet
         }
 
         private void RestartHub()
-        {
-            /*Board.CurrentBoard.CreateNewBoard();
-            PutJumperInTopLeftCorner();*/
+        { 
             Level.ActualState = Level.State.Hub;
             LoadContent();
         }
