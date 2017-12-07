@@ -9,7 +9,7 @@ using System.Drawing;
 namespace DungeonPlanet.Library
 {
 
-    public class Path
+    public class PathGeneration
     {
         public int Columns { get; set; }
         public int Rows { get; set; }
@@ -26,7 +26,7 @@ namespace DungeonPlanet.Library
             Bottom = 8
         }
 
-        public Path(int columns, int rows)
+        public PathGeneration(int columns, int rows)
         {
             Columns = columns;
             Rows = rows;

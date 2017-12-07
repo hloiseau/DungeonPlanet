@@ -30,7 +30,7 @@ namespace DungeonPlanet
 
         private void CheckStatusAndUpdateMovement()
         {
-            if (ItemLib.PlayerIntersect())
+            if (_itemLib.PlayerIntersect())
             {
                 Player.Life += Heal;
                 IsFinished = true;

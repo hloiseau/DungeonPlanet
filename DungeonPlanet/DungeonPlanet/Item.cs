@@ -12,7 +12,7 @@ namespace DungeonPlanet
     public class Item : Sprite
     {
 
-        public ItemLib ItemLib { get; private set; }
+        public ItemLib _itemLib { get; set; }
         public bool IsFinished { get; set; }
         protected Player Player { get; set; }
 
@@ -20,16 +20,15 @@ namespace DungeonPlanet
             : base(texture, position, spritebatch)
         {
             Player = player;
-            ItemLib = new ItemLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, player.PlayerLib);
+            _itemLib = new ItemLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, player.PlayerLib);
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            ItemLib.AffectWithGravity();
-            ItemLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
-            ItemLib.StopMovingIfBlocked();
-            ItemLib.SimulateFriction();
-            position = new Vector2(ItemLib.Position.X, ItemLib.Position.Y);
+            _itemLib.AffectWithGravity();
+            _itemLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
+            _itemLib.StopMovingIfBlocked();
+            position = new Vector2(_itemLib.Position.X, _itemLib.Position.Y);
         }
     }
 }

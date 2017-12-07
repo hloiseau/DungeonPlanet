@@ -21,7 +21,7 @@ namespace DungeonPlanet
         public Texture2D _textureWeapon;
         public SpriteBatch _spritebatch;
         public DungeonPlanetGame _ctx;
-
+        
         Player _player;
         int _count;
         string _type;
@@ -36,7 +36,7 @@ namespace DungeonPlanet
             _type = type;
             _spritebatch = spritebatch;
         }
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Shield shield)
            : base(texture, position, spritebatch)
         {
             EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 30);
@@ -48,7 +48,7 @@ namespace DungeonPlanet
             _textureWeapon = textureWeapon;
             _textureBullet = textureBullet;
             _ctx = ctx;
-            WeaponA = new Weapon(_textureWeapon, _textureBullet, _ctx, base.position, _spritebatch, EnemyLib);
+            WeaponA = new Weapon(_textureWeapon, _textureBullet, _ctx, base.position, _spritebatch, EnemyLib, shield);
         }
 
         public void Update(GameTime gameTime)
@@ -70,6 +70,10 @@ namespace DungeonPlanet
             {
                 if (_type == "CQC")
                 {
+                    /*if (EnemyLib.Bounds.IntersectsWith(_shield._itemLib.ShieldRadius))
+                    {
+                        EnemyLib.GotDamage();
+                    }*/
                     if (EnemyLib.Bounds.IntersectsWith(PlayerLib.Bounds))
                     {
                         _player.Life -= 10;
