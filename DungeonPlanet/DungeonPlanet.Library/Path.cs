@@ -47,7 +47,8 @@ namespace DungeonPlanet.Library
         public void CreatePath()
         {
             int x = 0;
-            int y = _rnd.Next(Columns);
+            int y = 0;
+            
             int whereToGo;
             bool isOk = true;
             while (isOk)
@@ -73,6 +74,7 @@ namespace DungeonPlanet.Library
                     {
                         y--;
                         isOk = Down(x, y);
+
                         x++;
                     }
                 }

@@ -14,6 +14,7 @@ namespace DungeonPlanet.Library
         int _columns;
         int _rows;
         Path _path;
+        Random _random = new Random();
         public Case[,] Cases { get; private set; }
         public static Level CurrentBoard { get; set; }
         public Level(int columns, int rows)
@@ -36,8 +37,7 @@ namespace DungeonPlanet.Library
                     Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
                     Cases[x, y].InitializeAllTiles();
                     Cases[x, y].SetBorder();
-                    Cases[x, y].RandomTiles();
-                    Cases[x, y].StructuresCreation();
+                    Cases[x, y].PartsAnalysis();
                 }
             }
         }
@@ -98,6 +98,10 @@ namespace DungeonPlanet.Library
                     WhereCanIGetTo(wrapper.FurthestAvailableLocationSoFar, wrapper.FurthestAvailableLocationSoFar + remainingVerticalMovement, wrapper.BoundingRectangle);
             }
             return wrapper.FurthestAvailableLocationSoFar;
+        }
+        public int GetNext(int min, int max)
+        {
+            return _random.Next(min, max);
         }
     }
 }

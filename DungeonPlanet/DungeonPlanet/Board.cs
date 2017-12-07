@@ -13,7 +13,6 @@ namespace DungeonPlanet
     {
         public Texture2D TileTexture { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
-        private Random _rnd = new Random();
         public static Board CurrentBoard { get; private set; }
         public Sprite _sprite;
         public Level Level { get; private set; }
@@ -23,7 +22,7 @@ namespace DungeonPlanet
 
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-            Level = new Level(2, 2);
+            Level = new Level(4, 4);
             CreateNewBoard();
             Board.CurrentBoard = this;
         }
