@@ -88,9 +88,17 @@ namespace DungeonPlanet
             for (int i = 0; i < _bombs.Count; i++)
             {
                 _bombs[i].Draw();
-
             }
-            if (keyboardState.IsKeyDown(Keys.A) && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
+            if (keyboardState.IsKeyDown(Keys.A) && !(Shield.Activate) && Level.ActualState == Level.State.LevelOne)
+            {
+                Shield.Activate = true;
+                Shield.Draw();
+            }
+            else if (keyboardState.IsKeyUp(Keys.A) && Shield.Activate == true && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
+            else if (keyboardState.IsKeyDown(Keys.A) && Shield.Activate == true && Level.ActualState == Level.State.LevelOne)
+            {
+                Shield.Activate = false;
+            }
         }
 
     }

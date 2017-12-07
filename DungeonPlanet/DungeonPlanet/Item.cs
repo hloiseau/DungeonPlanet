@@ -28,7 +28,6 @@ namespace DungeonPlanet
             ItemLib.AffectWithGravity();
             ItemLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             ItemLib.StopMovingIfBlocked();
-            ItemLib.SimulateFriction();
             position = new Vector2(ItemLib.Position.X, ItemLib.Position.Y);
         }
     }
