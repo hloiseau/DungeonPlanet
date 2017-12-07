@@ -15,6 +15,7 @@ namespace DungeonPlanet.Library
         public int Rows { get; set; }
         private Random _rnd = new Random();
         public Direction[,] Board { get; private set; }
+        Level _ctx;
 
         [Flags]
         public enum Direction
@@ -26,11 +27,12 @@ namespace DungeonPlanet.Library
             Bottom = 8
         }
 
-        public Path(int columns, int rows)
+        public Path(int columns, int rows, Level ctx)
         {
             Columns = columns;
             Rows = rows;
             Board = new Direction[columns, rows];
+            _ctx = ctx;
         }
 
         public void InitializeBoard()
@@ -53,7 +55,8 @@ namespace DungeonPlanet.Library
             bool isOk = true;
             while (isOk)
             {
-                whereToGo = _rnd.Next(1, 6);
+                whereToGo = _ctx.GetNext(1, 6);
+                //whereToGo = _rnd.Next(1, 6);
                 if (whereToGo == 1)
                 {
                     isOk = Down(x, y);
