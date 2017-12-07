@@ -11,11 +11,14 @@ namespace DungeonPlanet
 {
     public class Board
     {
+
         public Texture2D TileTexture { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
         public static Board CurrentBoard { get; private set; }
         public Sprite _sprite;
         public Level Level { get; private set; }
+        public static List<Enemy> Enemys { get; private set; }
+        public static List<Boss> Bosses { get; private set; }
 
         public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
         {
@@ -34,14 +37,28 @@ namespace DungeonPlanet
 
         public void Draw()
         {
-            foreach(Case Case in Level.Cases)
+            if (Level.ActualState == Level.State.Hub)
             {
-                foreach (var tile in Case.Tiles)
+                foreach (var tile in Level.Hub.Tiles)
                 {
                     if (tile.IsBlocked)
                     {
                         Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
                         sprite.Draw();
+                    }
+                }
+            }
+            else if (Level.ActualState == Level.State.LevelOne)
+            {
+                foreach (Case Case in Level.Cases)
+                {
+                    foreach (var tile in Case.Tiles)
+                    {
+                        if (tile.IsBlocked)
+                        {
+                            Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
+                            sprite.Draw();
+                        }
                     }
                 }
             }

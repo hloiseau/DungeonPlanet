@@ -45,9 +45,14 @@
     <Compile Include="Board.cs" />
     <Compile Include="Boss.cs" />
     <Compile Include="Bullet.cs" />
+    <Compile Include="Door.cs" />
     <Compile Include="DungeonPlanetGame.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="MediPack.cs" />
+    <Compile Include="Bomb.cs" />
+    <Compile Include="Shield.cs" />
+    <Compile Include="NPC.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Comora, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Comora.0.0.5\lib\portable-net45+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Comora.dll</HintPath>
+      <HintPath>..\packages\Comora.0.5.0\lib\portable-net45+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Comora.dll</HintPath>
     </Reference>
     <Reference Include="GeonBit.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GeonBit.UI.3.0.2.1\lib\geonbitui\GeonBit.UI.dll</HintPath>

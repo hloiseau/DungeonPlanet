@@ -14,7 +14,11 @@ namespace DungeonPlanet.Library
         int _columns;
         int _rows;
         Path _path;
+<<<<<<< HEAD
         Random _random = new Random();
+=======
+
+>>>>>>> e13c3c831f5306f0eedf25344d3b772e1b59a721
         public Case[,] Cases { get; private set; }
         public static Level CurrentBoard { get; private set; }
 
@@ -49,13 +53,21 @@ namespace DungeonPlanet.Library
                 _path.CreatePath();
                 for (int x = 0; x < _columns; x++)
                 {
+<<<<<<< HEAD
+                    Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
+                    Cases[x, y].InitializeAllTiles();
+                    Cases[x, y].SetBorder();
+                    Cases[x, y].PartsAnalysis();
+=======
                     for (int y = 0; y < _rows; y++)
                     {
                         Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
                         Cases[x, y].InitializeAllTiles();
                         Cases[x, y].SetBorder();
-                    Cases[x, y].PartsAnalysis();
+                        Cases[x, y].RandomTiles();
+                        Cases[x, y].StructuresCreation();
                     }
+>>>>>>> e13c3c831f5306f0eedf25344d3b772e1b59a721
                 }
             }
         }

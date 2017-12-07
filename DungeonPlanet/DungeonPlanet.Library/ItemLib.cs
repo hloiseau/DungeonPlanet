@@ -3,33 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Numerics;
 using System.Drawing;
+using System.Numerics;
 
 namespace DungeonPlanet.Library
 {
-    public class PlayerLib
+    public class ItemLib
     {
         public Vector2 Movement { get; set; }
-        public static Vector2 Position { get; set; }
-        public Vector2  OldPosition{ get; set; }
+        public Vector2 Position { get; set; }
+        public Vector2 OldPosition { get; set; }
 
-        int _height;
         int _width;
+        int _height;
+        PlayerLib _playerLib;
+
+        public ItemLib(Vector2 position, int width, int height, PlayerLib playerLib)
+        {
+            Position = position;
+            _width = width;
+            _height = height;
+            _playerLib = playerLib;
+        }
+
         public Rectangle Bounds
         {
             get { return new Rectangle((int)Position.X, (int)Position.Y, _width, _height); }
         }
 
-        public bool IsDead(int life)
+        public Rectangle BombRadius
         {
-            return life <= 0;
+            get { return new Rectangle((int)Position.X - 150, (int)Position.Y, _width * 3, _height); }
         }
-        public PlayerLib(Vector2 position, int width, int height)
+
+        public bool PlayerIntersect()
         {
-            Position = position;
-            _height = height;
-            _width = width;
+            return Bounds.IntersectsWith(_playerLib.Bounds);
+        }
+
+        public void AffectWithGravity()
+        {
+            Movement += Vector2.UnitY * .65f;
         }
 
         public void MoveAsFarAsPossible(float gameTime)
@@ -44,37 +58,16 @@ namespace DungeonPlanet.Library
             Position += Movement * gameTime;
         }
 
-        public void AffectWithGravity()
-        {
-            Movement += Vector2.UnitY * .65f;
-        }
-
-        public void SimulateFriction()
-        {
-            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
-            else { Movement -= Movement * Vector2.One * .02f; }
-        }
-
         public bool IsOnFirmGround()
         {
             Rectangle onePixelLower = Bounds;
             onePixelLower.Offset(0, 1);
-            if (Level.CurrentBoard != null)
-                return  !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
-            return false;
+            return !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
         }
-
-        public void Left()
+        public void SimulateFriction()
         {
-            Movement -= Vector2.UnitX;
-        }
-        public void Right()
-        {
-            Movement += Vector2.UnitX;
-        }
-        public void Jump()
-        {
-            Movement = -Vector2.UnitY * 20; 
+            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
+            else { Movement -= Movement * Vector2.One * .02f; }
         }
         public void StopMovingIfBlocked()
         {
@@ -84,4 +77,3 @@ namespace DungeonPlanet.Library
         }
     }
 }
-
