@@ -25,7 +25,7 @@ namespace DungeonPlanet.Library
         {
             return life <= 0;
         }
-        public PlayerLib(Vector2 position, int width, int height)
+        public PlayerLib( Vector2 position, int width, int height)
         {
             Position = position;
             _height = height;
