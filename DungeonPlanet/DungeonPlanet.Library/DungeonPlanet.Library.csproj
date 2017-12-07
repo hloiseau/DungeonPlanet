@@ -46,6 +46,7 @@
     <Compile Include="BossLib.cs" />
     <Compile Include="Case.cs" />
     <Compile Include="EnemyLib.cs" />
+    <Compile Include="Hub.cs" />
     <Compile Include="ItemLib.cs" />
     <Compile Include="MediPackLib.cs" />
     <Compile Include="Path.cs" />

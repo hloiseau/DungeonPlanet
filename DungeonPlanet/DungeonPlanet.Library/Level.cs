@@ -14,47 +14,81 @@ namespace DungeonPlanet.Library
         int _columns;
         int _rows;
         Path _path;
+        Random _random = new Random();
         public Case[,] Cases { get; private set; }
-        public static Level CurrentBoard { get; set; }
+        public static Level CurrentBoard { get; private set; }
+
+        public static State ActualState { get; set; }
+        public Hub Hub { get; private set; }
+        public enum State
+        {
+            Hub, 
+            LevelOne,
+        }
         public Level(int columns, int rows)
         {
             _columns = columns;
             _rows = rows;
             _path = new Path(columns, rows, this);
             Cases = new Case[columns, rows];
+            Hub = new Hub(10, 40);
             CurrentBoard = this;
         }
 
         public void NewLevel()
         {
-            _path.InitializeBoard();
-            _path.CreatePath();
-            for(int x = 0; x < _columns; x++)
+            if(ActualState == State.Hub)
             {
-                for(int y = 0; y < _rows; y++)
+                Hub.InitializeAllTilesAndBlockSomeRandomly();
+                Hub.SetAllBorderTilesBlocked();
+                Hub.SetTopLeftTileUnblocked();
+            }
+            else if(ActualState == State.LevelOne)
+            {
+                _path.InitializeBoard();
+                _path.CreatePath();
+                for (int x = 0; x < _columns; x++)
                 {
-                    Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
-                    Cases[x, y].InitializeAllTiles();
-                    Cases[x, y].SetBorder();
-                    Cases[x, y].RandomTiles();
-                    Cases[x, y].StructuresCreation();
+                    for (int y = 0; y < _rows; y++)
+                    {
+                        Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
+                        Cases[x, y].InitializeAllTiles();
+                        Cases[x, y].SetBorder();
+                    Cases[x, y].PartsAnalysis();
+                    }
                 }
             }
         }
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
         {
-            foreach (Case Case in Cases)
+            if (ActualState == State.Hub)
             {
-                foreach (var tile in Case.Tiles)
+                foreach (var tile in Hub.Tiles)
                 {
                     if (tile.IsBlocked && tile.Bounds.IntersectsWith(rectangleToCheck))
                     {
                         return false;
                     }
                 }
+                return true;
             }
-            return true;
+            else if (ActualState == State.LevelOne)
+            {
+                foreach (Case Case in Cases)
+                {
+                    foreach (var tile in Case.Tiles)
+                    {
+                        if (tile.IsBlocked && tile.Bounds.IntersectsWith(rectangleToCheck))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            else return false;
+           
         }
 
         public Vector2 WhereCanIGetTo(Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
@@ -98,6 +132,10 @@ namespace DungeonPlanet.Library
                     WhereCanIGetTo(wrapper.FurthestAvailableLocationSoFar, wrapper.FurthestAvailableLocationSoFar + remainingVerticalMovement, wrapper.BoundingRectangle);
             }
             return wrapper.FurthestAvailableLocationSoFar;
+        }
+        public int GetNext(int min, int max)
+        {
+            return _random.Next(min, max);
         }
     }
 }

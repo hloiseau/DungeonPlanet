@@ -14,7 +14,6 @@ namespace DungeonPlanet
 
         public Texture2D TileTexture { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
-        private Random _rnd = new Random();
         public static Board CurrentBoard { get; private set; }
         public Sprite _sprite;
         public Level Level { get; private set; }
@@ -26,7 +25,7 @@ namespace DungeonPlanet
 
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-            Level = new Level(4, 4);
+            Level = new Level(5, 5);
             CreateNewBoard();
             Board.CurrentBoard = this;
         }
@@ -38,20 +37,6 @@ namespace DungeonPlanet
 
         public void Draw()
         {
-            foreach(Case Case in Level.Cases)
-            {
-                foreach (var tile in Case.Tiles)
-                {
-                    if (tile.IsBlocked)
-                    {
-                        Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
-                        sprite.Draw();
-                    }
-                }
-            }
-        }
-    }
-}
             if (Level.ActualState == Level.State.Hub)
             {
                 foreach (var tile in Level.Hub.Tiles)

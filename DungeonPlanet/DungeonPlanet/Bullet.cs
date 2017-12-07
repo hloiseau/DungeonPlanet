@@ -80,29 +80,38 @@ namespace DungeonPlanet
 
         public bool HasTouchedTile()
         {
-            foreach (Case Case in Level.CurrentBoard.Cases)
+            if (Level.ActualState == Level.State.Hub)
             {
-                foreach (Tile tile in Case.Tiles)
+                foreach (var tile in Level.CurrentBoard.Hub.Tiles)
                 {
                     if (tile.IsBlocked)
                     {
-                    if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                        if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
                         {
                             return true;
                         }
                     }
                 }
+                return false;
+            }
+            else if (Level.ActualState == Level.State.LevelOne)
+            {
+                foreach (Case Case in Level.CurrentBoard.Cases)
+                {
+                    foreach (Tile tile in Case.Tiles)
+                    {
+                        if (tile.IsBlocked)
+                        {
+                            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
             }
             return false;
-        }
-
-        public bool HasTouchedShield(Shield shield)
-        {
-            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(shield._itemLib.Bounds))
-            {
-                return true;
-            }
-                return false;
         }
         public override void Draw()
         {
