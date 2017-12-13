@@ -664,10 +664,14 @@
     <None Include="app.manifest" />
     <None Include="Content\GeonBit.UI\themes\editor\fonts\Bold.spritefont" />
     <None Include="Content\GeonBit.UI\themes\editor\fonts\Italic.spritefont" />
-    <None Include="Content\GeonBit.UI\themes\editor\fonts\Regular.spritefont" />
+    <None Include="Content\GeonBit.UI\themes\editor\fonts\Regular.spritefont">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Content\GeonBit.UI\themes\hd\fonts\Bold.spritefont" />
     <None Include="Content\GeonBit.UI\themes\hd\fonts\Italic.spritefont" />
-    <None Include="Content\GeonBit.UI\themes\hd\fonts\Regular.spritefont" />
+    <None Include="Content\GeonBit.UI\themes\hd\fonts\Regular.spritefont">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Content\GeonBit.UI\themes\lowres\fonts\Bold.spritefont" />
     <None Include="Content\GeonBit.UI\themes\lowres\fonts\Italic.spritefont" />
     <None Include="Content\GeonBit.UI\themes\lowres\fonts\Regular.spritefont" />

@@ -31,6 +31,11 @@ namespace DungeonPlanet.Library
             get { return new Rectangle((int)Position.X, (int)Position.Y, _width, _height); }
         }
 
+        public Rectangle ShieldRadius
+        {
+            get { return new Rectangle((int)Position.X, (int)Position.Y, _width, _height); }
+        }
+
         public Rectangle BombRadius
         {
             get { return new Rectangle((int)Position.X - 150, (int)Position.Y, _width * 3, _height); }
@@ -39,6 +44,12 @@ namespace DungeonPlanet.Library
         public bool PlayerIntersect()
         {
             return Bounds.IntersectsWith(_playerLib.Bounds);
+        }
+
+        public bool EnemyIntersect(EnemyLib enemyLib)
+        {
+            //return new Rectangle((int)Position.X, (int)Position.Y, _width, _height).IntersectsWith(enemyLib.Bounds);
+            return Bounds.IntersectsWith(enemyLib.Bounds);
         }
 
         public void AffectWithGravity()
@@ -63,11 +74,6 @@ namespace DungeonPlanet.Library
             Rectangle onePixelLower = Bounds;
             onePixelLower.Offset(0, 1);
             return !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
-        }
-        public void SimulateFriction()
-        {
-            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
-            else { Movement -= Movement * Vector2.One * .02f; }
         }
         public void StopMovingIfBlocked()
         {

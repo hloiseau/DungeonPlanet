@@ -30,6 +30,7 @@ namespace DungeonPlanet
         private SpriteFont _debugFont;
         private Camera _camera;
         private ProgressBar _healthBar;
+        private ProgressBar _energyBar;
         private Door _door;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
@@ -56,7 +57,11 @@ namespace DungeonPlanet
             _healthBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
             _healthBar.ProgressFill.FillColor = Color.Red;
             _healthBar.Locked = true;
+            _energyBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
+            _energyBar.ProgressFill.FillColor = Color.LightSteelBlue;
+            _energyBar.Locked = true;
             UserInterface.Active.AddEntity(_healthBar);
+            UserInterface.Active.AddEntity(_energyBar);
             base.Initialize();
         }
 
@@ -80,37 +85,50 @@ namespace DungeonPlanet
             _shieldTexture = Content.Load<Texture2D>("shield");
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
+            _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
+            _player.Shield = _shield;
             _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
             _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
-<<<<<<< HEAD
             _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
-=======
             _bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
-            _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player);
->>>>>>> origin/develop
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent();
 
             if(Level.ActualState == Level.State.LevelOne)
             {
-                Enemys.Add(_enemy);
-                Enemys.Add(_enemy2);
+                foreach (Tile tile in Level.CurrentBoard.EmptyTiles)
+                {
+                    if(tile != null)
+                    {
+                        if (Level.CurrentBoard.GetNext(0, 500) == 0 && Level.CurrentBoard.GetNext(0, 2) == 0)
+                        {
+                            Enemy enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y),_spriteBatch,"CQC");
+                            Enemys.Add(enemy);
+                        }
+                        else if (Level.CurrentBoard.GetNext(0, 500) == 0)
+                        {
+                            Enemy enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST",_weaponTexture, _bulletETexture, this);
+                            Enemys.Add(enemy);
+                        }
+                        
+                        if (Level.CurrentBoard.GetNext(0, 500) == 0)
+                        {
+                            MediPack mediPack = new MediPack(_mediTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, 50, _player);
+                            Items.Add(mediPack);
+                        }
+                    }
+                }
+                _player.Shield = _shield;
                 Bosses.Add(_boss);
-            }
-            
 <<<<<<< HEAD
-
 =======
-            Enemys.Add(_enemy);
-            Enemys.Add(_enemy2);
-            Bosses.Add(_boss);
-            Items.Add(_mediPack);
-            _player.Shield = _shield;
->>>>>>> origin/develop
+                Items.Add(_mediPack);
+>>>>>>> f5ddf42be5de1f12cc412435a2b78f54741be73e
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -119,16 +137,13 @@ namespace DungeonPlanet
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
             _player.Update(gameTime);
-<<<<<<< HEAD
+            _shield.Update(gameTime);
             if(Level.ActualState == Level.State.Hub)
             {
                 _NPC.Update(gameTime);
                 _door.Update(gameTime);
             }
 
-=======
-            _shield.Update(gameTime);
->>>>>>> origin/develop
             for (int i = 0; i < Enemys.Count; i++)
             {
                 if (Enemys[i].EnemyLib.Life <= 0)
@@ -161,9 +176,10 @@ namespace DungeonPlanet
                     Items.Remove(Items[i]);
                 }
             }
-            if (_player.PlayerLib.IsDead(_player.Life)) RestartLevelOne();
+            if (_player.PlayerLib.IsDead(_player.Life)) RestartHub();
             _camera.Position = _player.position;
             _healthBar.Value = _player.Life;
+            _energyBar.Value = _player.Energy;
             CheckKeyboardAndReact();
         }
 
@@ -174,12 +190,11 @@ namespace DungeonPlanet
             if (state.IsKeyDown(Keys.Escape)) { Exit(); }
             if (state.IsKeyDown(Keys.F6)) { RestartLevelOne(); }
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
+
         }
 
         private void RestartHub()
-        {
-            /*Board.CurrentBoard.CreateNewBoard();
-            PutJumperInTopLeftCorner();*/
+        { 
             Level.ActualState = Level.State.Hub;
             LoadContent();
         }

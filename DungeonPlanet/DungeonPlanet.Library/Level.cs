@@ -29,7 +29,7 @@ namespace DungeonPlanet.Library
         {
             _columns = columns;
             _rows = rows;
-            _path = new Path(columns, rows);
+            _path = new Path(columns, rows, this);
             Cases = new Case[columns, rows];
             Hub = new Hub(10, 40);
             CurrentBoard = this;
