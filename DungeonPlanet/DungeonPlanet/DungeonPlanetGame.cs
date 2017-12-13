@@ -99,13 +99,31 @@ namespace DungeonPlanet
 
             if(Level.ActualState == Level.State.LevelOne)
             {
-                Enemys.Add(_enemy);
-                Enemys.Add(_enemy2);
+                foreach (Tile tile in Level.CurrentBoard.EmptyTiles)
+                {
+                    if(tile != null)
+                    {
+                        if (Level.CurrentBoard.GetNext(0, 500) == 0 && Level.CurrentBoard.GetNext(0, 2) == 0)
+                        {
+                            Enemy enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y),_spriteBatch,"CQC");
+                            Enemys.Add(enemy);
+                        }
+                        else if (Level.CurrentBoard.GetNext(0, 500) == 0)
+                        {
+                            Enemy enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST",_weaponTexture, _bulletETexture, this);
+                            Enemys.Add(enemy);
+                        }
+                        
+                        if (Level.CurrentBoard.GetNext(0, 500) == 0)
+                        {
+                            MediPack mediPack = new MediPack(_mediTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, 50, _player);
+                            Items.Add(mediPack);
+                        }
+                    }
+                }
+                _player.Shield = _shield;
                 Bosses.Add(_boss);
-            Items.Add(_mediPack);
-            _player.Shield = _shield;
             }
-            
         }
 
         protected override void Update(GameTime gameTime)

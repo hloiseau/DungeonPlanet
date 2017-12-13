@@ -10,16 +10,9 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\packages\GeonBit.UI.3.0.2.1\lib\geonbitui\DataTypes.dll
+/reference:..\..\packages\GeonBit.UI.3.0.2.2\lib\geonbitui\DataTypes.dll
 
 #---------------------------------- Content ---------------------------------#
-
-#begin DebugFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:DebugFont.spritefont
 
 #begin jumper.png
 /importer:TextureImporter
