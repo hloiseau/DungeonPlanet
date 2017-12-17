@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 using Comora;
 using DungeonPlanet.Library;
 using GeonBit.UI;
@@ -15,7 +16,7 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _enemyWeaponTexture, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
+        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Player _player;
         private NPC _NPC;
@@ -71,7 +72,7 @@ namespace DungeonPlanet
             Bosses = new List<Boss>();
             Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
             _enemyTexture = Content.Load<Texture2D>("enemy");
@@ -87,8 +88,8 @@ namespace DungeonPlanet
             _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
-            _enemy = new Enemy( _enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
-            _enemy2 = new Enemy( _enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
+            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
+            _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
@@ -98,30 +99,33 @@ namespace DungeonPlanet
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent();
 
-            if(Level.ActualState == Level.State.LevelOne)
+            if (Level.ActualState == Level.State.LevelOne)
             {
-                foreach (Tile tile in Level.CurrentBoard.EmptyTiles)
+                for (int i = 0; i < Level.CurrentBoard.GetNext(20, 30 + 1); i++)
                 {
-                    if(tile != null)
+                    Enemy enemy;
+                    Tile tile = Level.CurrentBoard.Emptytile();
+
+                    if (Level.CurrentBoard.GetNext(0, 2) == 0)
                     {
-                        if (Level.CurrentBoard.GetNext(0, 500) == 0 && Level.CurrentBoard.GetNext(0, 2) == 0)
-                        {
-                            Enemy enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y),_spriteBatch,"CQC");
-                            Enemys.Add(enemy);
-                        }
-                        else if (Level.CurrentBoard.GetNext(0, 500) == 0)
-                        {
-                            Enemy enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST",_weaponTexture, _bulletETexture, this);
-                            Enemys.Add(enemy);
-                        }
-                        
-                        if (Level.CurrentBoard.GetNext(0, 500) == 0)
-                        {
-                            MediPack mediPack = new MediPack(_mediTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, 50, _player);
-                            Items.Add(mediPack);
-                        }
+                        enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "CQC");
+
                     }
+                    else
+                    {
+                        enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
+                    }
+
+                    Enemys.Add(enemy);
                 }
+
+                for (int i = 0; i < 2/*Level.CurrentBoard.GetNext(5, 10 + 1)*/; i++)
+                {
+                    Tile tile = Level.CurrentBoard.Emptytile();
+                    MediPack mediPack = new MediPack(_mediTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, 50, _player);
+                    Items.Add(mediPack);
+                }
+
                 _player.Shield = _shield;
                 Bosses.Add(_boss);
             }
@@ -129,6 +133,7 @@ namespace DungeonPlanet
 
         protected override void Update(GameTime gameTime)
         {
+            
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
@@ -139,7 +144,7 @@ namespace DungeonPlanet
                 _NPC.Update(gameTime);
                 _door.Update(gameTime);
             }
-
+            
             for (int i = 0; i < Enemys.Count; i++)
             {
                 if (Enemys[i].EnemyLib.Life <= 0)
@@ -148,9 +153,12 @@ namespace DungeonPlanet
                 }
                 else
                 {
+                    if(IsOnScreen(Enemys[i].position))
                     Enemys[i].Update(gameTime);
                 }
             }
+            
+            
 
             for (int i = 0; i < Bosses.Count; i++)
             {
@@ -160,23 +168,37 @@ namespace DungeonPlanet
                 }
                 else
                 {
-                    Bosses[i].Update(gameTime);
+                    if (IsOnScreen(Bosses[i].position))
+                        Bosses[i].Update(gameTime);
                 }
             }
 
             for (int i = 0; i < Items.Count; i++)
             {
-                Items[i].Update(gameTime);
+                if (IsOnScreen(Items[i].position))
+                    Items[i].Update(gameTime);
                 if (Items[i].IsFinished && !(Items[i] is Shield))
                 {
                     Items.Remove(Items[i]);
                 }
             }
+
             if (_player.PlayerLib.IsDead(_player.Life)) RestartHub();
             _camera.Position = _player.position;
             _healthBar.Value = _player.Life;
             _energyBar.Value = _player.Energy;
             CheckKeyboardAndReact();
+            
+        }
+
+        private bool IsOnScreen(Vector2 position)
+        {
+            _camera.ToScreen(ref position, out Vector2 screenPosition);
+            if(_camera.Position.X -_camera.Width/2 > screenPosition.X || screenPosition.X <_camera.Position.X + _camera.Width / 2 || _camera.Position.Y - _camera.Height / 2 > screenPosition.Y || screenPosition.Y < _camera.Position.Y + _camera.Height / 2)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void CheckKeyboardAndReact()
@@ -209,6 +231,8 @@ namespace DungeonPlanet
 
         protected override void Draw(GameTime gameTime)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
@@ -229,7 +253,8 @@ namespace DungeonPlanet
             _spriteBatch.End();
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
-
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.Elapsed);
         }
 
         private void WriteDebugInformation()

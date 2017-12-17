@@ -60,7 +60,21 @@ namespace DungeonPlanet.Library
                 EmptyTiles = Spawnable();
             }
         }
-
+        public Tile Emptytile()
+        {
+            bool flag = true;
+            Tile tile;
+            while (flag != false)
+            {
+                tile = EmptyTiles[GetNext(0, EmptyTiles.GetLength(0)), GetNext(0, EmptyTiles.GetLength(1))];
+                if (tile != null)
+                {
+                    return tile;
+                }
+            }
+            return null;
+            
+        }
         public Tile[,] Spawnable()
         {
             Tile[,] emptyTiles = new Tile[_columns*20,_rows*14];
