@@ -16,8 +16,8 @@ namespace DungeonPlanet.Library
         Path _path;
         Random _random = new Random();
         public Case[,] Cases { get; private set; }
+        public Tile[,] EmptyTiles { get; private set; }
         public static Level CurrentBoard { get; private set; }
-
         public static State ActualState { get; set; }
         public Hub Hub { get; private set; }
         public enum State
@@ -54,10 +54,39 @@ namespace DungeonPlanet.Library
                         Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
                         Cases[x, y].InitializeAllTiles();
                         Cases[x, y].SetBorder();
-                    Cases[x, y].PartsAnalysis();
+                        Cases[x, y].PartsAnalysis();
                     }
                 }
+                EmptyTiles = Spawnable();
             }
+        }
+        public Tile Emptytile()
+        {
+            bool flag = true;
+            Tile tile;
+            while (flag != false)
+            {
+                tile = EmptyTiles[GetNext(0, EmptyTiles.GetLength(0)), GetNext(0, EmptyTiles.GetLength(1))];
+                if (tile != null)
+                {
+                    return tile;
+                }
+            }
+            return null;
+            
+        }
+        public Tile[,] Spawnable()
+        {
+            Tile[,] emptyTiles = new Tile[_columns*20,_rows*14];
+            foreach(Case Case in Cases)
+            {
+                foreach(Tile tile in Case.Tiles)
+                {
+                    if(!tile.IsBlocked)
+                    emptyTiles[(int)tile.Position.X / 64, (int)tile.Position.Y / 64] = tile;
+                }
+            }
+            return emptyTiles;
         }
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
