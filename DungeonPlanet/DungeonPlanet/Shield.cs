@@ -15,7 +15,7 @@ namespace DungeonPlanet
         int Life { get; set; }
         public bool Activate { get; set; }
         List<Enemy> _enemys;
-        ItemLib ShieldLib { get; set; }
+        public ItemLib ShieldLib { get; set; }
 
         public Shield(Texture2D texture, Vector2 position, SpriteBatch spritebatch, Player player, List<Enemy> enemys)
             : base(texture, position, spritebatch, player)
