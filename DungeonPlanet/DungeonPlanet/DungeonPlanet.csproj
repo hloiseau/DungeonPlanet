@@ -51,6 +51,7 @@
     <Compile Include="Item.cs" />
     <Compile Include="MediPack.cs" />
     <Compile Include="Bomb.cs" />
+    <Compile Include="Menu.cs" />
     <Compile Include="Shield.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="Player.cs" />

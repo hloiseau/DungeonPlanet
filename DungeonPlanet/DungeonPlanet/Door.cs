@@ -44,7 +44,7 @@ namespace DungeonPlanet
                     _header = null;
                 }
             }
-            else if ( _header == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds))
+            else if (_header == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds))
             {
                 _header = new Header("Appuyer sur E pour interagir", Anchor.AutoCenter);
                 UserInterface.Active.AddEntity(_header);

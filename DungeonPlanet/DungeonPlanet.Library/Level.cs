@@ -22,8 +22,9 @@ namespace DungeonPlanet.Library
         public Hub Hub { get; private set; }
         public enum State
         {
+            Menu,
             Hub, 
-            LevelOne,
+            LevelOne
         }
         public Level(int columns, int rows)
         {

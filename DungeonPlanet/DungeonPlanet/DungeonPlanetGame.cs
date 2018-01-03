@@ -33,6 +33,7 @@ namespace DungeonPlanet
         private ProgressBar _healthBar;
         private ProgressBar _energyBar;
         private Door _door;
+        private Menu _menu;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
@@ -97,6 +98,7 @@ namespace DungeonPlanet
             _bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
+            _menu = new Menu(this);
             _camera.LoadContent();
 
             if (Level.ActualState == Level.State.LevelOne)
@@ -139,6 +141,9 @@ namespace DungeonPlanet
             _camera.Update(gameTime);
             _player.Update(gameTime);
             _shield.Update(gameTime);
+
+            _menu.Update();
+            
             if(Level.ActualState == Level.State.Hub)
             {
                 _NPC.Update(gameTime);
