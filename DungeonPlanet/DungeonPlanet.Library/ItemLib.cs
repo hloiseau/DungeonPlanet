@@ -52,6 +52,12 @@ namespace DungeonPlanet.Library
             return Bounds.IntersectsWith(enemyLib.Bounds);
         }
 
+        public void SimulateFriction()
+        {
+            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
+            else { Movement -= Movement * Vector2.One * .02f; }
+        }
+
         public void AffectWithGravity()
         {
             Movement += Vector2.UnitY * .65f;

@@ -70,12 +70,20 @@ namespace DungeonPlanet
             if (keyboardState.IsKeyDown(Keys.Q)) { PlayerLib.Left(); }
             if (keyboardState.IsKeyDown(Keys.D)) { PlayerLib.Right(); }
             if (keyboardState.IsKeyDown(Keys.Z) && PlayerLib.IsOnFirmGround()) { PlayerLib.Jump(); }
-            if (keyboardState.IsKeyDown(Keys.B) && !_previousKey.IsKeyDown(Keys.B) && Energy >= 50)
+            if (keyboardState.IsKeyDown(Keys.B) && !_previousKey.IsKeyDown(Keys.B) && Energy >= 50 )
             {
                 Bomb bomb = new Bomb(_texturebomb, position, _spritebatch, 0, this, _enemys);
                 bomb.ItemLib.Movement = System.Numerics.Vector2.UnitX * 20;
                 _bombs.Add(bomb);
                 Energy -= 50;
+            }
+            if (keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && !Shield.Activate)
+            {
+                Shield.Activate = true;
+            } 
+            else if(keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && Shield.Activate)
+            {
+                Shield.Activate = false;
             }
             _previousKey = keyboardState;
         }
@@ -89,17 +97,7 @@ namespace DungeonPlanet
             {
                 _bombs[i].Draw();
             }
-            if (keyboardState.IsKeyDown(Keys.A) && !(Shield.Activate) && Level.ActualState == Level.State.LevelOne)
-            {
-                Shield.Activate = true;
-                Shield.Draw();
-            }
-            else if (keyboardState.IsKeyUp(Keys.A) && Shield.Activate == true && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
-            else if (keyboardState.IsKeyDown(Keys.A) && Shield.Activate == true && Level.ActualState == Level.State.LevelOne)
-            {
-                Shield.Activate = false;
-            }
+            if  (Shield.Activate && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
         }
-
     }
 }

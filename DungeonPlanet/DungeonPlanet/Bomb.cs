@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DungeonPlanet.Library;
 
 namespace DungeonPlanet
 {
@@ -25,6 +26,7 @@ namespace DungeonPlanet
         {
             CheckStatusAndMovement();
             base.Update(gameTime);
+            ItemLib.SimulateFriction();
         }
 
         private void CheckStatusAndMovement()

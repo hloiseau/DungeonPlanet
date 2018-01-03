@@ -24,7 +24,8 @@ namespace DungeonPlanet.Library
             Left = 1,
             Right = 2,
             Top = 4,
-            Bottom = 8
+            Bottom = 8,
+            Last = 16
         }
 
         public Path(int columns, int rows, Level ctx)
@@ -104,15 +105,16 @@ namespace DungeonPlanet.Library
 
         private bool Down(int x, int y)
         {
-            Board[x, y] |= Direction.Bottom;
             x++;
             if (x < Rows)
             {
+                Board[x-1, y] |= Direction.Bottom;
                 Board[x, y] |= Direction.Top;
                 return true;
             }
             else
             {
+                Board[x - 1, y] |= Direction.Last;
                 return false;
             }
         }
