@@ -33,6 +33,7 @@ namespace DungeonPlanet
         private ProgressBar _healthBar;
         private ProgressBar _energyBar;
         private Door _door;
+        private Door _door2;
         private Menu _menu;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
@@ -95,6 +96,7 @@ namespace DungeonPlanet
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
+            _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(100, 200), _spriteBatch, this);
             _bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
@@ -145,12 +147,16 @@ namespace DungeonPlanet
             {
                 _menu.Update();
             }
-            if(Level.ActualState == Level.State.Hub)
+            if (Level.ActualState == Level.State.Hub)
             {
                 _NPC.Update(gameTime);
                 _door.Update(gameTime);
             }
-            
+            if (Level.ActualState == Level.State.LevelOne)
+            {
+                _door2.Update(gameTime);
+            }
+
             for (int i = 0; i < Enemys.Count; i++)
             {
                 if (Enemys[i].EnemyLib.Life <= 0)
@@ -244,6 +250,10 @@ namespace DungeonPlanet
             {
                 _NPC.Draw();
                 _door.Draw();
+            }
+            if (Level.ActualState == Level.State.LevelOne)
+            {
+                _door2.Draw();
             }
             _board.Draw();
             WriteDebugInformation();

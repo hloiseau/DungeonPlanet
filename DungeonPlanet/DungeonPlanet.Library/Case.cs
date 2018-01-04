@@ -85,47 +85,78 @@ namespace DungeonPlanet.Library
             {
                 for (int b = 1; b < _columns / 1.1; b += _columns / 3) // so b + 6
                 {
-                    if (!(a >= _columns / 3 && a <= 2 * (_columns / 3))) //so diff 6 >= x <= 12 (far left or far right case)
+                    if ((_direction & Path.Direction.Last) == Path.Direction.None) //if this is Not a "last" direction
                     {
-                        if (_ctx.GetNext(0,2) == 0) // if random = 0
+                        if (!(a >= _columns / 3 && a <= 2 * (_columns / 3))) //so diff 6 >= x <= 12 (far left or far right case)
                         {
-                            GeneratePlatform(a, b);
-                            _oldMove = "plat";
-                        }
-                        else
-                        {
-                            if (((_direction & Path.Direction.Left) == Path.Direction.None && a < _columns / 3) || ((_direction & Path.Direction.Right) == Path.Direction.None && a >= 2 * (_columns / 3))) // if  this is not left direction and x < 6 ||  if  this is not right direction and x >= 12
+                            if (_ctx.GetNext(0, 2) == 0) // if random = 0
                             {
-                                GenerateStairs(a, b);
-                                _oldMove = "stairs";
+                                GeneratePlatform(a, b);
+                                _oldMove = "plat";
                             }
                             else
                             {
-                                GenerateBlock(a, b);
-                                _oldMove = "bloc";
+                                if (((_direction & Path.Direction.Left) == Path.Direction.None && a < _columns / 3) || ((_direction & Path.Direction.Right) == Path.Direction.None && a >= 2 * (_columns / 3))) // if  this is not left direction and x < 6 ||  if  this is not right direction and x >= 12
+                                {
+                                    GenerateStairs(a, b);
+                                    _oldMove = "stairs";
+                                }
+                                else
+                                {
+                                    GenerateBlock(a, b);
+                                    _oldMove = "bloc";
+                                }
+                            }
+                        }
+                        else // so  x < 6 || 12 < x (midle case)
+                        {
+                            if (_ctx.GetNext(0, 2) == 0) //same as the 1rst one random  = 0
+                            {
+                                GeneratePlatform(a, b);
+                                _oldMove = "plat";
+                            }
+                            else
+                            {
+                                if ((_oldMove != "piramid" && (_direction & Path.Direction.Bottom) == Path.Direction.None && b < _rows / 2) || (_oldMove != "piramid" && (_direction & Path.Direction.Top) == Path.Direction.None && b >= _rows / 2)) // if  this is not botom direction and y < 6 ||  if  this is not top direction and y >= 6
+                                {
+                                    GeneratePyramid(a, b);
+                                    _oldMove = "piramid";
+                                }
+                                else
+                                {
+                                    GenerateBlock(a, b);
+                                    _oldMove = "bloc";
+                                }
                             }
                         }
                     }
-                    else // so  x < 6 || 12 < x (midle case)
+                    else
                     {
-                        if (_ctx.GetNext(0, 2) == 0) //same as the 1rst one random  = 0
-                        {
-                            GeneratePlatform(a, b);
-                            _oldMove = "plat";
-                        }
-                        else
-                        {
-                            if ((_oldMove != "piramid" && (_direction & Path.Direction.Bottom) == Path.Direction.None && b < _rows / 2) || (_oldMove != "piramid" && (_direction & Path.Direction.Top) == Path.Direction.None && b >= _rows / 2)) // if  this is not botom direction and y < 6 ||  if  this is not top direction and y >= 6
-                            {
-                                GeneratePyramid(a, b);
-                                _oldMove = "piramid";
-                            }
-                            else
-                            {
-                                GenerateBlock(a, b);
-                                _oldMove = "bloc";
-                            }
-                        }
+                        //spawn exit dor.
+                        Tiles[7, 7].IsBlocked = true;
+                        Tiles[7, 8].IsBlocked = true;
+                        Tiles[7, 9].IsBlocked = true;
+                        Tiles[7, 10].IsBlocked = true;
+                        Tiles[7, 11].IsBlocked = true;                        
+                        Tiles[8, 7].IsBlocked = true;
+                        Tiles[9, 7].IsBlocked = true;
+                        Tiles[10, 7].IsBlocked = true;
+                        Tiles[11, 7].IsBlocked = true;
+                        Tiles[12, 7].IsBlocked = true;
+                        Tiles[7, 12].IsBlocked = true;
+                        Tiles[8, 12].IsBlocked = true;
+                        Tiles[9, 12].IsBlocked = true;
+                        Tiles[10, 12].IsBlocked = true;
+                        Tiles[11, 12].IsBlocked = true;
+                        Tiles[12, 12].IsBlocked = true;
+                        Tiles[12, 7].IsBlocked = true;
+                        Tiles[12, 8].IsBlocked = true;
+                        Tiles[12, 9].IsBlocked = true;
+                        Tiles[12, 10].IsBlocked = true;
+                        Tiles[12, 11].IsBlocked = true;
+                        Tiles[12, 12].IsBlocked = true;
+
+
                     }
                 }
             }
