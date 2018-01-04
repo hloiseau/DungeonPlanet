@@ -141,9 +141,10 @@ namespace DungeonPlanet
             _camera.Update(gameTime);
             _player.Update(gameTime);
             _shield.Update(gameTime);
-
-            _menu.Update();
-            
+            if (Level.ActualState == Level.State.Menu)
+            {
+                _menu.Update();
+            }
             if(Level.ActualState == Level.State.Hub)
             {
                 _NPC.Update(gameTime);
