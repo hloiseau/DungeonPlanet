@@ -78,6 +78,18 @@ namespace DungeonPlanet
             return false;
         }
 
+        public bool HasTouchedShield()
+        {
+            if (Player.CurrentPlayer.Shield.Activate)
+            {
+                if(new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(Player.CurrentPlayer.Shield.ShieldLib.Bounds))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool HasTouchedTile()
         {
             if (Level.ActualState == Level.State.Hub)

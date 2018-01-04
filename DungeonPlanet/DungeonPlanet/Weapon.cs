@@ -123,7 +123,7 @@ namespace DungeonPlanet
 
             for (int i = 0; i < BulletsEnemy.Count; i++)
             {
-                if (BulletsEnemy[i].BulletLib.IsDead() || BulletsEnemy[i].HasTouchedPlayer(_enemyLib) || BulletsEnemy[i].HasTouchedTile())
+                if (BulletsEnemy[i].BulletLib.IsDead() || BulletsEnemy[i].HasTouchedPlayer(_enemyLib) || BulletsEnemy[i].HasTouchedTile() || BulletsEnemy[i].HasTouchedShield())
                 {
                     BulletsEnemy.Remove(BulletsEnemy[i]);
                 }
