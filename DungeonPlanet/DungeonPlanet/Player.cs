@@ -24,13 +24,13 @@ namespace DungeonPlanet
         List<Bomb> _bombs;
         KeyboardState _previousKey;
 
-        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
+        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBomb, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
             : base(texturePlayer, position, spritebatch)
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X, position.Y), texturePlayer.Width, texturePlayer.Height);
             Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, bosses);
             _bombs = new List<Bomb>();
-            _texturebomb = textureWeapon;
+            _texturebomb = textureBomb;
             _spritebatch = spritebatch;
             _enemys = enemys;
             Life = 70;

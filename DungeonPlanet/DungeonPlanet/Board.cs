@@ -25,7 +25,7 @@ namespace DungeonPlanet
 
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-            Level = new Level(4, 5);
+            Level = new Level(2, 2);
             CreateNewBoard();
             Board.CurrentBoard = this;
         }

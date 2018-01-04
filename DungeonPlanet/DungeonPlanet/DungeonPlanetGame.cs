@@ -86,7 +86,7 @@ namespace DungeonPlanet
             _bombTexture = Content.Load<Texture2D>("bomb");
             _shieldTexture = Content.Load<Texture2D>("shield");
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
-            _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
+            _player = new Player(_playerTexture, _weaponTexture, _bombTexture ,_bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
             _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
@@ -95,7 +95,7 @@ namespace DungeonPlanet
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
-            _bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
+            //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _menu = new Menu(this);
