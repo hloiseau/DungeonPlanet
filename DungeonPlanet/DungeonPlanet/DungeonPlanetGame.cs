@@ -33,6 +33,7 @@ namespace DungeonPlanet
         private ProgressBar _healthBar;
         private ProgressBar _energyBar;
         private Door _door;
+        private Door _door2;
         private Menu _menu;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
@@ -95,6 +96,7 @@ namespace DungeonPlanet
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
+            _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(100, 200), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
@@ -145,16 +147,21 @@ namespace DungeonPlanet
             {
                 _menu.Update();
             }
-            if(Level.ActualState == Level.State.Hub)
+            if (Level.ActualState == Level.State.Hub)
             {
                 _NPC.Update(gameTime);
                 _door.Update(gameTime);
             }
-            
+            if (Level.ActualState == Level.State.LevelOne)
+            {
+                _door2.Update(gameTime);
+            }
+
             for (int i = 0; i < Enemys.Count; i++)
             {
                 if (Enemys[i].EnemyLib.Life <= 0)
                 {
+                    _player.Money += 20;
                     Enemys.Remove(Enemys[i]);
                 }
                 else
@@ -168,6 +175,7 @@ namespace DungeonPlanet
             {
                 if (Bosses[i].BossLib.Life <= 0)
                 {
+                    _player.Money += 50;
                     Bosses.Remove(Bosses[i]);
                 }
                 else
@@ -191,6 +199,7 @@ namespace DungeonPlanet
             _camera.Position = _player.position;
             _healthBar.Value = _player.Life;
             _energyBar.Value = _player.Energy;
+            
             CheckKeyboardAndReact();
             
         }
@@ -245,6 +254,10 @@ namespace DungeonPlanet
                 _NPC.Draw();
                 _door.Draw();
             }
+            if (Level.ActualState == Level.State.LevelOne)
+            {
+                _door2.Draw();
+            }
             _board.Draw();
             WriteDebugInformation();
             _player.Draw();
@@ -268,6 +281,7 @@ namespace DungeonPlanet
             string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _player.PlayerLib.Movement.X, _player.PlayerLib.Movement.Y);
             string isOnFirmGroundText = string.Format("On firm ground?: {0}", _player.PlayerLib.IsOnFirmGround());
             string playerLifeText = string.Format("PLife: {0}/100", _player.Life);
+            string playerMoney = string.Format("Coins : {0}", _player.Money);
             if(_enemy != null)
             {
                 enemyLifeText = string.Format("ELife: {0}/100", _enemy.EnemyLib.Life);
@@ -280,18 +294,25 @@ namespace DungeonPlanet
             }
             string bossLifeText = string.Format("BLife: {0}/200", _boss.BossLib.Life);
 
+            DrawWithShadowMoney(playerMoney, new Vector2(PlayerLib.Position.X - 940, PlayerLib.Position.Y - 400));
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));
             DrawWithShadow("F6 for random board", new Vector2(70, 580));
             DrawWithShadow(playerLifeText, new Vector2(70, 600));
-            DrawWithShadow(bossLifeText, new Vector2(1300, 600));
         }
 
         private void DrawWithShadow(string text, Vector2 position)
-        {
+        { 
+            
             _spriteBatch.DrawString(_debugFont, text, position + Vector2.One, Color.Black);
             _spriteBatch.DrawString(_debugFont, text, position, Color.LightYellow);
+        }
+
+        private void DrawWithShadowMoney(string text, Vector2 position)
+        {
+            _spriteBatch.DrawString(_debugFont, text, position + Vector2.One, Color.Black, 0, new Vector2(0, 0), 2, SpriteEffects.None, 0);
+            _spriteBatch.DrawString(_debugFont, text, position, Color.LightYellow, 0, new Vector2(0, 0), 2, SpriteEffects.None, 0);
         }
     }
 }

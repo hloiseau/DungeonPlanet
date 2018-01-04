@@ -16,6 +16,7 @@ namespace DungeonPlanet
         public Weapon Weapon { get; set; }
         public int Life { get; set; }
         public int Energy { get; set; }
+        public int Money { get; set; }
         public static Player CurrentPlayer { get; private set; }
         public Shield Shield { get; set; }
         Texture2D _texturebomb;
@@ -36,6 +37,7 @@ namespace DungeonPlanet
             Life = 70;
             Energy = 0;
             CurrentPlayer = this;
+            Money = 0;
         }
 
         public void Update(GameTime gameTime)
@@ -46,12 +48,15 @@ namespace DungeonPlanet
             PlayerLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             PlayerLib.StopMovingIfBlocked();
             PlayerLib.IsDead(Life);
+
             position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y);
             Weapon.Update(gameTime);
+
             Life = MathHelper.Clamp(Life, 0, 100);
             if (PlayerLib.IsOnFirmGround()) Energy++;
             Energy = MathHelper.Clamp(Energy, 0, 100);
-            for(int i = 0; i< _bombs.Count; i++) 
+
+            for (int i = 0; i< _bombs.Count; i++) 
             {
                 _bombs[i].Update(gameTime);
                 if (_bombs[i].IsFinished)
