@@ -10,20 +10,20 @@ namespace DungeonPlanet
 {
     public class Sprite
     {
-        public Vector2 Position { get; set; }
+        public Vector2 position { get; set; }
         public Texture2D Texture { set; get; }
         public SpriteBatch SpriteBatch { get; set; }
 
         public Sprite(Texture2D texture, Vector2 position, SpriteBatch batch)
         {
             Texture = texture;
-            Position = position;
+            this.position = position;
             SpriteBatch = batch;
         }
 
         public virtual void Draw()
         {
-            SpriteBatch.Draw(Texture, Position, Color.White);
+            SpriteBatch.Draw(Texture, position, Color.White);
         }
     }
 }

@@ -11,40 +11,55 @@ namespace DungeonPlanet
 {
     public class Board
     {
+
         public Texture2D TileTexture { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
-        private Random _rnd = new Random();
         public static Board CurrentBoard { get; private set; }
-        public BoardLib _boardLib;
         public Sprite _sprite;
-      
+        public Level Level { get; private set; }
+        public static List<Enemy> Enemys { get; private set; }
+        public static List<Boss> Bosses { get; private set; }
 
         public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
         {
 
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-
-            _boardLib = new BoardLib(columns, rows, tileTexture.Width, tileTexture.Height);
+            Level = new Level(4, 4);
             CreateNewBoard();
             Board.CurrentBoard = this;
         }
 
         public void CreateNewBoard()
         {
-            _boardLib.InitializeAllTilesAndBlockSomeRandomly();
-            _boardLib.SetAllBorderTilesBlocked();
-            _boardLib.SetTopLeftTileUnblocked();
+            Level.NewLevel();
         }
 
         public void Draw()
         {
-            foreach (var tile in _boardLib.Tiles)
+            if (Level.ActualState == Level.State.Hub)
             {
-                if(tile.IsBlocked)
+                foreach (var tile in Level.Hub.Tiles)
                 {
-                    Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
-                    sprite.Draw();
+                    if (tile.IsBlocked)
+                    {
+                        Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
+                        sprite.Draw();
+                    }
+                }
+            }
+            else if (Level.ActualState == Level.State.LevelOne)
+            {
+                foreach (Case Case in Level.Cases)
+                {
+                    foreach (var tile in Case.Tiles)
+                    {
+                        if (tile.IsBlocked)
+                        {
+                            Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
+                            sprite.Draw();
+                        }
+                    }
                 }
             }
         }

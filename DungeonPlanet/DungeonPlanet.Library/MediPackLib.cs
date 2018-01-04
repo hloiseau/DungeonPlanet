@@ -31,7 +31,5 @@ namespace DungeonPlanet.Library
         {
             return Bounds.IntersectsWith(_playerLib.Bounds);            
         }
-
-
     }
 }

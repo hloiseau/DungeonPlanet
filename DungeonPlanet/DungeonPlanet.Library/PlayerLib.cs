@@ -11,7 +11,7 @@ namespace DungeonPlanet.Library
     public class PlayerLib
     {
         public Vector2 Movement { get; set; }
-        public Vector2 Position { get; set; }
+        public static Vector2 Position { get; set; }
         public Vector2  OldPosition{ get; set; }
 
         int _height;
@@ -25,7 +25,7 @@ namespace DungeonPlanet.Library
         {
             return life <= 0;
         }
-        public PlayerLib( Vector2 position, int width, int height)
+        public PlayerLib(Vector2 position, int width, int height)
         {
             Position = position;
             _height = height;
@@ -36,7 +36,7 @@ namespace DungeonPlanet.Library
         {
             OldPosition = Position;
             UpdatePositionBasedOnMovement(gameTime);
-            Position = BoardLib.CurrentBoard.WhereCanIGetTo(OldPosition, Position, Bounds);
+            Position = Level.CurrentBoard.WhereCanIGetTo(OldPosition, Position, Bounds);
         }
 
         public void UpdatePositionBasedOnMovement(float gameTime)
@@ -59,7 +59,9 @@ namespace DungeonPlanet.Library
         {
             Rectangle onePixelLower = Bounds;
             onePixelLower.Offset(0, 1);
-            return !BoardLib.CurrentBoard.HasRoomForRectangle(onePixelLower);
+            if (Level.CurrentBoard != null)
+                return  !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
+            return false;
         }
 
         public void Left()
