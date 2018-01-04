@@ -47,7 +47,7 @@ namespace DungeonPlanet
                     NPCPanel.AddChild(new Label(" 10 $", Anchor.Auto));
                 */
                 NPCPanel.AddChild(new Paragraph("Vie"));
-                NPCPanel.AddChild(new Button(string.Format("{0}", _player.Life), ButtonSkin.Default, Anchor.AutoInline, new Vector2(50, 50)));
+                NPCPanel.AddChild(new Button(string.Format("{0}", _player.PlayerInfo.Life), ButtonSkin.Default, Anchor.AutoInline, new Vector2(50, 50)));
 
                 if (_header != null)
                 {

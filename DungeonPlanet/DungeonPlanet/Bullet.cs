@@ -72,7 +72,7 @@ namespace DungeonPlanet
             if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(Player.CurrentPlayer.PlayerLib.Bounds))
             {
                 enemylib.MakeDamage(Player.CurrentPlayer.PlayerLib);
-                Player.CurrentPlayer.Life -= 10;
+                Player.CurrentPlayer.PlayerInfo.Life -= 10;
                 return true;
             }
             return false;

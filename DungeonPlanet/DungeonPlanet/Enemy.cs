@@ -72,7 +72,7 @@ namespace DungeonPlanet
                 {
                     if (EnemyLib.Bounds.IntersectsWith(PlayerLib.Bounds))
                     {
-                        _player.Life -= 10;
+                        _player.PlayerInfo.Life -= 10;
                         EnemyLib.MakeDamage(PlayerLib);
                     }
                     if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1) { EnemyLib.Left(); }
@@ -83,7 +83,7 @@ namespace DungeonPlanet
                     EnemyLib.IsShooting = true;
                     if (EnemyLib.Bounds.IntersectsWith(PlayerLib.Bounds))
                     {
-                        _player.Life -= 1;
+                        _player.PlayerInfo.Life -= 1;
                         EnemyLib.MakeDamage(PlayerLib);
                     }
                 }

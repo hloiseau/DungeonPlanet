@@ -32,7 +32,7 @@ namespace DungeonPlanet
         {
             if (ItemLib.PlayerIntersect())
             {
-                Player.Life += Heal;
+                Player.PlayerInfo.Life += Heal;
                 IsFinished = true;
             }
         }

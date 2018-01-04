@@ -43,7 +43,7 @@ namespace DungeonPlanet
             {
                 if (BossLib.Bounds.IntersectsWith(PlayerLib.Bounds))
                 {
-                    _player.Life -= 15;
+                    _player.PlayerInfo.Life -= 15;
                     BossLib.MakeDamage(PlayerLib);
                 }
                 if (BossLib.GetDistanceTo(PlayerLib.Position).X < 0.1) { BossLib.Left(); }

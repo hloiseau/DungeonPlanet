@@ -161,7 +161,7 @@ namespace DungeonPlanet
             {
                 if (Enemys[i].EnemyLib.Life <= 0)
                 {
-                    _player.Money += 20;
+                    _player.PlayerInfo.Money += 20;
                     Enemys.Remove(Enemys[i]);
                 }
                 else
@@ -175,7 +175,7 @@ namespace DungeonPlanet
             {
                 if (Bosses[i].BossLib.Life <= 0)
                 {
-                    _player.Money += 50;
+                    _player.PlayerInfo.Money += 50;
                     Bosses.Remove(Bosses[i]);
                 }
                 else
@@ -195,10 +195,14 @@ namespace DungeonPlanet
                 }
             }
 
-            if (_player.PlayerLib.IsDead(_player.Life)) RestartHub();
+            if (_player.PlayerLib.IsDead(_player.PlayerInfo.Life))
+            {
+                _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+                RestartHub();
+            }
             _camera.Position = _player.position;
-            _healthBar.Value = _player.Life;
-            _energyBar.Value = _player.Energy;
+            _healthBar.Value = _player.PlayerInfo.Life;
+            _energyBar.Value = _player.PlayerInfo.Energy;
             
             CheckKeyboardAndReact();
             
@@ -225,7 +229,8 @@ namespace DungeonPlanet
         }
 
         private void RestartHub()
-        { 
+        {
+            
             Level.ActualState = Level.State.Hub;
             LoadContent();
         }
@@ -280,8 +285,8 @@ namespace DungeonPlanet
             string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", PlayerLib.Position.X, _player.position.Y);
             string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _player.PlayerLib.Movement.X, _player.PlayerLib.Movement.Y);
             string isOnFirmGroundText = string.Format("On firm ground?: {0}", _player.PlayerLib.IsOnFirmGround());
-            string playerLifeText = string.Format("PLife: {0}/100", _player.Life);
-            string playerMoney = string.Format("Coins : {0}", _player.Money);
+            string playerLifeText = string.Format("PLife: {0}/100", _player.PlayerInfo.Life);
+            string playerMoney = string.Format("Coins : {0}", _player.PlayerInfo.Money);
             if(_enemy != null)
             {
                 enemyLifeText = string.Format("ELife: {0}/100", _enemy.EnemyLib.Life);
