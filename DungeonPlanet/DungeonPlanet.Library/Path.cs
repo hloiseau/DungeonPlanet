@@ -61,43 +61,43 @@ namespace DungeonPlanet.Library
                 if (whereToGo == 1)
                 {
                     isOk = Down(x, y);
-                    x++;
+                    y++;
                 }
                 else if (whereToGo == 2 || whereToGo == 3)
                 {
-                    y++;
-                    if (y < Rows)
+                    x++;
+                    if (x < Columns)
                     {
                         if ((Board[x, y] & Direction.Left) == Direction.None)
                         {
-                            Board[x, y - 1] |= Direction.Right;
+                            Board[x - 1, y] |= Direction.Right;
                             Board[x, y] |= Direction.Left;
                         }
                     }
                     else
                     {
-                        y--;
+                        x--;
                         isOk = Down(x, y);
 
-                        x++;
+                        y++;
                     }
                 }
                 else if (whereToGo == 4 || whereToGo == 5)
                 {
-                    y--;
-                    if (y >= 0)
+                    x--;
+                    if (x >= 0)
                     {
                         if ((Board[x, y] & Direction.Right) == Direction.None)
                         {
-                            Board[x, y + 1] |= Direction.Left;
+                            Board[x + 1, y ] |= Direction.Left;
                             Board[x, y] |= Direction.Right;
                         }
                     }
                     else
                     {
-                        y++;
-                        isOk = Down(x, y);
                         x++;
+                        isOk = Down(x, y);
+                        y++;
                     }
                 }
             }
@@ -105,16 +105,16 @@ namespace DungeonPlanet.Library
 
         private bool Down(int x, int y)
         {
-            x++;
-            if (x < Rows)
+            y++;
+            if (y < Rows)
             {
-                Board[x-1, y] |= Direction.Bottom;
+                Board[x, y-1] |= Direction.Bottom;
                 Board[x, y] |= Direction.Top;
                 return true;
             }
             else
             {
-                Board[x - 1, y] |= Direction.Last;
+                Board[x, y-1] |= Direction.Last;
                 return false;
             }
         }

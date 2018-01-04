@@ -52,7 +52,7 @@ namespace DungeonPlanet.Library
                 {
                     for (int y = 0; y < _rows; y++)
                     {
-                        Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
+                        Cases[x, y] = new Case(14, 20, _path.Board[x, y], this, x, y);
                         Cases[x, y].InitializeAllTiles();
                         Cases[x, y].SetBorder();
                         Cases[x, y].PartsAnalysis();
