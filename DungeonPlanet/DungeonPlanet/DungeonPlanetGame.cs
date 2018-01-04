@@ -157,8 +157,6 @@ namespace DungeonPlanet
                     Enemys[i].Update(gameTime);
                 }
             }
-            
-            
 
             for (int i = 0; i < Bosses.Count; i++)
             {
@@ -279,7 +277,7 @@ namespace DungeonPlanet
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));
-            DrawWithShadow("F5 for random board", new Vector2(70, 580));
+            DrawWithShadow("F6 for random board", new Vector2(70, 580));
             DrawWithShadow(playerLifeText, new Vector2(70, 600));
             DrawWithShadow(bossLifeText, new Vector2(1300, 600));
         }

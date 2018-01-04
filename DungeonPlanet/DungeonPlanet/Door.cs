@@ -37,11 +37,22 @@ namespace DungeonPlanet
             position = new Vector2(_lib.Position.X, _lib.Position.Y);
             if (Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds) && keyboardState.IsKeyDown(Keys.E))
             {
-                _ctx.RestartLevelOne();
-                if (_header != null)
+                if (Level.ActualState == Level.State.Hub)
                 {
-                    UserInterface.Active.RemoveEntity(_header);
-                    _header = null;
+                    _ctx.RestartLevelOne();
+                    if (_header != null)
+                    {
+                        UserInterface.Active.RemoveEntity(_header);
+                        _header = null;
+                    }
+                }
+                else {
+                  /*  _ctx.R;
+                    if (_header != null)
+                    {
+                        UserInterface.Active.RemoveEntity(_header);
+                        _header = null;
+                    }*/
                 }
             }
             else if ( _header == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds))
