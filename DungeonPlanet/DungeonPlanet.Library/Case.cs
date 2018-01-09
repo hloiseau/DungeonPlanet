@@ -17,7 +17,11 @@ namespace DungeonPlanet.Library
         public Tile[,] Tiles { get; private set; }
         int _xTilesOffset;
         int _yTilesOffset;
+        int _xLevel;
+        int _yLevel;
         string _oldMove;
+        public static int _dorX;
+        public static int _dorY;
 
 
         public Case(int rows, int columns, Path.Direction direction, Level ctx, int xOffset, int yOffset)
@@ -27,6 +31,8 @@ namespace DungeonPlanet.Library
             _ctx = ctx;
             _xTilesOffset = xOffset * 20;
             _yTilesOffset = yOffset * 14;
+            _xLevel = xOffset;
+            _yLevel = yOffset;
             _direction = direction;
             Tiles = new Tile[columns, rows];
         }
@@ -133,30 +139,41 @@ namespace DungeonPlanet.Library
                     else
                     {
                         //spawn exit dor.
+                        // int _test_x = Level._levelRows;
+                        if (_xLevel != 0)
+                        {
+                            _dorX = ((_xLevel * (64 * 12)) - (64 * 8));
+                        }
+                        else
+                        {
+                            _dorX = _xLevel + (64 * 10);
+                        }
+                        _dorY = ((_yLevel * (64 * 18)) - (64 * 4));
+                        
                         Tiles[7, 7].IsBlocked = true;
                         Tiles[7, 8].IsBlocked = true;
                         Tiles[7, 9].IsBlocked = true;
                         Tiles[7, 10].IsBlocked = true;
-                        Tiles[7, 11].IsBlocked = true;                        
+                        Tiles[7, 11].IsBlocked = true;
+
                         Tiles[8, 7].IsBlocked = true;
                         Tiles[9, 7].IsBlocked = true;
                         Tiles[10, 7].IsBlocked = true;
                         Tiles[11, 7].IsBlocked = true;
                         Tiles[12, 7].IsBlocked = true;
+
                         Tiles[7, 12].IsBlocked = true;
                         Tiles[8, 12].IsBlocked = true;
                         Tiles[9, 12].IsBlocked = true;
                         Tiles[10, 12].IsBlocked = true;
                         Tiles[11, 12].IsBlocked = true;
                         Tiles[12, 12].IsBlocked = true;
+
                         Tiles[12, 7].IsBlocked = true;
                         Tiles[12, 8].IsBlocked = true;
                         Tiles[12, 9].IsBlocked = true;
                         Tiles[12, 10].IsBlocked = true;
-                        Tiles[12, 11].IsBlocked = true;
-                        Tiles[12, 12].IsBlocked = true;
-
-
+                        Tiles[12, 11].IsBlocked = true;                        
                     }
                 }
             }

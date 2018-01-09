@@ -13,6 +13,8 @@ namespace DungeonPlanet.Library
     {
         int _columns;
         int _rows;
+        public static int _levelRows;
+        public static int _levelColumns;
         Path _path;
         Random _random = new Random();
         public Case[,] Cases { get; private set; }
@@ -30,6 +32,10 @@ namespace DungeonPlanet.Library
         {
             _columns = columns;
             _rows = rows;
+
+            _levelColumns = columns;
+            _levelRows = rows;
+
             _path = new Path(columns, rows, this);
             Cases = new Case[columns, rows];
             Hub = new Hub(10, 40);
