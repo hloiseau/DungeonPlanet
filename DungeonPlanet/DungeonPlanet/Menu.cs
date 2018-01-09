@@ -51,7 +51,7 @@ namespace DungeonPlanet
             }
             if (_loadGame.IsMouseDown)
             {
-                Player.CurrentPlayer.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+                Player.CurrentPlayer.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
                 Level.ActualState = Level.State.Hub;
                 Level.CurrentBoard.NewLevel();
                 if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
