@@ -10,13 +10,13 @@ using DungeonPlanet.Library;
 
 namespace DungeonPlanet
 {
+    [Serializable]
     public class Player : Sprite
     {
+
         public PlayerLib PlayerLib { get; set; }
+        public PlayerInfo PlayerInfo { get; set; }
         public Weapon Weapon { get; set; }
-        public int Life { get; set; }
-        public int Energy { get; set; }
-        public int Money { get; set; }
         public static Player CurrentPlayer { get; private set; }
         public Shield Shield { get; set; }
         Texture2D _texturebomb;
@@ -25,19 +25,18 @@ namespace DungeonPlanet
         List<Bomb> _bombs;
         KeyboardState _previousKey;
 
-        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
+
+        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBomb, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
             : base(texturePlayer, position, spritebatch)
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X, position.Y), texturePlayer.Width, texturePlayer.Height);
             Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, bosses);
             _bombs = new List<Bomb>();
-            _texturebomb = textureWeapon;
+            PlayerInfo = new PlayerInfo();
+            _texturebomb = textureBomb;
             _spritebatch = spritebatch;
             _enemys = enemys;
-            Life = 70;
-            Energy = 0;
             CurrentPlayer = this;
-            Money = 0;
         }
 
         public void Update(GameTime gameTime)
@@ -47,14 +46,14 @@ namespace DungeonPlanet
             PlayerLib.SimulateFriction();
             PlayerLib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             PlayerLib.StopMovingIfBlocked();
-            PlayerLib.IsDead(Life);
+            PlayerLib.IsDead(PlayerInfo.Life);
 
             position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y);
             Weapon.Update(gameTime);
 
-            Life = MathHelper.Clamp(Life, 0, 100);
-            if (PlayerLib.IsOnFirmGround()) Energy++;
-            Energy = MathHelper.Clamp(Energy, 0, 100);
+            PlayerInfo.Life = MathHelper.Clamp(PlayerInfo.Life, 0, 100);
+            if (PlayerLib.IsOnFirmGround()) PlayerInfo.Energy++;
+            PlayerInfo.Energy = MathHelper.Clamp(PlayerInfo.Energy, 0, 100);
 
             for (int i = 0; i< _bombs.Count; i++) 
             {
@@ -75,21 +74,26 @@ namespace DungeonPlanet
             if (keyboardState.IsKeyDown(Keys.Q)) { PlayerLib.Left(); }
             if (keyboardState.IsKeyDown(Keys.D)) { PlayerLib.Right(); }
             if (keyboardState.IsKeyDown(Keys.Z) && PlayerLib.IsOnFirmGround()) { PlayerLib.Jump(); }
-            if (keyboardState.IsKeyDown(Keys.B) && !_previousKey.IsKeyDown(Keys.B) && Energy >= 50 )
+            if (keyboardState.IsKeyDown(Keys.B) && !_previousKey.IsKeyDown(Keys.B) && PlayerInfo.Energy >= 50 )
             {
                 Bomb bomb = new Bomb(_texturebomb, position, _spritebatch, 0, this, _enemys);
                 bomb.ItemLib.Movement = System.Numerics.Vector2.UnitX * 20;
                 _bombs.Add(bomb);
-                Energy -= 50;
+                PlayerInfo.Energy -= 50;
             }
-            if (keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && !Shield.Activate)
+            if (keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && !Shield.IsActive)
             {
-                Shield.Activate = true;
+                Shield.IsActive = true;
             } 
-            else if(keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && Shield.Activate)
+            else if(keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && Shield.IsActive)
             {
-                Shield.Activate = false;
+                Shield.IsActive = false;
             }
+            if (Shield.IsActive)
+            {
+                PlayerInfo.Energy -= 2;
+            }
+            if (PlayerInfo.Energy <= 0) Shield.IsActive = false;
             _previousKey = keyboardState;
         }
 
@@ -102,7 +106,9 @@ namespace DungeonPlanet
             {
                 _bombs[i].Draw();
             }
-            if  (Shield.Activate && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
+            if  (Shield.IsActive && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
         }
+
+      
     }
 }

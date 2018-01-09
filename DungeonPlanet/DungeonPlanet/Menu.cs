@@ -38,13 +38,20 @@ namespace DungeonPlanet
                 _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 150));
                 _panel.AddChild(_quit);
             }
-           
         }
 
         public void Update()
         {
             if (_newGame.IsMouseDown)
             {
+                Level.ActualState = Level.State.Hub;
+                Level.CurrentBoard.NewLevel();
+                if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
+                _panel = null;
+            }
+            if (_loadGame.IsMouseDown)
+            {
+                Player.CurrentPlayer.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
                 Level.ActualState = Level.State.Hub;
                 Level.CurrentBoard.NewLevel();
                 if (_panel != null) UserInterface.Active.RemoveEntity(_panel);

@@ -26,7 +26,8 @@ namespace DungeonPlanet.Library
         {
             Menu,
             Hub, 
-            LevelOne
+            LevelOne,
+            BossRoom
         }
         public Level(int columns, int rows)
         {
@@ -44,7 +45,7 @@ namespace DungeonPlanet.Library
 
         public void NewLevel()
         {
-            if(ActualState == State.Hub)
+            if(ActualState == State.Hub || ActualState == State.BossRoom)
             {
                 Hub.InitializeAllTilesAndBlockSomeRandomly();
                 Hub.SetAllBorderTilesBlocked();

@@ -35,6 +35,7 @@ namespace DungeonPlanet
         private Door _door;
         private Door _door2;
         private Menu _menu;
+        private Paragraph _money;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
@@ -63,8 +64,12 @@ namespace DungeonPlanet
             _energyBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
             _energyBar.ProgressFill.FillColor = Color.LightSteelBlue;
             _energyBar.Locked = true;
+            _money = new Paragraph("", offset: new Vector2(10, 10));
+            _money.Scale = 1;
             UserInterface.Active.AddEntity(_healthBar);
             UserInterface.Active.AddEntity(_energyBar);
+            UserInterface.Active.AddEntity(_money);
+
             base.Initialize();
         }
 
@@ -87,7 +92,7 @@ namespace DungeonPlanet
             _bombTexture = Content.Load<Texture2D>("bomb");
             _shieldTexture = Content.Load<Texture2D>("shield");
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
-            _player = new Player(_playerTexture, _weaponTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
+            _player = new Player(_playerTexture, _weaponTexture, _bombTexture ,_bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
             _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
@@ -97,7 +102,7 @@ namespace DungeonPlanet
             _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
-            _bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
+            //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _menu = new Menu(this);
@@ -129,7 +134,6 @@ namespace DungeonPlanet
                     MediPack mediPack = new MediPack(_mediTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, 50, _player);
                     Items.Add(mediPack);
                 }
-
                 _player.Shield = _shield;
                 Bosses.Add(_boss);
             }
@@ -137,20 +141,21 @@ namespace DungeonPlanet
 
         protected override void Update(GameTime gameTime)
         {
-            
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
             _player.Update(gameTime);
             _shield.Update(gameTime);
+
             if (Level.ActualState == Level.State.Menu)
             {
                 _menu.Update();
             }
             if (Level.ActualState == Level.State.Hub)
             {
-                _NPC.Update(gameTime);
                 _door.Update(gameTime);
+                _NPC.Update(gameTime);
+
             }
             if (Level.ActualState == Level.State.LevelOne)
             {
@@ -161,7 +166,7 @@ namespace DungeonPlanet
             {
                 if (Enemys[i].EnemyLib.Life <= 0)
                 {
-                    _player.Money += 20;
+                    _player.PlayerInfo.Money += 20;
                     Enemys.Remove(Enemys[i]);
                 }
                 else
@@ -175,7 +180,7 @@ namespace DungeonPlanet
             {
                 if (Bosses[i].BossLib.Life <= 0)
                 {
-                    _player.Money += 50;
+                    _player.PlayerInfo.Money += 50;
                     Bosses.Remove(Bosses[i]);
                 }
                 else
@@ -195,11 +200,14 @@ namespace DungeonPlanet
                 }
             }
 
-            if (_player.PlayerLib.IsDead(_player.Life)) RestartHub();
+            if (_player.PlayerLib.IsDead(_player.PlayerInfo.Life))
+            {
+                RestartHub();
+            }
             _camera.Position = _player.position;
-            _healthBar.Value = _player.Life;
-            _energyBar.Value = _player.Energy;
-            
+            _healthBar.Value = _player.PlayerInfo.Life;
+            _energyBar.Value = _player.PlayerInfo.Energy;
+            _money.Text = string.Format("Coins : {0}", _player.PlayerInfo.Money);
             CheckKeyboardAndReact();
             
         }
@@ -225,15 +233,21 @@ namespace DungeonPlanet
         }
 
         private void RestartHub()
-        { 
+        {
+            _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
             Level.ActualState = Level.State.Hub;
             LoadContent();
+            _player.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+
         }
 
         internal void RestartLevelOne()
         {
+            _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
             Level.ActualState = Level.State.LevelOne;
             LoadContent();
+            _player.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+
         }
 
         private void PutJumperInTopLeftCorner()
@@ -280,8 +294,8 @@ namespace DungeonPlanet
             string positionInText = string.Format("Position of Jumper: ({0:0.0}, {1:0.0})", PlayerLib.Position.X, _player.position.Y);
             string movementInText = string.Format("Current movement: ({0:0.0}, {1:0.0})", _player.PlayerLib.Movement.X, _player.PlayerLib.Movement.Y);
             string isOnFirmGroundText = string.Format("On firm ground?: {0}", _player.PlayerLib.IsOnFirmGround());
-            string playerLifeText = string.Format("PLife: {0}/100", _player.Life);
-            string playerMoney = string.Format("Coins : {0}", _player.Money);
+            string playerLifeText = string.Format("PLife: {0}/100", _player.PlayerInfo.Life);
+            string playerMoney = string.Format("Coins : {0}", _player.PlayerInfo.Money);
             if(_enemy != null)
             {
                 enemyLifeText = string.Format("ELife: {0}/100", _enemy.EnemyLib.Life);
@@ -294,7 +308,7 @@ namespace DungeonPlanet
             }
             string bossLifeText = string.Format("BLife: {0}/200", _boss.BossLib.Life);
 
-            DrawWithShadowMoney(playerMoney, new Vector2(PlayerLib.Position.X - 940, PlayerLib.Position.Y - 400));
+            //DrawWithShadowMoney(playerMoney, new Vector2(PlayerLib.Position.X - 940, PlayerLib.Position.Y - 400));
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));
