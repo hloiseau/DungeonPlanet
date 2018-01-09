@@ -234,19 +234,19 @@ namespace DungeonPlanet
 
         private void RestartHub()
         {
-            _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)+"\\Documents\\SaveDP.sav");
             Level.ActualState = Level.State.Hub;
             LoadContent();
-            _player.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+            _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
 
         }
 
         internal void RestartLevelOne()
         {
-            _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
             Level.ActualState = Level.State.LevelOne;
             LoadContent();
-            _player.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+            _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
 
         }
 
