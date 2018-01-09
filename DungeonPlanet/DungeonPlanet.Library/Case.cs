@@ -142,14 +142,15 @@ namespace DungeonPlanet.Library
                         // int _test_x = Level._levelRows;
                         if (_xLevel != 0)
                         {
-                            _dorX = ((_xLevel * (64 * 12)) - (64 * 8));
+                            _dorX = (((_xLevel + 1) * (64 * 20)) - (64 * 11));
                         }
                         else
                         {
                             _dorX = _xLevel + (64 * 10);
                         }
-                        _dorY = ((_yLevel * (64 * 18)) - (64 * 4));
-                        
+
+                        _dorY = (((_yLevel + 1) * (64 * 14)) - (64 * 4));
+                        /*
                         Tiles[7, 7].IsBlocked = true;
                         Tiles[7, 8].IsBlocked = true;
                         Tiles[7, 9].IsBlocked = true;
@@ -173,7 +174,8 @@ namespace DungeonPlanet.Library
                         Tiles[12, 8].IsBlocked = true;
                         Tiles[12, 9].IsBlocked = true;
                         Tiles[12, 10].IsBlocked = true;
-                        Tiles[12, 11].IsBlocked = true;                        
+                        Tiles[12, 11].IsBlocked = true;
+                        */
                     }
                 }
             }
