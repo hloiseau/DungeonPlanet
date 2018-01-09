@@ -81,14 +81,19 @@ namespace DungeonPlanet
                 _bombs.Add(bomb);
                 PlayerInfo.Energy -= 50;
             }
-            if (keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && !Shield.Activate)
+            if (keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && !Shield.IsActive)
             {
-                Shield.Activate = true;
+                Shield.IsActive = true;
             } 
-            else if(keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && Shield.Activate)
+            else if(keyboardState.IsKeyDown(Keys.A) && !_previousKey.IsKeyDown(Keys.A) && Shield.IsActive)
             {
-                Shield.Activate = false;
+                Shield.IsActive = false;
             }
+            if (Shield.IsActive)
+            {
+                PlayerInfo.Energy -= 2;
+            }
+            if (PlayerInfo.Energy <= 0) Shield.IsActive = false;
             _previousKey = keyboardState;
         }
 
@@ -101,7 +106,7 @@ namespace DungeonPlanet
             {
                 _bombs[i].Draw();
             }
-            if  (Shield.Activate && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
+            if  (Shield.IsActive && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
         }
 
       

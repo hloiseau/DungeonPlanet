@@ -35,6 +35,7 @@ namespace DungeonPlanet
         private Door _door;
         private Door _door2;
         private Menu _menu;
+        private Paragraph _money;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
@@ -63,8 +64,12 @@ namespace DungeonPlanet
             _energyBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
             _energyBar.ProgressFill.FillColor = Color.LightSteelBlue;
             _energyBar.Locked = true;
+            _money = new Paragraph("", offset: new Vector2(10, 10));
+            _money.Scale = 1;
             UserInterface.Active.AddEntity(_healthBar);
             UserInterface.Active.AddEntity(_energyBar);
+            UserInterface.Active.AddEntity(_money);
+
             base.Initialize();
         }
 
@@ -129,7 +134,6 @@ namespace DungeonPlanet
                     MediPack mediPack = new MediPack(_mediTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, 50, _player);
                     Items.Add(mediPack);
                 }
-
                 _player.Shield = _shield;
                 Bosses.Add(_boss);
             }
@@ -137,20 +141,21 @@ namespace DungeonPlanet
 
         protected override void Update(GameTime gameTime)
         {
-            
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
             _player.Update(gameTime);
             _shield.Update(gameTime);
+
             if (Level.ActualState == Level.State.Menu)
             {
                 _menu.Update();
             }
             if (Level.ActualState == Level.State.Hub)
             {
-                _NPC.Update(gameTime);
                 _door.Update(gameTime);
+                _NPC.Update(gameTime);
+
             }
             if (Level.ActualState == Level.State.LevelOne)
             {
@@ -197,13 +202,12 @@ namespace DungeonPlanet
 
             if (_player.PlayerLib.IsDead(_player.PlayerInfo.Life))
             {
-                _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
                 RestartHub();
             }
             _camera.Position = _player.position;
             _healthBar.Value = _player.PlayerInfo.Life;
             _energyBar.Value = _player.PlayerInfo.Energy;
-            
+            _money.Text = string.Format("Coins : {0}", _player.PlayerInfo.Money);
             CheckKeyboardAndReact();
             
         }
@@ -230,15 +234,20 @@ namespace DungeonPlanet
 
         private void RestartHub()
         {
-            
+            _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
             Level.ActualState = Level.State.Hub;
             LoadContent();
+            _player.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+
         }
 
         internal void RestartLevelOne()
         {
+            _player.PlayerInfo.Save("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
             Level.ActualState = Level.State.LevelOne;
             LoadContent();
+            _player.PlayerInfo = PlayerInfo.LoadFrom("C:\\Users\\hugo\\DEV\\ITI.DungeonPlanet\\DungeonPlanet\\DungeonPlanet\\Save.sav");
+
         }
 
         private void PutJumperInTopLeftCorner()
@@ -299,7 +308,7 @@ namespace DungeonPlanet
             }
             string bossLifeText = string.Format("BLife: {0}/200", _boss.BossLib.Life);
 
-            DrawWithShadowMoney(playerMoney, new Vector2(PlayerLib.Position.X - 940, PlayerLib.Position.Y - 400));
+            //DrawWithShadowMoney(playerMoney, new Vector2(PlayerLib.Position.X - 940, PlayerLib.Position.Y - 400));
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));

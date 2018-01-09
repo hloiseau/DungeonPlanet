@@ -13,7 +13,7 @@ namespace DungeonPlanet
     public class Shield : Item
     {
         int Life { get; set; }
-        public bool Activate { get; set; }
+        public bool IsActive { get; set; }
         List<Enemy> _enemys;
         public ItemLib ShieldLib { get; set; }
 
@@ -35,7 +35,7 @@ namespace DungeonPlanet
         {
             foreach (Enemy enemy in _enemys)
             {
-                if (Player.Shield.Activate)
+                if (Player.Shield.IsActive)
                 {
                     if (ShieldLib.EnemyIntersect(enemy.EnemyLib))
                     {

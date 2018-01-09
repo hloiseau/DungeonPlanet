@@ -16,6 +16,14 @@ namespace DungeonPlanet.Library
 
         int _height;
         int _width;
+
+        public PlayerLib(Vector2 position, int width, int height)
+        {
+            Position = position;
+            _height = height;
+            _width = width;
+        }
+
         public Rectangle Bounds
         {
             get { return new Rectangle((int)Position.X, (int)Position.Y, _width, _height); }
@@ -25,13 +33,7 @@ namespace DungeonPlanet.Library
         {
             return life <= 0;
         }
-        public PlayerLib(Vector2 position, int width, int height)
-        {
-            Position = position;
-            _height = height;
-            _width = width;
-        }
-
+        
         public void MoveAsFarAsPossible(float gameTime)
         {
             OldPosition = Position;

@@ -80,7 +80,7 @@ namespace DungeonPlanet
 
         public bool HasTouchedShield()
         {
-            if (Player.CurrentPlayer.Shield.Activate)
+            if (Player.CurrentPlayer.Shield.IsActive)
             {
                 if(new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(Player.CurrentPlayer.Shield.ShieldLib.Bounds))
                 {

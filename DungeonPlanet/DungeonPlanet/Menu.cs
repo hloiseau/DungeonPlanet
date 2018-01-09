@@ -38,7 +38,6 @@ namespace DungeonPlanet
                 _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 150));
                 _panel.AddChild(_quit);
             }
-           
         }
 
         public void Update()
