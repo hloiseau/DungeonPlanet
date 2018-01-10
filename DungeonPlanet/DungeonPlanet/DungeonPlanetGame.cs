@@ -27,7 +27,6 @@ namespace DungeonPlanet
         private Random _rnd = new Random();
         private MediPack _mediPack;
         private Shield _shield;
-        private Bomb _bomb;
         private SpriteFont _debugFont;
         private Camera _camera;
         private ProgressBar _healthBar;
@@ -108,6 +107,8 @@ namespace DungeonPlanet
             _menu = new Menu(this);
             _camera.LoadContent();
 
+            if (Level.ActualState == Level.State.BossRoom) Bosses.Add(_boss);
+
             if (Level.ActualState == Level.State.LevelOne)
             {
                 for (int i = 0; i < Level.CurrentBoard.GetNext(20, 30 + 1); i++)
@@ -135,7 +136,6 @@ namespace DungeonPlanet
                     Items.Add(mediPack);
                 }
                 _player.Shield = _shield;
-                Bosses.Add(_boss);
             }
         }
         public void Reload() => LoadContent();
@@ -233,6 +233,7 @@ namespace DungeonPlanet
                 _menu = new Menu(this);
             }
             if (state.IsKeyDown(Keys.F6)) { RestartLevelOne(); }
+            if (state.IsKeyDown(Keys.F7)) { RestartBossRoom(); }
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
 
         }
@@ -252,8 +253,16 @@ namespace DungeonPlanet
             Level.ActualState = Level.State.LevelOne;
             LoadContent();
             _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+        }
+        internal void RestartBossRoom()
+        {
+            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+            Level.ActualState = Level.State.BossRoom;
+            LoadContent();
+            _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
 
         }
+
 
         private void PutJumperInTopLeftCorner()
         {

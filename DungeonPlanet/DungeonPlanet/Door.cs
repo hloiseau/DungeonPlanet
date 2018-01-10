@@ -48,8 +48,7 @@ namespace DungeonPlanet
                 }
                 else if (Level.ActualState == Level.State.LevelOne)
                 {
-                    Level.ActualState = Level.State.BossRoom;
-                    Level.CurrentBoard.NewLevel();
+                    _ctx.RestartBossRoom();
                     if (_header != null)
                     {
                         UserInterface.Active.RemoveEntity(_header);

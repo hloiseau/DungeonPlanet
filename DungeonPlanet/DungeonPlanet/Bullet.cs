@@ -92,7 +92,7 @@ namespace DungeonPlanet
 
         public bool HasTouchedTile()
         {
-            if (Level.ActualState == Level.State.Hub)
+            if (Level.ActualState == Level.State.Hub || Level.ActualState == Level.State.BossRoom)
             {
                 foreach (var tile in Level.CurrentBoard.Hub.Tiles)
                 {

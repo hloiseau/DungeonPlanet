@@ -37,7 +37,7 @@ namespace DungeonPlanet
 
         public void Draw()
         {
-            if (Level.ActualState == Level.State.Hub)
+            if (Level.ActualState == Level.State.Hub || Level.ActualState == Level.State.BossRoom)
             {
                 foreach (var tile in Level.Hub.Tiles)
                 {
