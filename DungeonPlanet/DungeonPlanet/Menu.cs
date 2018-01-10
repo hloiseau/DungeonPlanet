@@ -42,25 +42,33 @@ namespace DungeonPlanet
 
         public void Update()
         {
-            if (_newGame.IsMouseDown)
+            if(Level.ActualState != Level.State.Menu)
             {
-                Level.ActualState = Level.State.Hub;
-                _ctx.Reload();
                 if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
                 _panel = null;
             }
-            if (_loadGame.IsMouseDown)
+            else
             {
-                Player.CurrentPlayer.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
-                Level.ActualState = Level.State.Hub;
-                Level.CurrentBoard.NewLevel();
-                if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
-                _panel = null;
-            }
+                if (_newGame.IsMouseDown)
+                {
+                    Level.ActualState = Level.State.Hub;
+                    _ctx.Reload();
+                    if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
+                    _panel = null;
+                }
+                if (_loadGame.IsMouseDown)
+                {
+                    Player.CurrentPlayer.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+                    Level.ActualState = Level.State.Hub;
+                    Level.CurrentBoard.NewLevel();
+                    if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
+                    _panel = null;
+                }
 
-            if (_quit.IsMouseDown)
-            {
-                _ctx.Exit();
+                if (_quit.IsMouseDown)
+                {
+                    _ctx.Exit();
+                }
             }
         }
     }

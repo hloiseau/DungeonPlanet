@@ -91,7 +91,7 @@ namespace DungeonPlanet
             _bombTexture = Content.Load<Texture2D>("bomb");
             _shieldTexture = Content.Load<Texture2D>("shield");
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
-            _player = new Player(_playerTexture, _weaponTexture, _bombTexture ,_bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
+            _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
             _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
@@ -104,7 +104,7 @@ namespace DungeonPlanet
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
-            _menu = new Menu(this);
+            if (Level.ActualState == Level.State.Menu) _menu = new Menu(this);
             _camera.LoadContent();
 
             if (Level.ActualState == Level.State.BossRoom) Bosses.Add(_boss);
@@ -147,11 +147,7 @@ namespace DungeonPlanet
             _camera.Update(gameTime);
             _player.Update(gameTime);
             _shield.Update(gameTime);
-
-            if (Level.ActualState == Level.State.Menu)
-            {
-                _menu.Update();
-            }
+            _menu.Update();
             if (Level.ActualState == Level.State.Hub)
             {
                 _door.Update(gameTime);
@@ -161,6 +157,23 @@ namespace DungeonPlanet
             if (Level.ActualState == Level.State.LevelOne)
             {
                 _door2.Update(gameTime);
+            }
+            if (Level.ActualState == Level.State.BossRoom)
+            {
+                for (int i = 0; i < Bosses.Count; i++)
+                {
+                    if (Bosses[i].BossLib.Life <= 0)
+                    {
+                        _player.PlayerInfo.Money += 50;
+                        Bosses.Remove(Bosses[i]);
+                    }
+                    else
+                    {
+                        if (IsOnScreen(Bosses[i].position))
+                            Bosses[i].Update(gameTime);
+                    }
+                }
+                if (Bosses.Count == 0) _door.Update(gameTime);
             }
 
             for (int i = 0; i < Enemys.Count; i++)
@@ -172,22 +185,8 @@ namespace DungeonPlanet
                 }
                 else
                 {
-                    if(IsOnScreen(Enemys[i].position))
-                    Enemys[i].Update(gameTime);
-                }
-            }
-
-            for (int i = 0; i < Bosses.Count; i++)
-            {
-                if (Bosses[i].BossLib.Life <= 0)
-                {
-                    _player.PlayerInfo.Money += 50;
-                    Bosses.Remove(Bosses[i]);
-                }
-                else
-                {
-                    if (IsOnScreen(Bosses[i].position))
-                        Bosses[i].Update(gameTime);
+                    if (IsOnScreen(Enemys[i].position))
+                        Enemys[i].Update(gameTime);
                 }
             }
 
@@ -210,13 +209,13 @@ namespace DungeonPlanet
             _energyBar.Value = _player.PlayerInfo.Energy;
             _money.Text = string.Format("Coins : {0}", _player.PlayerInfo.Money);
             CheckKeyboardAndReact();
-            
+
         }
 
         private bool IsOnScreen(Vector2 position)
         {
             _camera.ToScreen(ref position, out Vector2 screenPosition);
-            if(_camera.Position.X -_camera.Width/2 > screenPosition.X || screenPosition.X <_camera.Position.X + _camera.Width / 2 || _camera.Position.Y - _camera.Height / 2 > screenPosition.Y || screenPosition.Y < _camera.Position.Y + _camera.Height / 2)
+            if (_camera.Position.X - _camera.Width / 2 > screenPosition.X || screenPosition.X < _camera.Position.X + _camera.Width / 2 || _camera.Position.Y - _camera.Height / 2 > screenPosition.Y || screenPosition.Y < _camera.Position.Y + _camera.Height / 2)
             {
                 return true;
             }
@@ -226,27 +225,20 @@ namespace DungeonPlanet
         private void CheckKeyboardAndReact()
         {
             KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.F5)) { RestartHub(); }
-            if (state.IsKeyDown(Keys.Escape))
-            {
-                Level.ActualState = Level.State.Menu;
-                _menu = new Menu(this);
-            }
-            if (state.IsKeyDown(Keys.F6)) { RestartLevelOne(); }
-            if (state.IsKeyDown(Keys.F7)) { RestartBossRoom(); }
+            if (state.IsKeyDown(Keys.F5)) RestartHub();
+            if (state.IsKeyDown(Keys.Escape)) OpenMenu();
+            if (state.IsKeyDown(Keys.F6)) RestartLevelOne();
+            if (state.IsKeyDown(Keys.F7)) RestartBossRoom();
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
-
         }
 
-        private void RestartHub()
+        internal void RestartHub()
         {
-            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)+"\\Documents\\SaveDP.sav");
+            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
             Level.ActualState = Level.State.Hub;
             LoadContent();
             _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
-
         }
-
         internal void RestartLevelOne()
         {
             _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
@@ -258,6 +250,14 @@ namespace DungeonPlanet
         {
             _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
             Level.ActualState = Level.State.BossRoom;
+            LoadContent();
+            _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+
+        }
+        internal void OpenMenu()
+        {
+            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");         
+            Level.ActualState = Level.State.Menu;
             LoadContent();
             _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
 
@@ -284,6 +284,11 @@ namespace DungeonPlanet
             {
                 _door2.Draw();
             }
+            if (Level.ActualState == Level.State.BossRoom)
+            {
+                foreach (Boss boss in Bosses) boss.Draw();
+                if (Bosses.Count == 0) _door.Draw();
+            }
             _board.Draw();
             WriteDebugInformation();
             _player.Draw();
@@ -306,7 +311,7 @@ namespace DungeonPlanet
             string isOnFirmGroundText = string.Format("On firm ground?: {0}", _player.PlayerLib.IsOnFirmGround());
             string playerLifeText = string.Format("PLife: {0}/100", _player.PlayerInfo.Life);
             string playerMoney = string.Format("Coins : {0}", _player.PlayerInfo.Money);
-            if(_enemy != null)
+            if (_enemy != null)
             {
                 enemyLifeText = string.Format("ELife: {0}/100", _enemy.EnemyLib.Life);
                 DrawWithShadow(enemyLifeText, new Vector2(70, 620));
@@ -327,8 +332,8 @@ namespace DungeonPlanet
         }
 
         private void DrawWithShadow(string text, Vector2 position)
-        { 
-            
+        {
+
             _spriteBatch.DrawString(_debugFont, text, position + Vector2.One, Color.Black);
             _spriteBatch.DrawString(_debugFont, text, position, Color.LightYellow);
         }
