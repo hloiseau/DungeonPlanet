@@ -45,7 +45,7 @@ namespace DungeonPlanet
             if (_newGame.IsMouseDown)
             {
                 Level.ActualState = Level.State.Hub;
-                Level.CurrentBoard.NewLevel();
+                _ctx.Reload();
                 if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
                 _panel = null;
             }

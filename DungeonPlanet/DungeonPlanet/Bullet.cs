@@ -21,7 +21,7 @@ namespace DungeonPlanet
         {
             _origin = new Vector2(1, 12);
             _rotation = ctx.Rotation;
-            base.position = new Vector2(base.position.X + 50, base.position.Y);
+            base.position = new Vector2(base.position.X, base.position.Y);
             BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(base.position.X, base.position.Y), texture.Height, texture.Width);
             _bosses = bosses;
         }
@@ -30,7 +30,7 @@ namespace DungeonPlanet
         {
             _origin = new Vector2(1, 12);
             _rotation = ctx.Rotation;
-            base.position = new Vector2(base.position.X + 50, base.position.Y);
+            base.position = new Vector2(base.position.X, base.position.Y);
             BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(base.position.X, base.position.Y), texture.Height, texture.Width);
         }
 

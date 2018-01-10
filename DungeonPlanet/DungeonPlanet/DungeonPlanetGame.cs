@@ -138,6 +138,7 @@ namespace DungeonPlanet
                 Bosses.Add(_boss);
             }
         }
+        public void Reload() => LoadContent();
 
         protected override void Update(GameTime gameTime)
         {
@@ -226,7 +227,11 @@ namespace DungeonPlanet
         {
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.F5)) { RestartHub(); }
-            if (state.IsKeyDown(Keys.Escape)) { Exit(); }
+            if (state.IsKeyDown(Keys.Escape))
+            {
+                Level.ActualState = Level.State.Menu;
+                _menu = new Menu(this);
+            }
             if (state.IsKeyDown(Keys.F6)) { RestartLevelOne(); }
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
 
@@ -258,8 +263,6 @@ namespace DungeonPlanet
 
         protected override void Draw(GameTime gameTime)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
@@ -284,8 +287,6 @@ namespace DungeonPlanet
             _spriteBatch.End();
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.Elapsed);
         }
 
         private void WriteDebugInformation()
