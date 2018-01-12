@@ -35,6 +35,7 @@ namespace DungeonPlanet
         private Door _door2;
         private Menu _menu;
         private Paragraph _money;
+        private KeyboardState _previousState;
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
@@ -68,6 +69,7 @@ namespace DungeonPlanet
             UserInterface.Active.AddEntity(_healthBar);
             UserInterface.Active.AddEntity(_energyBar);
             UserInterface.Active.AddEntity(_money);
+            _menu = new Menu(this);
 
             base.Initialize();
         }
@@ -104,7 +106,6 @@ namespace DungeonPlanet
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
-            if (Level.ActualState == Level.State.Menu) _menu = new Menu(this);
             _camera.LoadContent();
 
             if (Level.ActualState == Level.State.BossRoom) Bosses.Add(_boss);
@@ -152,7 +153,6 @@ namespace DungeonPlanet
             {
                 _door.Update(gameTime);
                 _NPC.Update(gameTime);
-
             }
             if (Level.ActualState == Level.State.LevelOne)
             {
@@ -226,10 +226,11 @@ namespace DungeonPlanet
         {
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.F5)) RestartHub();
-            if (state.IsKeyDown(Keys.Escape)) OpenMenu();
+            if (state.IsKeyDown(Keys.Escape) && !_previousState.IsKeyDown(Keys.Escape)) OpenMenu();
             if (state.IsKeyDown(Keys.F6)) RestartLevelOne();
             if (state.IsKeyDown(Keys.F7)) RestartBossRoom();
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
+            _previousState = state;
         }
 
         internal void RestartHub()
@@ -252,15 +253,13 @@ namespace DungeonPlanet
             Level.ActualState = Level.State.BossRoom;
             LoadContent();
             _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
-
         }
         internal void OpenMenu()
         {
-            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");         
+            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+            _menu.PreviousState = Level.ActualState;
             Level.ActualState = Level.State.Menu;
-            LoadContent();
             _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
-
         }
 
 
