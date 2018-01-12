@@ -76,11 +76,21 @@ namespace DungeonPlanet
                 {
                     if (EnemyLib.Bounds.IntersectsWith(PlayerLib.Bounds))
                     {
-                        _player.PlayerInfo.Life -= 10;
-                        EnemyLib.MakeDamage(PlayerLib);
+                        if (EnemyLib.State != 2)
+                        {
+                            _player.PlayerInfo.Life -= 10;
+                            EnemyLib.MakeDamage(PlayerLib);
+                        }
+                        else
+                        {
+                            _player.PlayerInfo.Life -= 10;
+                            EnemyLib.MakeDamageWithSlim(PlayerLib);
+                        }
                     }
-                    if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1) { EnemyLib.Left(); }
-                    if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 0.1) { EnemyLib.Right(); }
+                    if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1 && EnemyLib.State != 2) { EnemyLib.Left(); }
+                    else if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1 && EnemyLib.State == 2) {  EnemyLib.LeftSlim(); }
+                    if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 0.1 && EnemyLib.State != 2) { EnemyLib.Right(); }
+                    else if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 0.1 && EnemyLib.State == 2) { EnemyLib.RightSlim(); }
                 }
                 else if (_type == "DIST")
                 {
@@ -97,14 +107,29 @@ namespace DungeonPlanet
                 EnemyLib.IsShooting = false;
                 if (_count <= 100)
                 {
-                    EnemyLib.Left();
-                    _count++;
-                    
+                    if (EnemyLib.State != 2)
+                    {
+                        EnemyLib.Left();
+                        _count++;
+                    }
+                    else
+                    {
+                        EnemyLib.LeftSlim();
+                        _count++;
+                    }
                 }
                 else if (_count <= 200 && _count > 100)
                 {
-                    EnemyLib.Right();
-                    _count++;
+                    if (EnemyLib.State != 2)
+                    {
+                        EnemyLib.Right();
+                        _count++;
+                    }
+                    else
+                    {
+                        EnemyLib.RightSlim();
+                        _count++;
+                    }
                 }
                 else
                 {

@@ -58,15 +58,15 @@ namespace DungeonPlanet
             Paragraph blueText = new Paragraph("Des munitions basiques");
             Paragraph greenText = new Paragraph("Ralenti l'ennemi");
 
-            NPCPanel.AddChild(new Label(" 20 $", Anchor.Auto));
+            NPCPanel.AddChild(new Label(" 10 $", Anchor.Auto));
             NPCPanel.AddChild(_blueBullet);
             NPCPanel.AddChild(blueText);
             NPCPanel.AddChild(hz1);
-            NPCPanel.AddChild(new Label(" 30 $", Anchor.Auto));
+            NPCPanel.AddChild(new Label(" 250 $", Anchor.Auto));
             NPCPanel.AddChild(_redBullet);
             NPCPanel.AddChild(redText);
             NPCPanel.AddChild(hz2);
-            NPCPanel.AddChild(new Label(" 30 $", Anchor.Auto));
+            NPCPanel.AddChild(new Label(" 100 $", Anchor.Auto));
             NPCPanel.AddChild(_greenBullet);
             NPCPanel.AddChild(greenText);
         }
@@ -82,21 +82,20 @@ namespace DungeonPlanet
             _lib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             _lib.StopMovingIfBlocked();
             position = new Vector2(_lib.Position.X, _lib.Position.Y);
-            if (_blueBullet != null && _blueBullet.IsMouseDown && _player.PlayerInfo.Money - 30 >= 0)
+            if (_blueBullet != null && _blueBullet.IsMouseDown && _player.PlayerInfo.Money - 10 >= 0)
             {
-                _player.PlayerInfo.Money -= 20;
+                _player.PlayerInfo.Money -= 10;
                 PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.None;
             }
-            if (_redBullet != null && _redBullet.IsMouseDown && _player.PlayerInfo.Money - 30 >= 0)
+            if (_redBullet != null && _redBullet.IsMouseDown && _player.PlayerInfo.Money - 250 >= 0)
             {
-                _player.PlayerInfo.Money -= 30;
+                _player.PlayerInfo.Money -= 250;
                 PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Fire;
             }
-            if (_greenBullet != null && _greenBullet.IsMouseDown && _player.PlayerInfo.Money - 30 >= 0)
+            if (_greenBullet != null && _greenBullet.IsMouseDown && _player.PlayerInfo.Money - 100 >= 0)
             {
-                _player.PlayerInfo.Money -= 30;
-                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime
-                    ;
+                _player.PlayerInfo.Money -= 100;
+                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime;
             }
 
             if (NPCPanel == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds) && keyboardState.IsKeyDown(Keys.E))

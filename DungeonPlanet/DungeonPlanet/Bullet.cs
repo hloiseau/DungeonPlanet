@@ -61,7 +61,7 @@ namespace DungeonPlanet
                     else if (PlayerInfo.ActualWeapon == PlayerInfo.WeaponState.Slime)
                     {
                         enemy.EnemyLib.State = 2;
-                        enemy.EnemyLib.GotDamage();
+                        enemy.EnemyLib.GotDammageWithSlim();
                         enemy.EnemyLib.Life -= 10;
                     }
                     return true;

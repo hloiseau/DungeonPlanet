@@ -49,14 +49,17 @@ namespace DungeonPlanet
             {
                 if (BossLib.Bounds.IntersectsWith(PlayerLib.Bounds))
                 {
-                    _player.PlayerInfo.Life -= 15;
+                    
+                    _player.PlayerInfo.Life -= 25;
                     BossLib.MakeDamage(PlayerLib);
                 }
-                if (BossLib.GetDistanceTo(PlayerLib.Position).X < 0.1) { BossLib.Left(); }
+                if (BossLib.GetDistanceTo(PlayerLib.Position).X < 0.1 && BossLib.State != 2) { BossLib.Left(); }
+                else { BossLib.LeftSlim(); }
             }
             else
             {
-                BossLib.Right();
+                if(BossLib.State != 2) BossLib.Right();
+                else { BossLib.RightSlim(); }
             }
 
             if (_count <= 50) _count++;
