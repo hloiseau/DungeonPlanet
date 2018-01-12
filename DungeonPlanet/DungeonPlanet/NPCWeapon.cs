@@ -12,59 +12,93 @@ using GeonBit.UI.Entities;
 
 namespace DungeonPlanet
 {
-    public class NPC : Sprite
+    public class NPCWeapon : Sprite
     {
         SpriteBatch _spritebatch;
         EnemyLib _lib;
         Header _header;
         Player _player;
-        Icon _button;
+        Icon _redBullet;
+        Icon _blueBullet;
+        Icon _greenBullet;
+        bool _alreadyBuy { get; set; }
 
         Panel NPCPanel { get; set; }
-        public NPC(Texture2D texture, Vector2 position, SpriteBatch spriteBatch)
+
+        public NPCWeapon(Texture2D texture, Vector2 position, SpriteBatch spriteBatch)
             : base(texture, position, spriteBatch)
         {
             _lib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 100);
             _spritebatch = spriteBatch;
             _player = Player.CurrentPlayer;
-            _button = new Icon(IconType.PotionRed, Anchor.Auto);
-
+            _redBullet = new Icon(IconType.OrbRed, Anchor.Auto);
+            _blueBullet = new Icon(IconType.OrbBlue, Anchor.Auto);
+            _greenBullet = new Icon(IconType.OrbGreen, Anchor.Auto);
+            _alreadyBuy = false;
         }
 
         public void ShowMessage()
         {
-            _header = new Header("Appuyer sur E pour interagir", Anchor.AutoCenter);
+            _header = new Header("Appuyer sur E pour voir les munitions", Anchor.AutoCenter);
             UserInterface.Active.AddEntity(_header);
         }
-
         public void ShowMenu()
         {
             NPCPanel = new Panel(size: new Vector2(500, 500), skin: PanelSkin.Golden, anchor: Anchor.Center, offset: new Vector2(10, 10));
             UserInterface.Active.AddEntity(NPCPanel);
             NPCPanel.AddChild(new Header("Magasin", Anchor.AutoCenter));
-            NPCPanel.AddChild(new HorizontalLine());
-            _button = new Icon(IconType.PotionRed, Anchor.Auto);
-            /*
-q                NPCPanel.AddChild(new Label(" 10 $", Anchor.Auto));
-            */
-            NPCPanel.AddChild(new Paragraph("Vie"));
-            NPCPanel.AddChild(_button);
+            _redBullet = new Icon(IconType.OrbRed, Anchor.Auto);
+            _blueBullet = new Icon(IconType.OrbBlue, Anchor.Auto);
+            _greenBullet = new Icon(IconType.OrbGreen, Anchor.Auto);
+
+            HorizontalLine hz1 = new HorizontalLine();
+            HorizontalLine hz2 = new HorizontalLine();
+
+            Paragraph redText = new Paragraph("Emflamme l'ennemi");
+            Paragraph blueText = new Paragraph("Des munitions basiques");
+            Paragraph greenText = new Paragraph("Ralenti l'ennemi");
+
+            NPCPanel.AddChild(new Label(" 20 $", Anchor.Auto));
+            NPCPanel.AddChild(_blueBullet);
+            NPCPanel.AddChild(blueText);
+            NPCPanel.AddChild(hz1);
+            NPCPanel.AddChild(new Label(" 30 $", Anchor.Auto));
+            NPCPanel.AddChild(_redBullet);
+            NPCPanel.AddChild(redText);
+            NPCPanel.AddChild(hz2);
+            NPCPanel.AddChild(new Label(" 30 $", Anchor.Auto));
+            NPCPanel.AddChild(_greenBullet);
+            NPCPanel.AddChild(greenText);
         }
-
-
 
         public void Update(GameTime gameTime)
         {
             KeyboardState keyboardState = Keyboard.GetState();
+
+            MouseState mouseState = Mouse.GetState();
+
             _lib.AffectWithGravity();
             _lib.SimulateFriction();
             _lib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             _lib.StopMovingIfBlocked();
             position = new Vector2(_lib.Position.X, _lib.Position.Y);
-            if (_button != null &&_button.IsMouseDown)
+            if (_blueBullet != null && _blueBullet.IsMouseDown && _player.PlayerInfo.Money - 30 >= 0)
             {
-                _player.PlayerInfo.Money -= 10;
+                _player.PlayerInfo.Money -= 20;
+                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.None;
             }
+            if (_redBullet != null && _redBullet.IsMouseDown && _player.PlayerInfo.Money - 30 >= 0)
+            {
+                _player.PlayerInfo.Money -= 30;
+                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Fire;
+            }
+            if (_greenBullet != null && _greenBullet.IsMouseDown && _player.PlayerInfo.Money - 30 >= 0)
+            {
+                _player.PlayerInfo.Money -= 30;
+                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime
+                    ;
+            }
+
             if (NPCPanel == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds) && keyboardState.IsKeyDown(Keys.E))
             {
                 ShowMenu();
@@ -84,7 +118,7 @@ q                NPCPanel.AddChild(new Label(" 10 $", Anchor.Auto));
                 {
                     UserInterface.Active.RemoveEntity(NPCPanel);
                     NPCPanel = null;
-                    _button = null;
+                    _redBullet = null;
                 }
                 if (_header != null)
                 {

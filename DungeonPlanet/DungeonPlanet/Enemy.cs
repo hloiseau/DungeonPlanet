@@ -21,12 +21,13 @@ namespace DungeonPlanet
         public Texture2D _textureWeapon;
         public SpriteBatch _spritebatch;
         public DungeonPlanetGame _ctx;
+        public Sprite Fire { get; set; }
 
         Player _player;
         int _count;
         string _type;
 
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture)
             : base(texture, position, spritebatch)
         {
             EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 30);
@@ -35,8 +36,9 @@ namespace DungeonPlanet
             _count = 0;
             _type = type;
             _spritebatch = spritebatch;
+            Fire = new Sprite(fireTexture, new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y), _spritebatch);
         }
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx)
            : base(texture, position, spritebatch)
         {
             EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 30);
@@ -49,6 +51,7 @@ namespace DungeonPlanet
             _textureBullet = textureBullet;
             _ctx = ctx;
             WeaponA = new Weapon(_textureWeapon, _textureBullet, _ctx, base.position, _spritebatch, EnemyLib);
+            Fire = new Sprite(fireTexture, new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y), _spritebatch);
         }
 
         public void Update(GameTime gameTime)
@@ -62,6 +65,7 @@ namespace DungeonPlanet
             position = new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y);
             EnemyLib.Life = MathHelper.Clamp(EnemyLib.Life, 0, 100);
             if (WeaponA != null) WeaponA.Update(gameTime);
+            if(EnemyLib != null && Fire != null)Fire.position = new Vector2(EnemyLib.Position.X - 5, EnemyLib.Position.Y - 20);
         }
 
         private void CheckKeyboardAndUpdateMovement(GameTime gameTime)
@@ -95,6 +99,7 @@ namespace DungeonPlanet
                 {
                     EnemyLib.Left();
                     _count++;
+                    
                 }
                 else if (_count <= 200 && _count > 100)
                 {
@@ -104,6 +109,7 @@ namespace DungeonPlanet
                 else
                 {
                     _count = 0;
+                    if (EnemyLib.State == 1) EnemyLib.Life -= 15;
                 }
             }
         }
@@ -111,6 +117,7 @@ namespace DungeonPlanet
         {
             base.Draw();
             if (WeaponA != null) WeaponA.Draw();
+            if (EnemyLib.State == 1) Fire.Draw();
         }
     }
 }

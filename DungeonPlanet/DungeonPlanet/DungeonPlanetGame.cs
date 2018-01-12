@@ -18,8 +18,10 @@ namespace DungeonPlanet
         private SpriteBatch _spriteBatch;
         private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
+        private Texture2D _fireTexture, _fireBossTexture;
         private Player _player;
-        private NPC _NPC;
+        private NPCMarchand _NPCMarchand;
+        private NPCWeapon _NPCWeapon;
         private Enemy _enemy;
         private Enemy _enemy2;
         private Boss _boss;
@@ -91,15 +93,18 @@ namespace DungeonPlanet
             _mediTexture = Content.Load<Texture2D>("Medipack");
             _bombTexture = Content.Load<Texture2D>("bomb");
             _shieldTexture = Content.Load<Texture2D>("shield");
+            _fireTexture = Content.Load<Texture2D>("fire");
+            _fireBossTexture = Content.Load<Texture2D>("fireBoss");
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture ,_bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
-            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC");
-            _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
-            _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch);
+            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch,"CQC", _fireTexture);
+            _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this);
+            _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
-            _NPC = new NPC(_playerTexture, new Vector2(500, 200), _spriteBatch);
+            _NPCMarchand = new NPCMarchand(_playerTexture, new Vector2(500, 200), _spriteBatch);
+            _NPCWeapon = new NPCWeapon(_playerTexture, new Vector2(250, 200), _spriteBatch);
             _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
@@ -117,12 +122,12 @@ namespace DungeonPlanet
 
                     if (Level.CurrentBoard.GetNext(0, 2) == 0)
                     {
-                        enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "CQC");
+                        enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "CQC", _fireTexture);
 
                     }
                     else
                     {
-                        enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST", _weaponTexture, _bulletETexture, this);
+                        enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this);
                     }
 
                     Enemys.Add(enemy);
@@ -154,8 +159,8 @@ namespace DungeonPlanet
             if (Level.ActualState == Level.State.Hub)
             {
                 _door.Update(gameTime);
-                _NPC.Update(gameTime);
-
+                _NPCMarchand.Update(gameTime);
+                _NPCWeapon.Update(gameTime);
             }
             if (Level.ActualState == Level.State.LevelOne)
             {
@@ -265,7 +270,8 @@ namespace DungeonPlanet
             base.Draw(gameTime);
             if (Level.ActualState == Level.State.Hub)
             {
-                _NPC.Draw();
+                _NPCWeapon.Draw();
+                _NPCMarchand.Draw();
                 _door.Draw();
             }
             if (Level.ActualState == Level.State.LevelOne)
@@ -308,7 +314,7 @@ namespace DungeonPlanet
             }
             string bossLifeText = string.Format("BLife: {0}/200", _boss.BossLib.Life);
 
-            //DrawWithShadowMoney(playerMoney, new Vector2(PlayerLib.Position.X - 940, PlayerLib.Position.Y - 400));
+            //DrawWithShadowMoney(playerMoney, new Vector2(PlayerLib.Position.X + 200, PlayerLib.Position.Y + 200));
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));

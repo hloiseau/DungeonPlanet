@@ -16,6 +16,7 @@ namespace DungeonPlanet
         List<Enemy> _enemys = DungeonPlanetGame.Enemys;
         List<Boss> _bosses;
         public BulletLib BulletLib { get; set; }
+
         public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx, List<Boss> bosses)
             : base(texture, position, spritebatch)
         {
@@ -45,8 +46,24 @@ namespace DungeonPlanet
             {
                 if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(enemy.EnemyLib.Bounds))
                 {
-                    enemy.EnemyLib.GotDamage();
-                    enemy.EnemyLib.Life -= 10;
+                    if (PlayerInfo.ActualWeapon == PlayerInfo.WeaponState.None)
+                    {
+                        enemy.EnemyLib.State = 0;
+                        enemy.EnemyLib.GotDamage();
+                        enemy.EnemyLib.Life -= 10;
+                    }
+                    else if (PlayerInfo.ActualWeapon == PlayerInfo.WeaponState.Fire)
+                    {
+                        enemy.EnemyLib.State = 1;
+                        enemy.EnemyLib.GotDamage();
+                        enemy.EnemyLib.Life -= 10;
+                    }
+                    else if (PlayerInfo.ActualWeapon == PlayerInfo.WeaponState.Slime)
+                    {
+                        enemy.EnemyLib.State = 2;
+                        enemy.EnemyLib.GotDamage();
+                        enemy.EnemyLib.Life -= 10;
+                    }
                     return true;
                 }
             }
@@ -59,8 +76,26 @@ namespace DungeonPlanet
             {
                 if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(boss.BossLib.Bounds))
                 {
-                    boss.BossLib.Life -= 10;
-                    boss.BossLib.ReceiveDamage(playerLib);
+                    
+
+                    if (PlayerInfo.ActualWeapon == PlayerInfo.WeaponState.None)
+                    {
+                        boss.BossLib.Life -= 10;
+                        boss.BossLib.ReceiveDamage(playerLib);
+                        boss.BossLib.State = 0;
+                    }
+                    else if (PlayerInfo.ActualWeapon == PlayerInfo.WeaponState.Fire)
+                    {
+                        boss.BossLib.Life -= 10;
+                        boss.BossLib.ReceiveDamage(playerLib);
+                        boss.BossLib.State = 1;
+                    }
+                    else if (PlayerInfo.ActualWeapon == PlayerInfo.WeaponState.Slime)
+                    {
+                        boss.BossLib.Life -= 10;
+                        boss.BossLib.ReceiveDamage(playerLib);
+                        boss.BossLib.State = 2;
+                    }
                     return true;
                 }
             }
