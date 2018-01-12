@@ -19,11 +19,12 @@ namespace DungeonPlanet
         Button _loadGame;
         Button _options;
         Button _quit;
-
+        Button _continue;
         DungeonPlanetGame _ctx;
+        Level.State _previousState;
         public Menu(DungeonPlanetGame ctx)
         {
-            if(Level.ActualState == Level.State.Menu)
+            if (Level.ActualState == Level.State.Menu)
             {
                 _ctx = ctx;
                 _panel = new Panel(new Vector2(1280, 720));
@@ -37,30 +38,59 @@ namespace DungeonPlanet
                 _panel.AddChild(_options);
                 _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 150));
                 _panel.AddChild(_quit);
+                _continue = new Button("Reprendre", ButtonSkin.Default, Anchor.TopLeft, new Vector2(500, 200), new Vector2(10, 10));
+                UserInterface.Active.AddEntity(_continue);
             }
         }
-
+        internal Level.State PreviousState
+        {
+            get { return _previousState; }
+            set { _previousState = value; }
+        }
         public void Update()
         {
-            if (_newGame.IsMouseDown)
+            if (_panel != null)
             {
-                Level.ActualState = Level.State.Hub;
-                Level.CurrentBoard.NewLevel();
-                if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
-                _panel = null;
-            }
-            if (_loadGame.IsMouseDown)
-            {
-                Player.CurrentPlayer.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
-                Level.ActualState = Level.State.Hub;
-                Level.CurrentBoard.NewLevel();
-                if (_panel != null) UserInterface.Active.RemoveEntity(_panel);
-                _panel = null;
-            }
-
-            if (_quit.IsMouseDown)
-            {
-                _ctx.Exit();
+                if (_previousState == Level.State.Menu)
+                {
+                    _continue.Visible = false;
+                }
+                else
+                {
+                    if (!_continue.Visible) _continue.Visible = true;
+                    _continue.OnClick = (Entity btn) =>
+                    {
+                        Level.ActualState = _previousState;
+                    };
+                }
+                if (Level.ActualState != Level.State.Menu)
+                {
+                    _panel.Visible = false;
+                    _continue.Visible = false;
+                }
+                else
+                {
+                    _newGame.OnClick = (Entity btn) =>
+                    {
+                        Level.ActualState = Level.State.Hub;
+                        _ctx.Reload();
+                        _panel.Visible = false;
+                        _continue.Visible = false;
+                    };
+                    _loadGame.OnClick = (Entity btn) =>
+                    {
+                        Level.ActualState = Level.State.Hub;
+                        _ctx.Reload();
+                        Player.CurrentPlayer.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+                        _panel.Visible = false;
+                        _continue.Visible = false;
+                    };
+                    _quit.OnClick = (Entity btn) =>
+                    {
+                        _ctx.Exit();
+                    };
+                    _panel.Visible = true;
+                }
             }
         }
     }

@@ -136,7 +136,6 @@ namespace DungeonPlanet
 
         public override void Draw()
         {
-            SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, SpriteEffects.None, 0);
             foreach (Bullet bullet in Bullets)
             {
                 bullet.Draw();
@@ -145,6 +144,8 @@ namespace DungeonPlanet
             {
                 bulletE.Draw();
             }
+            SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, SpriteEffects.None, 0);
+
         }
     }
 }

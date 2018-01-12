@@ -99,7 +99,7 @@ namespace DungeonPlanet.Library
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
         {
-            if (ActualState == State.Hub)
+            if (ActualState == State.Hub || ActualState == State.BossRoom)
             {
                 foreach (var tile in Hub.Tiles)
                 {

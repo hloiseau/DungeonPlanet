@@ -54,7 +54,13 @@ namespace DungeonPlanet.Library
         public void SimulateFriction()
         {
             if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
-            else { Movement -= Movement * Vector2.One * .02f; }
+            else
+            {
+                Vector2 movement = Movement;
+                movement.X -= Movement.X * Vector2.One.X * .04f;
+                movement.Y -= Movement.Y * Vector2.One.Y * .01f;
+                Movement = movement;
+            }
         }
 
         public bool IsOnFirmGround()
@@ -74,10 +80,7 @@ namespace DungeonPlanet.Library
         {
             Movement += Vector2.UnitX;
         }
-        public void Jump()
-        {
-            Movement = -Vector2.UnitY * 20; 
-        }
+        public void Jump() => Movement = -Vector2.UnitY * 25;
         public void StopMovingIfBlocked()
         {
             Vector2 lastMovement = Position - OldPosition;

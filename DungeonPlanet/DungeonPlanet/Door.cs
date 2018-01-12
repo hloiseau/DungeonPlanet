@@ -46,13 +46,23 @@ namespace DungeonPlanet
                         _header = null;
                     }
                 }
-                else {
-                  /*  _ctx.R;
+                else if (Level.ActualState == Level.State.LevelOne)
+                {
+                    _ctx.RestartBossRoom();
                     if (_header != null)
                     {
                         UserInterface.Active.RemoveEntity(_header);
                         _header = null;
-                    }*/
+                    }
+                }
+                else if (Level.ActualState == Level.State.BossRoom)
+                {
+                    _ctx.RestartHub();
+                    if (_header != null)
+                    {
+                        UserInterface.Active.RemoveEntity(_header);
+                        _header = null;
+                    }
                 }
             }
             else if (_header == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds))
