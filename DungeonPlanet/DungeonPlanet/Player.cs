@@ -13,7 +13,6 @@ namespace DungeonPlanet
     [Serializable]
     public class Player : Sprite
     {
-
         public PlayerLib PlayerLib { get; set; }
         public PlayerInfo PlayerInfo { get; set; }
         public Weapon Weapon { get; set; }
@@ -30,9 +29,9 @@ namespace DungeonPlanet
             : base(texturePlayer, position, spritebatch)
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X, position.Y), texturePlayer.Width, texturePlayer.Height);
+            PlayerInfo = new PlayerInfo();
             Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, bosses);
             _bombs = new List<Bomb>();
-            PlayerInfo = new PlayerInfo();
             _texturebomb = textureBomb;
             _spritebatch = spritebatch;
             _enemys = enemys;

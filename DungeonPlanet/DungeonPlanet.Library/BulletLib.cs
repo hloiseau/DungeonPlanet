@@ -17,6 +17,7 @@ namespace DungeonPlanet.Library
         Vector2 _position;
         int _height;
         int _width;
+        
 
         public BulletLib(WeaponLib ctx, Vector2 position, int height, int width)
         {
@@ -24,7 +25,6 @@ namespace DungeonPlanet.Library
             _position = position;
             _height = height;
             _width = width;
- 
         }
  
         public void Timer(float gameTime)

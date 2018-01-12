@@ -14,6 +14,7 @@ namespace DungeonPlanet.Library
         public Vector2 Position { get; set; }
         public Vector2 OldPosition { get; set; }
         public int Life { get; set; }
+        public int State { get; set; }
 
         int _height;
         int _width;

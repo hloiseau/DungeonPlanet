@@ -14,10 +14,12 @@ namespace DungeonPlanet.Library
         public int Life { get; set; }
         public int Money { get; set; }
         public int Energy { get; set; }
+        public static WeaponState ActualWeapon { get; set; }
+        public enum WeaponState { None, Fire, Slime}
         public PlayerInfo()
         {
             Life = 100;
-            Money = 0;
+            Money = 100;
             Energy = 100;
         }
         public void Save(string filePath)

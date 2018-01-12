@@ -17,6 +17,7 @@ namespace DungeonPlanet.Library
         public float Rotation { get; set; }
         public Vector2 Direction { get; set; }
         public int Life { get; set; }
+        public int State { get; set; }
         public bool IsShooting { get; set; }
         int _height;
         int _width;
