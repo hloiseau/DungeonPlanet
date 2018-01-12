@@ -27,19 +27,19 @@ namespace DungeonPlanet
             if (Level.ActualState == Level.State.Menu)
             {
                 _ctx = ctx;
-                _panel = new Panel(new Vector2(1280, 720));
+                _panel = new Panel(new Vector2(1300, 750));
                 UserInterface.Active.AddEntity(_panel);
                 _panel.AddChild(new Header("Dungeon Planet"));
-                _newGame = new Button("Nouveau Jeu", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 150));
+                _continue = new Button("Reprendre", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+                _panel.AddChild(_continue);
+                _newGame = new Button("Nouvelle Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
                 _panel.AddChild(_newGame);
-                _loadGame = new Button("Reprendre Jeu", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 150));
+                _loadGame = new Button("Charger Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
                 _panel.AddChild(_loadGame);
-                _options = new Button("Option", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 150));
+                _options = new Button("Option", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
                 _panel.AddChild(_options);
-                _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 150));
+                _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
                 _panel.AddChild(_quit);
-                _continue = new Button("Reprendre", ButtonSkin.Default, Anchor.TopLeft, new Vector2(500, 200), new Vector2(10, 10));
-                UserInterface.Active.AddEntity(_continue);
             }
         }
         internal Level.State PreviousState

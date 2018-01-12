@@ -256,10 +256,18 @@ namespace DungeonPlanet
         }
         internal void OpenMenu()
         {
-            _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
-            _menu.PreviousState = Level.ActualState;
-            Level.ActualState = Level.State.Menu;
-            _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+            if(Level.ActualState != Level.State.Menu)
+            {
+                _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+                _menu.PreviousState = Level.ActualState;
+                Level.ActualState = Level.State.Menu;
+                _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
+            }
+            else
+            {
+                Level.ActualState = _menu.PreviousState;
+            }
+          
         }
 
 
