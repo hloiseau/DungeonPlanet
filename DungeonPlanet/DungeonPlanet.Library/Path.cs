@@ -56,14 +56,14 @@ namespace DungeonPlanet.Library
             bool isOk = true;
             while (isOk)
             {
-                whereToGo = _ctx.GetNext(1, 6);
+                whereToGo = _ctx.GetNext(1, 12);
                 //whereToGo = _rnd.Next(1, 6);
                 if (whereToGo == 1)
                 {
                     isOk = Down(x, y);
                     y++;
                 }
-                else if (whereToGo == 2 || whereToGo == 3)
+                else if (whereToGo >= 2 && whereToGo <= 8) // direction right
                 {
                     x++;
                     if (x < Columns)
@@ -82,7 +82,7 @@ namespace DungeonPlanet.Library
                         y++;
                     }
                 }
-                else if (whereToGo == 4 || whereToGo == 5)
+                else if (whereToGo >= 9 && whereToGo <= 11) // direction left
                 {
                     x--;
                     if (x >= 0)
