@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System.Diagnostics;
 using Comora;
 using DungeonPlanet.Library;
@@ -25,7 +26,7 @@ namespace DungeonPlanet
         private Song backgroundBossSong;
         private Song backgroundLevelSong;
 
-        private Song GunSoundEfect;
+        private SoundEffect GunSoundEfect;
 
         private Player _player;
         private NPCMarchand _NPCMarchand;
@@ -111,6 +112,7 @@ namespace DungeonPlanet
             _shieldTexture = Content.Load<Texture2D>("shield");
             _fireTexture = Content.Load<Texture2D>("fire");
             _fireBossTexture = Content.Load<Texture2D>("fireBoss");
+
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
@@ -135,7 +137,7 @@ namespace DungeonPlanet
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent();
 
-            GunSoundEfect = Content.Load<Song>("GunSoundEfect");
+            GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
 
             backgroundBossSong = Content.Load<Song>("backgroundBossSong");
             backgroundHubSong = Content.Load<Song>("backgroundHubSong");
@@ -213,7 +215,7 @@ namespace DungeonPlanet
                 }
                 if (Player.CurrentPlayer.Weapon.Bullets.Count > oldcount)
                 {
-                    MediaPlayer.Play(GunSoundEfect);
+                    GunSoundEfect.Play();
                 }
                 oldcount = Player.CurrentPlayer.Weapon.Bullets.Count;
             }
