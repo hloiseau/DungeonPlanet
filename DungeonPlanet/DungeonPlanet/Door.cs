@@ -18,12 +18,19 @@ namespace DungeonPlanet
         EnemyLib _lib;
         Header _header;
         DungeonPlanetGame _ctx;
+        Level.LevelID _id;
         public Door(Texture2D texture, Vector2 position, SpriteBatch spriteBatch, DungeonPlanetGame ctx)
             : base(texture, position, spriteBatch)
         {
             _lib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 100);
             _spritebatch = spriteBatch;
             _ctx = ctx;
+        }
+
+        public Door(Texture2D texture, Vector2 position, SpriteBatch spriteBatch, DungeonPlanetGame ctx, Level.LevelID ID)
+           : this(texture, position, spriteBatch, ctx)
+        {
+            _id = ID;
         }
 
         public void Update(GameTime gameTime)
@@ -39,6 +46,7 @@ namespace DungeonPlanet
             {
                 if (Level.ActualState == Level.State.Hub)
                 {
+                    Level.ID = _id;
                     _ctx.RestartLevelOne();
                     if (_header != null)
                     {
@@ -46,7 +54,7 @@ namespace DungeonPlanet
                         _header = null;
                     }
                 }
-                else if (Level.ActualState == Level.State.LevelOne)
+                else if (Level.ActualState == Level.State.Level)
                 {
                     _ctx.RestartBossRoom();
                     if (_header != null)

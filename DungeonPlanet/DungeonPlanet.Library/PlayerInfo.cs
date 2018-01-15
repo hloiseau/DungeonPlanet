@@ -15,13 +15,21 @@ namespace DungeonPlanet.Library
         public int Money { get; set; }
         public int Energy { get; set; }
         public static WeaponState ActualWeapon { get; set; }
-        public enum WeaponState { None, Fire, Slime}
+        public enum WeaponState
+        {
+            None,
+            Fire,
+            Slime
+        }
+        public static Level.LevelID Progress { get; set; }
         public PlayerInfo()
         {
             Life = 100;
             Money = 100;
             Energy = 100;
+            Progress = Level.LevelID.Three;
         }
+       
         public void Save(string filePath)
         {
             BinaryFormatter f = new BinaryFormatter();

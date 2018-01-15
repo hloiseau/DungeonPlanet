@@ -33,7 +33,7 @@ namespace DungeonPlanet
         private Camera _camera;
         private ProgressBar _healthBar;
         private ProgressBar _energyBar;
-        private Door _door;
+        private Door[] _door;
         private Door _door2;
         private Menu _menu;
         private Paragraph _money;
@@ -100,13 +100,18 @@ namespace DungeonPlanet
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
-            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch,"CQC", _fireTexture);
+            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture);
             _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPCMarchand = new NPCMarchand(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _NPCWeapon = new NPCWeapon(_playerTexture, new Vector2(250, 200), _spriteBatch);
-            _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
+            _door = new Door[5];
+            for (int x = 0; x < _door.Length; x++)
+            {
+                if(Level.ActualState == Level.State.Hub || (Level.ActualState == Level.State.BossRoom && x == 0))
+                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1000 + x * 100, 200), _spriteBatch, this, (Level.LevelID)x+1);
+            }
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
@@ -115,7 +120,7 @@ namespace DungeonPlanet
 
             if (Level.ActualState == Level.State.BossRoom) Bosses.Add(_boss);
 
-            if (Level.ActualState == Level.State.LevelOne)
+            if (Level.ActualState == Level.State.Level)
             {
                 for (int i = 0; i < Level.CurrentBoard.GetNext(20, 30 + 1); i++)
                 {
@@ -156,11 +161,14 @@ namespace DungeonPlanet
             _menu.Update();
             if (Level.ActualState == Level.State.Hub)
             {
-                _door.Update(gameTime);
+               for(int x = 0; x < (int)PlayerInfo.Progress; x++)
+                {
+                    _door[x].Update(gameTime);
+                }
                 _NPCMarchand.Update(gameTime);
                 _NPCWeapon.Update(gameTime);
             }
-            if (Level.ActualState == Level.State.LevelOne)
+            if (Level.ActualState == Level.State.Level)
             {
                 _door2.Update(gameTime);
             }
@@ -179,7 +187,8 @@ namespace DungeonPlanet
                             Bosses[i].Update(gameTime);
                     }
                 }
-                if (Bosses.Count == 0) _door.Update(gameTime);
+                if (Bosses.Count == 0)_door[0].Update(gameTime);
+
             }
 
             for (int i = 0; i < Enemys.Count; i++)
@@ -249,7 +258,7 @@ namespace DungeonPlanet
         internal void RestartLevelOne()
         {
             _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
-            Level.ActualState = Level.State.LevelOne;
+            Level.ActualState = Level.State.Level;
             LoadContent();
             _player.PlayerInfo = PlayerInfo.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
         }
@@ -262,7 +271,7 @@ namespace DungeonPlanet
         }
         internal void OpenMenu()
         {
-            if(Level.ActualState != Level.State.Menu)
+            if (Level.ActualState != Level.State.Menu)
             {
                 _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
                 _menu.PreviousState = Level.ActualState;
@@ -273,7 +282,7 @@ namespace DungeonPlanet
             {
                 Level.ActualState = _menu.PreviousState;
             }
-          
+
         }
 
 
@@ -292,16 +301,19 @@ namespace DungeonPlanet
             {
                 _NPCWeapon.Draw();
                 _NPCMarchand.Draw();
-                _door.Draw();
+                for (int x = 0; x < (int)PlayerInfo.Progress; x++)
+                {
+                    _door[x].Draw();
+                }
             }
-            if (Level.ActualState == Level.State.LevelOne)
+            if (Level.ActualState == Level.State.Level)
             {
                 _door2.Draw();
             }
             if (Level.ActualState == Level.State.BossRoom)
             {
                 foreach (Boss boss in Bosses) boss.Draw();
-                if (Bosses.Count == 0) _door.Draw();
+                if (Bosses.Count == 0) _door[0].Draw();
             }
             _board.Draw();
             WriteDebugInformation();

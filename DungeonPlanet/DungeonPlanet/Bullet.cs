@@ -141,7 +141,7 @@ namespace DungeonPlanet
                 }
                 return false;
             }
-            else if (Level.ActualState == Level.State.LevelOne)
+            else if (Level.ActualState == Level.State.Level)
             {
                 foreach (Case Case in Level.CurrentBoard.Cases)
                 {
