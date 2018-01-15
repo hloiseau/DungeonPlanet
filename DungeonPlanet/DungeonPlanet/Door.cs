@@ -65,6 +65,7 @@ namespace DungeonPlanet
                 }
                 else if (Level.ActualState == Level.State.BossRoom)
                 {
+                    if (Level.ID == _ctx.PlayerInfo.Progress) _ctx.PlayerInfo.Progress++;
                     _ctx.RestartHub();
                     if (_header != null)
                     {

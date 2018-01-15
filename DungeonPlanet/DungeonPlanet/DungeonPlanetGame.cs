@@ -48,6 +48,11 @@ namespace DungeonPlanet
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
         public string backgroundMusic { get; private set; }
+        public PlayerInfo PlayerInfo
+        {
+            get { return _player.PlayerInfo; }
+            private set { _player.PlayerInfo = value; }
+        }
 
         public DungeonPlanetGame()
         {
@@ -124,7 +129,7 @@ namespace DungeonPlanet
             for (int x = 0; x < _door.Length; x++)
             {
                 if(Level.ActualState == Level.State.Hub || (Level.ActualState == Level.State.BossRoom && x == 0))
-                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1000 + x * 100, 200), _spriteBatch, this, (Level.LevelID)x+1);
+                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1000 + x * 150, 200), _spriteBatch, this, (Level.LevelID)x+1);
             }
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
@@ -187,7 +192,7 @@ namespace DungeonPlanet
             {
                for(int x = 0; x < (int)PlayerInfo.Progress; x++)
                 {
-                    _door[x].Update(gameTime);
+                    if(_door[x] != null)_door[x].Update(gameTime);
                 }
                 _NPCMarchand.Update(gameTime);
                 _NPCWeapon.Update(gameTime);

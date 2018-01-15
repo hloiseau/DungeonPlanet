@@ -50,12 +50,12 @@ namespace DungeonPlanet.Library
                     rows = 4;
                     break;
                 case LevelID.Two:
-                    columns = 4;
+                    columns = 8;
                     rows = 4;
                     break;
                 case LevelID.Three:
                     columns = 4;
-                    rows = 4;
+                    rows = 8;
                     break;
                 case LevelID.Four:
                     columns = 4;
