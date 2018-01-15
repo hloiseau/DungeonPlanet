@@ -4968,3 +4968,21 @@
 /processorParam:TextureFormat=Color
 /build:fireBoss.png
 
+#begin backgroundBossSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:backgroundBossSong.mp3
+
+#begin backgroundLevelSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:backgroundLevelSong.mp3
+
+#begin backgroundHubSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:backgroundHubSong.mp3
+

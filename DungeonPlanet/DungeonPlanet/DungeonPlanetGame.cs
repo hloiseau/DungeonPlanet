@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System.Diagnostics;
 using Comora;
 using DungeonPlanet.Library;
@@ -19,6 +20,11 @@ namespace DungeonPlanet
         private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Texture2D _fireTexture, _fireBossTexture;
+
+        private Song backgroundHubSong;
+        private Song backgroundBossSong;
+        private Song backgroundLevelSong;
+
         private Player _player;
         private NPCMarchand _NPCMarchand;
         private NPCWeapon _NPCWeapon;
@@ -41,6 +47,7 @@ namespace DungeonPlanet
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
+        public string backgroundMusic { get; private set; }
 
         public DungeonPlanetGame()
         {
@@ -83,6 +90,13 @@ namespace DungeonPlanet
             Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            backgroundHubSong = Content.Load<Song>("backgroundHubSong");
+            MediaPlayer.IsRepeating = true;
+            backgroundBossSong = Content.Load<Song>("backgroundBossSong");
+            MediaPlayer.IsRepeating = true;
+            backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
+            MediaPlayer.IsRepeating = true;
+
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
             _enemyTexture = Content.Load<Texture2D>("enemy");
@@ -118,7 +132,16 @@ namespace DungeonPlanet
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent();
 
-            if (Level.ActualState == Level.State.BossRoom) Bosses.Add(_boss);
+            if (Level.ActualState == Level.State.BossRoom)
+            {
+                Bosses.Add(_boss);
+                MediaPlayer.Play(backgroundBossSong);
+            }
+
+            if (Level.ActualState == Level.State.Hub)
+            {
+                MediaPlayer.Play(backgroundHubSong);
+            }
 
             if (Level.ActualState == Level.State.Level)
             {
@@ -147,6 +170,7 @@ namespace DungeonPlanet
                     Items.Add(mediPack);
                 }
                 _player.Shield = _shield;
+                MediaPlayer.Play(backgroundLevelSong);
             }
         }
         public void Reload() => LoadContent();
@@ -167,6 +191,7 @@ namespace DungeonPlanet
                 }
                 _NPCMarchand.Update(gameTime);
                 _NPCWeapon.Update(gameTime);
+                backgroundMusic = "backgroundHubMusic";
             }
             if (Level.ActualState == Level.State.Level)
             {
