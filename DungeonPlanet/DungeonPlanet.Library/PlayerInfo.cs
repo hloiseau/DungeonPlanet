@@ -55,8 +55,6 @@ namespace DungeonPlanet.Library
                  * { 
                  * }*/
                 playerInfo.Progress = (Level.LevelID)Case.Clamp((int)playerInfo.Progress, 1, 5);
-                playerInfo.Life = 100;
-                playerInfo.Energy = 100;
                 return playerInfo;
             }
         }

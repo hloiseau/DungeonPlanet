@@ -82,21 +82,42 @@ namespace DungeonPlanet
             _lib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             _lib.StopMovingIfBlocked();
             position = new Vector2(_lib.Position.X, _lib.Position.Y);
-            if (_blueBullet != null && _blueBullet.IsMouseDown && _player.PlayerInfo.Money - 10 >= 0)
+
+            if (_blueBullet != null)
             {
-                _player.PlayerInfo.Money -= 10;
-                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.None;
+                _blueBullet.OnClick = (Entity btn) =>
+                {
+                    if(_player.PlayerInfo.Money - 10 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 10;
+                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.None;
+                    }
+                   
+                };
             }
-            if (_redBullet != null && _redBullet.IsMouseDown && _player.PlayerInfo.Money - 250 >= 0)
+            if (_redBullet != null)
             {
-                _player.PlayerInfo.Money -= 250;
-                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Fire;
+                _redBullet.OnClick = (Entity btn) =>
+                {
+                    if (_player.PlayerInfo.Money - 250 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 250;
+                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Fire;
+                    }
+                };
             }
-            if (_greenBullet != null && _greenBullet.IsMouseDown && _player.PlayerInfo.Money - 100 >= 0)
+            if (_greenBullet != null)
             {
-                _player.PlayerInfo.Money -= 100;
-                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime;
+                _greenBullet.OnClick = (Entity btn) =>
+                {
+                    if (_player.PlayerInfo.Money - 100 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 100;
+                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime;
+                    }
+                };
             }
+
 
             if (NPCPanel == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds) && keyboardState.IsKeyDown(Keys.E))
             {
@@ -128,3 +149,4 @@ namespace DungeonPlanet
         }
     }
 }
+

@@ -66,16 +66,31 @@ namespace DungeonPlanet
             _lib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             _lib.StopMovingIfBlocked();
             position = new Vector2(_lib.Position.X, _lib.Position.Y);
-            if (_button != null && _button.IsMouseDown && _player.PlayerInfo.Money-30 >= 0)
+
+            if (_button != null)
             {
-                _player.PlayerInfo.Money -= 30;
-                _player.PlayerInfo.Life += 40;
+                _button.OnClick = (Entity btn) =>
+                {
+                    if (_player.PlayerInfo.Money - 30 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 30;
+                        _player.PlayerInfo.Life += 40;
+                    }
+                };
             }
-            if (_button2 != null && _button2.IsMouseDown && _player.PlayerInfo.Money-5 >= 0)
+
+            if (_button2 != null)
             {
-                _player.PlayerInfo.Money -= 5;
-                _player.PlayerInfo.Life += 10;
+                _button2.OnClick = (Entity btn) =>
+                {
+                    if (_player.PlayerInfo.Money - 5 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 5;
+                        _player.PlayerInfo.Life += 10;
+                    }
+                };
             }
+
 
             if (NPCPanel == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds) && keyboardState.IsKeyDown(Keys.E))
             {
