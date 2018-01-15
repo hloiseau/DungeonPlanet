@@ -88,9 +88,9 @@ namespace DungeonPlanet
                         }
                     }
                     if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1 && EnemyLib.State != 2) { EnemyLib.Left(); }
-                    else if (EnemyLib.GetDistanceTo(PlayerLib.Position).X < 0.1 && EnemyLib.State == 2) {  EnemyLib.LeftSlim(); }
+                    else {  EnemyLib.LeftSlim(); }
                     if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 0.1 && EnemyLib.State != 2) { EnemyLib.Right(); }
-                    else if (EnemyLib.GetDistanceTo(PlayerLib.Position).X > 0.1 && EnemyLib.State == 2) { EnemyLib.RightSlim(); }
+                    else { EnemyLib.RightSlim(); }
                 }
                 else if (_type == "DIST")
                 {

@@ -17,6 +17,7 @@ namespace DungeonPlanet
         SpriteBatch _spritebatch;
         EnemyLib _lib;
         Header _header;
+        Header _headerMessage;
         Player _player;
         Icon _button;
         Icon _button2;
@@ -41,6 +42,8 @@ namespace DungeonPlanet
 
         public void ShowMenu()
         {
+            _headerMessage = new Header("R pour quitter", Anchor.AutoCenter);
+            UserInterface.Active.AddEntity(_headerMessage);
             NPCPanel = new Panel(size: new Vector2(500, 500), skin: PanelSkin.Golden, anchor: Anchor.Center, offset: new Vector2(10, 10));
             UserInterface.Active.AddEntity(NPCPanel);
             NPCPanel.AddChild(new Header("Magasin", Anchor.AutoCenter));
@@ -94,7 +97,9 @@ namespace DungeonPlanet
             {
                 if (NPCPanel != null)
                 {
+                    UserInterface.Active.RemoveEntity(_headerMessage);
                     UserInterface.Active.RemoveEntity(NPCPanel);
+                    _headerMessage = null;
                     NPCPanel = null;
                     _button = null;
                 }
@@ -102,6 +107,17 @@ namespace DungeonPlanet
                 {
                     UserInterface.Active.RemoveEntity(_header);
                     _header = null;
+                }
+            }
+            else if (NPCPanel != null && keyboardState.IsKeyDown(Keys.R))
+            {
+                if (NPCPanel != null)
+                {
+                    UserInterface.Active.RemoveEntity(_headerMessage);
+                    UserInterface.Active.RemoveEntity(NPCPanel);
+                    NPCPanel = null;
+                    _headerMessage = null;
+                    _button = null;
                 }
             }
         }

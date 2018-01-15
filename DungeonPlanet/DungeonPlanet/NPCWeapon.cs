@@ -17,6 +17,7 @@ namespace DungeonPlanet
         SpriteBatch _spritebatch;
         EnemyLib _lib;
         Header _header;
+        Header _headerMessage;
         Player _player;
         Icon _redBullet;
         Icon _blueBullet;
@@ -39,11 +40,13 @@ namespace DungeonPlanet
 
         public void ShowMessage()
         {
-            _header = new Header("Appuyer sur E pour voir les munitions", Anchor.AutoCenter);
+            _header = new Header("Appuyer sur E pour voir la boutique", Anchor.AutoCenter);
             UserInterface.Active.AddEntity(_header);
         }
         public void ShowMenu()
         {
+            _headerMessage = new Header("R pour quitter", Anchor.AutoCenter);
+            UserInterface.Active.AddEntity(_headerMessage);
             NPCPanel = new Panel(size: new Vector2(500, 500), skin: PanelSkin.Golden, anchor: Anchor.Center, offset: new Vector2(10, 10));
             UserInterface.Active.AddEntity(NPCPanel);
             NPCPanel.AddChild(new Header("Magasin", Anchor.AutoCenter));
@@ -115,14 +118,31 @@ namespace DungeonPlanet
             {
                 if (NPCPanel != null)
                 {
+                    UserInterface.Active.RemoveEntity(_headerMessage);
                     UserInterface.Active.RemoveEntity(NPCPanel);
                     NPCPanel = null;
+                    _headerMessage = null;
                     _redBullet = null;
+                    _blueBullet = null;
+                    _greenBullet = null;
                 }
                 if (_header != null)
                 {
                     UserInterface.Active.RemoveEntity(_header);
                     _header = null;
+                }
+            }
+            else if (NPCPanel != null && keyboardState.IsKeyDown(Keys.R))
+            {
+                if (NPCPanel != null)
+                {
+                    UserInterface.Active.RemoveEntity(_headerMessage);
+                    UserInterface.Active.RemoveEntity(NPCPanel);
+                    NPCPanel = null;
+                    _headerMessage = null;
+                    _redBullet = null;
+                    _blueBullet = null;
+                    _greenBullet = null;
                 }
             }
         }
