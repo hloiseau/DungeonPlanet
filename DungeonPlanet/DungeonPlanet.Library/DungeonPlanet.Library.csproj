@@ -58,6 +58,7 @@
     <Compile Include="Hub.cs" />
     <Compile Include="ItemLib.cs" />
     <Compile Include="MediPackLib.cs" />
+    <Compile Include="NPCDialogLib.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="BulletLib.cs" />

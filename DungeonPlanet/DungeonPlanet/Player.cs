@@ -105,7 +105,7 @@ namespace DungeonPlanet
             {
                 _bombs[i].Draw();
             }
-            if  (Shield.IsActive && Level.ActualState == Level.State.LevelOne) { Shield.Draw(); }
+            if  (Shield.IsActive && Level.ActualState == Level.State.Level) { Shield.Draw(); }
         }
 
       

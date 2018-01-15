@@ -21,16 +21,56 @@ namespace DungeonPlanet.Library
         public Tile[,] EmptyTiles { get; private set; }
         public static Level CurrentBoard { get; private set; }
         public static State ActualState { get; set; }
+        public static LevelID ID { get; set; }
         public Hub Hub { get; private set; }
         public enum State
         {
             Menu,
             Hub, 
-            LevelOne,
+            Level,
             BossRoom
         }
-        public Level(int columns, int rows)
+        public enum LevelID
         {
+            None = 0,
+            One = 1,
+            Two = 2,
+            Three = 3,
+            Four = 4,
+            Five = 5
+        }
+        public Level()
+        {
+            int columns = 0;
+            int rows = 0;
+            switch (ID)
+            {
+                case LevelID.One:
+                    columns = 4;
+                    rows = 4;
+                    break;
+                case LevelID.Two:
+                    columns = 8;
+                    rows = 4;
+                    break;
+                case LevelID.Three:
+                    columns = 4;
+                    rows = 8;
+                    break;
+                case LevelID.Four:
+                    columns = 4;
+                    rows = 4;
+                    break;
+                case LevelID.Five:
+                    columns = 4;
+                    rows = 4;
+                    break;
+                default:
+                    columns = 0;
+                    rows = 0;
+                    break;
+            };
+                
             _columns = columns;
             _rows = rows;
 
@@ -51,7 +91,7 @@ namespace DungeonPlanet.Library
                 Hub.SetAllBorderTilesBlocked();
                 Hub.SetTopLeftTileUnblocked();
             }
-            else if(ActualState == State.LevelOne)
+            else if(ActualState == State.Level)
             {
                 _path.InitializeBoard();
                 _path.CreatePath();
@@ -110,7 +150,7 @@ namespace DungeonPlanet.Library
                 }
                 return true;
             }
-            else if (ActualState == State.LevelOne)
+            else if (ActualState == State.Level)
             {
                 foreach (Case Case in Cases)
                 {

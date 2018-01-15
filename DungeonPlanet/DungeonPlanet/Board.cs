@@ -25,7 +25,7 @@ namespace DungeonPlanet
 
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-            Level = new Level(4, 4);
+            Level = new Level();
             CreateNewBoard();
             Board.CurrentBoard = this;
         }
@@ -48,7 +48,7 @@ namespace DungeonPlanet
                     }
                 }
             }
-            else if (Level.ActualState == Level.State.LevelOne)
+            else if (Level.ActualState == Level.State.Level)
             {
                 foreach (Case Case in Level.Cases)
                 {

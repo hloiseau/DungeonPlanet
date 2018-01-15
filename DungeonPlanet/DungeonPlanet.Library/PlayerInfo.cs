@@ -14,14 +14,24 @@ namespace DungeonPlanet.Library
         public int Life { get; set; }
         public int Money { get; set; }
         public int Energy { get; set; }
-        public static WeaponState ActualWeapon { get; set; }
-        public enum WeaponState { None, Fire, Slime}
+        public WeaponState SerializableWeapon { get { return ActualWeapon; } set { ActualWeapon = value; } }
+        public static WeaponState ActualWeapon;
+        public enum WeaponState
+        {
+            None,
+            Fire,
+            Slime
+        }
+        public Level.LevelID Progress { get; set; }
+
         public PlayerInfo()
         {
             Life = 100;
             Money = 100;
             Energy = 100;
+            Progress = Level.LevelID.Five;
         }
+       
         public void Save(string filePath)
         {
             BinaryFormatter f = new BinaryFormatter();
@@ -44,8 +54,7 @@ namespace DungeonPlanet.Library
                 /*catch 
                  * { 
                  * }*/
-                playerInfo.Life = 100;
-                playerInfo.Energy = 100;
+                playerInfo.Progress = (Level.LevelID)Case.Clamp((int)playerInfo.Progress, 1, 5);
                 return playerInfo;
             }
         }

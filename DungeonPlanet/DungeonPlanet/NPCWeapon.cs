@@ -17,6 +17,7 @@ namespace DungeonPlanet
         SpriteBatch _spritebatch;
         EnemyLib _lib;
         Header _header;
+        Header _headerMessage;
         Player _player;
         Icon _redBullet;
         Icon _blueBullet;
@@ -39,11 +40,13 @@ namespace DungeonPlanet
 
         public void ShowMessage()
         {
-            _header = new Header("Appuyer sur E pour voir les munitions", Anchor.AutoCenter);
+            _header = new Header("Appuyer sur E pour voir la boutique", Anchor.AutoCenter);
             UserInterface.Active.AddEntity(_header);
         }
         public void ShowMenu()
         {
+            _headerMessage = new Header("R pour quitter", Anchor.AutoCenter);
+            UserInterface.Active.AddEntity(_headerMessage);
             NPCPanel = new Panel(size: new Vector2(500, 500), skin: PanelSkin.Golden, anchor: Anchor.Center, offset: new Vector2(10, 10));
             UserInterface.Active.AddEntity(NPCPanel);
             NPCPanel.AddChild(new Header("Magasin", Anchor.AutoCenter));
@@ -82,21 +85,42 @@ namespace DungeonPlanet
             _lib.MoveAsFarAsPossible((float)gameTime.ElapsedGameTime.TotalMilliseconds / 15);
             _lib.StopMovingIfBlocked();
             position = new Vector2(_lib.Position.X, _lib.Position.Y);
-            if (_blueBullet != null && _blueBullet.IsMouseDown && _player.PlayerInfo.Money - 10 >= 0)
+
+            if (_blueBullet != null)
             {
-                _player.PlayerInfo.Money -= 10;
-                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.None;
+                _blueBullet.OnClick = (Entity btn) =>
+                {
+                    if(_player.PlayerInfo.Money - 10 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 10;
+                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.None;
+                    }
+                   
+                };
             }
-            if (_redBullet != null && _redBullet.IsMouseDown && _player.PlayerInfo.Money - 250 >= 0)
+            if (_redBullet != null)
             {
-                _player.PlayerInfo.Money -= 250;
-                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Fire;
+                _redBullet.OnClick = (Entity btn) =>
+                {
+                    if (_player.PlayerInfo.Money - 250 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 250;
+                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Fire;
+                    }
+                };
             }
-            if (_greenBullet != null && _greenBullet.IsMouseDown && _player.PlayerInfo.Money - 100 >= 0)
+            if (_greenBullet != null)
             {
-                _player.PlayerInfo.Money -= 100;
-                PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime;
+                _greenBullet.OnClick = (Entity btn) =>
+                {
+                    if (_player.PlayerInfo.Money - 100 >= 0)
+                    {
+                        _player.PlayerInfo.Money -= 100;
+                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime;
+                    }
+                };
             }
+
 
             if (NPCPanel == null && Player.CurrentPlayer.PlayerLib.Bounds.IntersectsWith(_lib.Bounds) && keyboardState.IsKeyDown(Keys.E))
             {
@@ -115,9 +139,13 @@ namespace DungeonPlanet
             {
                 if (NPCPanel != null)
                 {
+                    UserInterface.Active.RemoveEntity(_headerMessage);
                     UserInterface.Active.RemoveEntity(NPCPanel);
                     NPCPanel = null;
+                    _headerMessage = null;
                     _redBullet = null;
+                    _blueBullet = null;
+                    _greenBullet = null;
                 }
                 if (_header != null)
                 {
@@ -125,6 +153,20 @@ namespace DungeonPlanet
                     _header = null;
                 }
             }
+            else if (NPCPanel != null && keyboardState.IsKeyDown(Keys.R))
+            {
+                if (NPCPanel != null)
+                {
+                    UserInterface.Active.RemoveEntity(_headerMessage);
+                    UserInterface.Active.RemoveEntity(NPCPanel);
+                    NPCPanel = null;
+                    _headerMessage = null;
+                    _redBullet = null;
+                    _blueBullet = null;
+                    _greenBullet = null;
+                }
+            }
         }
     }
 }
+
