@@ -25,6 +25,8 @@ namespace DungeonPlanet
         private Song backgroundBossSong;
         private Song backgroundLevelSong;
 
+        private Song GunSoundEfect;
+
         private Player _player;
         private NPCMarchand _NPCMarchand;
         private NPCWeapon _NPCWeapon;
@@ -47,7 +49,8 @@ namespace DungeonPlanet
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
-        public string backgroundMusic { get; private set; }
+        private int oldcount;
+
 
         public DungeonPlanetGame()
         {
@@ -89,14 +92,6 @@ namespace DungeonPlanet
             Bosses = new List<Boss>();
             Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            backgroundHubSong = Content.Load<Song>("backgroundHubSong");
-            MediaPlayer.IsRepeating = true;
-            backgroundBossSong = Content.Load<Song>("backgroundBossSong");
-            MediaPlayer.IsRepeating = true;
-            backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
-            MediaPlayer.IsRepeating = true;
-
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
             _enemyTexture = Content.Load<Texture2D>("enemy");
@@ -126,6 +121,13 @@ namespace DungeonPlanet
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent();
+
+            GunSoundEfect = Content.Load<Song>("GunSoundEfect");
+
+            backgroundBossSong = Content.Load<Song>("backgroundBossSong");
+            backgroundHubSong = Content.Load<Song>("backgroundHubSong");
+            backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
+
 
             if (Level.ActualState == Level.State.BossRoom)
             {
@@ -183,11 +185,19 @@ namespace DungeonPlanet
                 _door.Update(gameTime);
                 _NPCMarchand.Update(gameTime);
                 _NPCWeapon.Update(gameTime);
-                backgroundMusic = "backgroundHubMusic";
             }
             if (Level.ActualState == Level.State.LevelOne)
             {
                 _door2.Update(gameTime);
+                if (oldcount == null)
+                {
+                    oldcount = Player.CurrentPlayer.Weapon.Bullets.Count;
+                }
+                if (Player.CurrentPlayer.Weapon.Bullets.Count > oldcount)
+                {
+                    MediaPlayer.Play(GunSoundEfect);
+                }
+                oldcount = Player.CurrentPlayer.Weapon.Bullets.Count;
             }
             if (Level.ActualState == Level.State.BossRoom)
             {

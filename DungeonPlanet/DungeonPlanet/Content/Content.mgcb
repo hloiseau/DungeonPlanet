@@ -4986,3 +4986,9 @@
 /processorParam:Quality=Best
 /build:backgroundHubSong.mp3
 
+#begin GunSoundEfect.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:GunSoundEfect.mp3
+
