@@ -133,7 +133,7 @@ namespace DungeonPlanet
             for (int x = 0; x < _door.Length; x++)
             {
                 if(Level.ActualState == Level.State.Hub || (Level.ActualState == Level.State.BossRoom && x == 0))
-                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1000 + x * 150, 200), _spriteBatch, this, (Level.LevelID)x+1);
+                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1625 + x * 180, 200), _spriteBatch, this, (Level.LevelID)x+1);
             }
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
