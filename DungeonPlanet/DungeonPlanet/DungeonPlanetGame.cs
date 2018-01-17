@@ -101,6 +101,7 @@ namespace DungeonPlanet
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("player");
+            Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _bossTexture = Content.Load<Texture2D>("boss");
@@ -123,7 +124,7 @@ namespace DungeonPlanet
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPCMarchand = new NPCMarchand(_playerTexture, new Vector2(500, 200), _spriteBatch);
             _NPCWeapon = new NPCWeapon(_playerTexture, new Vector2(250, 200), _spriteBatch);
-            _NPCWise = new NPCTheWise(_playerTexture, new Vector2(1300, 200), _spriteBatch);
+            _NPCWise = new NPCTheWise(theWise, new Vector2(1300, 200), _spriteBatch);
             _NPCNarrator = new NPCNarrator(_playerTexture, new Vector2(1500, 200), _spriteBatch);
             _door = new Door[5];
             for (int x = 0; x < _door.Length; x++)
@@ -189,6 +190,7 @@ namespace DungeonPlanet
 
         protected override void Update(GameTime gameTime)
         {
+            MediaPlayer.IsRepeating = true;
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
@@ -375,6 +377,8 @@ namespace DungeonPlanet
             _spriteBatch.End();
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
+            //_camera.Zoom = 1.25f;
+            _camera.Zoom = 0.5f;
         }
 
         private void WriteDebugInformation()
