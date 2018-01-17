@@ -22,11 +22,14 @@ namespace DungeonPlanet
         NPCDialogLib Lib { get; set; }
         string Sentence { get; set; }
         Panel NPCPanel { get; set; }
+        Animation _animation;
 
         public NPCTheWise(Texture2D texture, Vector2 position, SpriteBatch spriteBatch)
             : base(texture, position, spriteBatch)
         {
-            ReferenceLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 100);
+            ReferenceLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 66, 60, 100);
+            _animation = new Animation();
+            _animation.Initialize(texture, position, 66, 60, 0, 0, 5, 150, Color.White, 1, true, true);
             _spritebatch = spriteBatch;
             _player = Player.CurrentPlayer;
             Lib = new NPCDialogLib();
@@ -55,6 +58,8 @@ namespace DungeonPlanet
 
         public void Update(GameTime gameTime)
         {
+            _animation.Update(gameTime);
+            _animation.Position = new Vector2(ReferenceLib.Position.X, ReferenceLib.Position.Y+30);
             KeyboardState keyboardState = Keyboard.GetState();
 
             MouseState mouseState = Mouse.GetState();
@@ -103,6 +108,11 @@ namespace DungeonPlanet
                     NPCPanel = null;
                 }
             }
+        }
+
+        public override void Draw()
+        {
+            _animation.Draw(SpriteBatch);
         }
     }
 }
