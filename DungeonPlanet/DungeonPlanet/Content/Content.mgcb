@@ -4992,3 +4992,9 @@
 /processorParam:Quality=Best
 /build:GunSoundEfect.mp3
 
+#begin GrandpaSingingJhonny.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:GrandpaSingingJhonny.mp3
+
