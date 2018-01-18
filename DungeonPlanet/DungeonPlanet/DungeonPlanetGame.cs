@@ -117,7 +117,7 @@ namespace DungeonPlanet
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _bossTexture = Content.Load<Texture2D>("boss");
-            _weaponTexture = Content.Load<Texture2D>("player_arm");
+            _weaponTexture = Content.Load<Texture2D>("playerGun");
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
@@ -296,6 +296,7 @@ namespace DungeonPlanet
             if (_player.PlayerLib.IsDead(_player.PlayerInfo.Life))
             {
                 RestartHub();
+                _player.PlayerInfo.Life = 100;
             }
             _camera.Position = _player.position;
             _healthBar.Value = _player.PlayerInfo.Life;

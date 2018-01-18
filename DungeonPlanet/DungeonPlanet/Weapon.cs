@@ -22,12 +22,12 @@ namespace DungeonPlanet
         int _time;
         DungeonPlanetGame _ctx;
         List<Boss> _bosses;
+        SpriteEffects _effect;
 
         public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Boss> bosses)
             : base(weaponTexture, position, spritebatch)
         {
-            _origin = new Vector2(5, 20);
-            base.position = new Vector2(PlayerLib.Position.X + 28, PlayerLib.Position.Y + 28);
+            _origin = new Vector2(-2, 7);
             WeaponLib = new WeaponLib();
             Bullets = new List<Bullet>();
             BulletsEnemy = new List<Bullet>();
@@ -40,8 +40,7 @@ namespace DungeonPlanet
            : base(weaponTexture, position, spritebatch)
         {
             _enemyLib = enemyLib;
-            _origin = new Vector2(5, 20);
-            base.position = new Vector2(_enemyLib.Position.X + 28, _enemyLib.Position.Y + 28);
+            _origin = new Vector2(-2, 7);
             WeaponLib = new WeaponLib();
             Bullets = new List<Bullet>();
             BulletsEnemy = new List<Bullet>();
@@ -62,7 +61,9 @@ namespace DungeonPlanet
             }
             else
             {
-                position = new Vector2(PlayerLib.Position.X + 28, PlayerLib.Position.Y + 28);
+                position = new Vector2(PlayerLib.Position.X , PlayerLib.Position.Y + 25);
+                if (Player.CurrentPlayer.Animation.Effect == SpriteEffects.FlipHorizontally) _effect = SpriteEffects.FlipVertically;
+                else _effect = SpriteEffects.None;
                 WeaponLib.Update(_currentMouse.X - _ctx.GraphicsDevice.Viewport.Width / 2, _currentMouse.Y - _ctx.GraphicsDevice.Viewport.Height / 2);
             }
         }
@@ -144,7 +145,7 @@ namespace DungeonPlanet
             {
                 bulletE.Draw();
             }
-            SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, SpriteEffects.None, 0);
+            SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, _effect, 0);
 
         }
     }

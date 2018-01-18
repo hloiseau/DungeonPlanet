@@ -180,9 +180,9 @@ namespace DungeonPlanet
 
         public override void Draw()
         {
+            Weapon.Draw();
             KeyboardState keyboardState = Keyboard.GetState();
             _animation.Draw(SpriteBatch);
-            Weapon.Draw();
             for (int i = 0; i < _bombs.Count; i++)
             {
                 _bombs[i].Draw();
@@ -190,6 +190,6 @@ namespace DungeonPlanet
             if  (Shield.IsActive && Level.ActualState == Level.State.Level) { Shield.Draw(); }
         }
 
-      
+      internal Animation Animation { get { return _animation; } }
     }
 }
