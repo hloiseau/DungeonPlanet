@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System.Diagnostics;
 using Comora;
 using DungeonPlanet.Library;
@@ -17,6 +18,11 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private Texture2D _hubBackground001;
+        private Texture2D _hubBackground002;
+        private Texture2D _hubBackground003;
+
         private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Texture2D _fireTexture, _fireBossTexture;
@@ -24,6 +30,8 @@ namespace DungeonPlanet
         private Song backgroundHubSong;
         private Song backgroundBossSong;
         private Song backgroundLevelSong;
+
+        private SoundEffect GunSoundEfect;
 
         private Player _player;
         private NPCMarchand _NPCMarchand;
@@ -49,7 +57,7 @@ namespace DungeonPlanet
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
-        public string backgroundMusic { get; private set; }
+        private int oldcount;
         public PlayerInfo PlayerInfo
         {
             get { return _player.PlayerInfo; }
@@ -96,16 +104,17 @@ namespace DungeonPlanet
             Bosses = new List<Boss>();
             Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            backgroundHubSong = Content.Load<Song>("backgroundHubSong");
-            MediaPlayer.IsRepeating = true;
-            backgroundBossSong = Content.Load<Song>("backgroundBossSong");
-            MediaPlayer.IsRepeating = true;
-            backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
-            MediaPlayer.IsRepeating = true;
-
             _tileTexture = Content.Load<Texture2D>("tile");
+<<<<<<< HEAD
+            _hubBackground001 = Content.Load<Texture2D>("hub001");
+            _hubBackground002 = Content.Load<Texture2D>("hub002");
+            _hubBackground003 = Content.Load<Texture2D>("hub003");
             _playerTexture = Content.Load<Texture2D>("player");
+=======
+            _playerTexture = Content.Load<Texture2D>("PlayerSprite");
+>>>>>>> 7b8eec50957d9e3d297870843a409a967ca80c25
+            Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
+            Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _bossTexture = Content.Load<Texture2D>("boss");
@@ -117,6 +126,7 @@ namespace DungeonPlanet
             _shieldTexture = Content.Load<Texture2D>("shield");
             _fireTexture = Content.Load<Texture2D>("fire");
             _fireBossTexture = Content.Load<Texture2D>("fireBoss");
+
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
@@ -126,24 +136,27 @@ namespace DungeonPlanet
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPCMarchand = new NPCMarchand(_playerTexture, new Vector2(500, 200), _spriteBatch);
-            _NPCWeapon = new NPCWeapon(_playerTexture, new Vector2(250, 200), _spriteBatch);
-<<<<<<< HEAD
-            _NPCWise = new NPCTheWise(_playerTexture, new Vector2(1300, 200), _spriteBatch);
+            _NPCWeapon = new NPCWeapon(weapon, new Vector2(250, 200), _spriteBatch);
+            _NPCWise = new NPCTheWise(theWise, new Vector2(1300, 200), _spriteBatch);
             _NPCNarrator = new NPCNarrator(_playerTexture, new Vector2(1500, 200), _spriteBatch);
-            _door = new Door(Content.Load<Texture2D>("door"), new Vector2(1000, 200), _spriteBatch, this);
-=======
             _door = new Door[5];
             for (int x = 0; x < _door.Length; x++)
             {
                 if(Level.ActualState == Level.State.Hub || (Level.ActualState == Level.State.BossRoom && x == 0))
-                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1000 + x * 150, 200), _spriteBatch, this, (Level.LevelID)x+1);
+                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1625 + x * 180, 200), _spriteBatch, this, (Level.LevelID)x+1);
             }
->>>>>>> ec66748c2b316b72106c6e07c39079092b304fcc
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
             _camera = new Camera(GraphicsDevice);
             _camera.LoadContent();
+
+            GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
+
+            backgroundBossSong = Content.Load<Song>("backgroundBossSong");
+            backgroundHubSong = Content.Load<Song>("backgroundHubSong");
+            backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
+
 
             if (Level.ActualState == Level.State.BossRoom)
             {
@@ -153,7 +166,7 @@ namespace DungeonPlanet
 
             if (Level.ActualState == Level.State.Hub)
             {
-                MediaPlayer.Play(backgroundHubSong);
+                //MediaPlayer.Play(backgroundHubSong);
             }
 
             if (Level.ActualState == Level.State.Level)
@@ -190,6 +203,7 @@ namespace DungeonPlanet
 
         protected override void Update(GameTime gameTime)
         {
+            MediaPlayer.IsRepeating = true;
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
             _camera.Update(gameTime);
@@ -204,16 +218,21 @@ namespace DungeonPlanet
                 }
                 _NPCMarchand.Update(gameTime);
                 _NPCWeapon.Update(gameTime);
-<<<<<<< HEAD
                 _NPCWise.Update(gameTime);
                 _NPCNarrator.Update(gameTime);
-=======
-                backgroundMusic = "backgroundHubMusic";
->>>>>>> ec66748c2b316b72106c6e07c39079092b304fcc
             }
             if (Level.ActualState == Level.State.Level)
             {
                 _door2.Update(gameTime);
+                if (oldcount == null)
+                {
+                    oldcount = Player.CurrentPlayer.Weapon.Bullets.Count;
+                }
+                if (Player.CurrentPlayer.Weapon.Bullets.Count > oldcount)
+                {
+                    GunSoundEfect.Play();
+                }
+                oldcount = Player.CurrentPlayer.Weapon.Bullets.Count;
             }
             if (Level.ActualState == Level.State.BossRoom)
             {
@@ -336,23 +355,23 @@ namespace DungeonPlanet
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
             if (Level.ActualState == Level.State.Hub)
             {
+                _spriteBatch.Draw(_hubBackground001, new Vector2(-1000, -550), Color.White);
+                _spriteBatch.Draw(_hubBackground002, new Vector2(766, -550), Color.White);
+                _spriteBatch.Draw(_hubBackground003, new Vector2(2461, -550), Color.White);
                 _NPCWise.Draw();
                 _NPCWeapon.Draw();
                 _NPCMarchand.Draw();
-<<<<<<< HEAD
                 _NPCNarrator.Draw();
-                _door.Draw();
-=======
+
                 for (int x = 0; x < (int)PlayerInfo.Progress; x++)
                 {
                     _door[x].Draw();
                 }
->>>>>>> ec66748c2b316b72106c6e07c39079092b304fcc
             }
             if (Level.ActualState == Level.State.Level)
             {
@@ -375,6 +394,12 @@ namespace DungeonPlanet
             _spriteBatch.End();
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
+            //_camera.Zoom = 1.25f;
+<<<<<<< HEAD
+            _camera.Zoom = 1.25f;
+=======
+            //_camera.Zoom = 0.5f;
+>>>>>>> 7b8eec50957d9e3d297870843a409a967ca80c25
         }
 
         private void WriteDebugInformation()

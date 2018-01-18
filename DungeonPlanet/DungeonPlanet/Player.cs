@@ -23,13 +23,17 @@ namespace DungeonPlanet
         List<Enemy> _enemys;
         List<Bomb> _bombs;
         KeyboardState _previousKey;
-
+        Animation _animation;
+        int _animeState = 0;
 
         public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBomb, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
             : base(texturePlayer, position, spritebatch)
         {
-            PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X, position.Y), texturePlayer.Width, texturePlayer.Height);
+            PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X, position.Y), 40, 64);
             PlayerInfo = new PlayerInfo();
+            _animation = new Animation();
+            _animation.Initialize(texturePlayer, position, 40, 64, 0, 0, 2, 150, Color.White, 1, true, false);
+            
             Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, bosses);
             _bombs = new List<Bomb>();
             _texturebomb = textureBomb;
@@ -40,6 +44,7 @@ namespace DungeonPlanet
 
         public void Update(GameTime gameTime)
         {
+            
             CheckKeyboardAndUpdateMovement();
             PlayerLib.AffectWithGravity();
             PlayerLib.SimulateFriction();
@@ -48,8 +53,10 @@ namespace DungeonPlanet
             PlayerLib.IsDead(PlayerInfo.Life);
 
             position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y);
+            _animation.Position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y + 35);
+            _animation.Update(gameTime);
             Weapon.Update(gameTime);
-
+            CheckMovementAndUpdateAnimation();
             PlayerInfo.Life = MathHelper.Clamp(PlayerInfo.Life, 0, 100);
             if (PlayerLib.IsOnFirmGround()) PlayerInfo.Energy++;
             PlayerInfo.Energy = MathHelper.Clamp(PlayerInfo.Energy, 0, 100);
@@ -61,8 +68,83 @@ namespace DungeonPlanet
                 {
                     _bombs.Remove(_bombs[i]);
                 }
-
             }
+        }
+
+        private void CheckMovementAndUpdateAnimation()
+        {
+            if (PlayerLib.IsOnFirmGround())
+            {
+                if (PlayerLib.Movement.X < -1)
+                {
+                    if (_animeState != 0)
+                    {
+                        _animation.CurrentFrameCol = 0;
+                        _animeState = 0;
+                    }
+                    _animation.FrameWidth = 47;
+                    _animation.FrameCount = 5;
+                    _animation.Effect = SpriteEffects.FlipHorizontally;
+                    _animation.CurrentFrameLin = 2;
+                    _animation.FrameTime = 150;
+                }
+                else if (PlayerLib.Movement.X > 1)
+                {
+                    if (_animeState != 1)
+                    {
+                        _animation.CurrentFrameCol = 0;
+                        _animeState = 1;
+                    }
+                    _animation.FrameWidth = 47;
+                    _animation.FrameCount = 5;
+                    _animation.Effect = SpriteEffects.None;
+                    _animation.CurrentFrameLin = 2;
+                    _animation.FrameTime = 150;
+                }
+                else
+                {
+                    if (_animeState != 2)
+                    {
+                        _animation.CurrentFrameCol = 0;
+                        _animeState = 2;
+                    }
+                    _animation.FrameTime = 300;
+                    _animation.FrameWidth = 40;
+                    _animation.FrameCount = 2;
+                    _animation.CurrentFrameLin = 0;
+                }
+            }
+            else
+            {
+                if (PlayerLib.Movement.Y < -3)
+                {
+                    _animation.CurrentFrameCol = 2;
+                    _animation.FrameWidth = 40;
+                    _animation.FrameCount = 0;
+                    _animation.CurrentFrameLin = 1;
+                    _animation.FrameTime = 1000;
+                }
+                else if (PlayerLib.Movement.Y > 3)
+                {
+                    _animation.CurrentFrameCol = 0;
+
+                    _animation.FrameWidth = 40;
+                    _animation.FrameCount = 0;
+                    _animation.CurrentFrameLin = 1;
+                    _animation.FrameTime = 1000;
+                }
+                else
+                {
+                    _animation.CurrentFrameCol = 1;
+
+                    _animation.FrameTime = 1000;
+                    _animation.FrameWidth = 40;
+                    _animation.FrameCount = 1;
+                    _animation.CurrentFrameLin = 1;
+                }
+            }
+            
+
         }
 
         private void CheckKeyboardAndUpdateMovement()
@@ -99,7 +181,7 @@ namespace DungeonPlanet
         public override void Draw()
         {
             KeyboardState keyboardState = Keyboard.GetState();
-            base.Draw();
+            _animation.Draw(SpriteBatch);
             Weapon.Draw();
             for (int i = 0; i < _bombs.Count; i++)
             {

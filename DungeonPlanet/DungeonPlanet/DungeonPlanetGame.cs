@@ -105,11 +105,12 @@ namespace DungeonPlanet
             Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
+            _playerTexture = Content.Load<Texture2D>("PlayerSprite");
             _hubBackground001 = Content.Load<Texture2D>("hub001");
             _hubBackground002 = Content.Load<Texture2D>("hub002");
             _hubBackground003 = Content.Load<Texture2D>("hub003");
-            _playerTexture = Content.Load<Texture2D>("player");
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
+            Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _bossTexture = Content.Load<Texture2D>("boss");
@@ -131,7 +132,7 @@ namespace DungeonPlanet
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
             _NPCMarchand = new NPCMarchand(_playerTexture, new Vector2(500, 200), _spriteBatch);
-            _NPCWeapon = new NPCWeapon(_playerTexture, new Vector2(250, 200), _spriteBatch);
+            _NPCWeapon = new NPCWeapon(weapon, new Vector2(250, 200), _spriteBatch);
             _NPCWise = new NPCTheWise(theWise, new Vector2(1300, 200), _spriteBatch);
             _NPCNarrator = new NPCNarrator(_playerTexture, new Vector2(1500, 200), _spriteBatch);
             _door = new Door[5];
@@ -350,7 +351,7 @@ namespace DungeonPlanet
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
             if (Level.ActualState == Level.State.Hub)
@@ -390,7 +391,7 @@ namespace DungeonPlanet
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
             //_camera.Zoom = 1.25f;
-            _camera.Zoom = 1.25f;
+            _camera.Zoom = 0.5f;
         }
 
         private void WriteDebugInformation()

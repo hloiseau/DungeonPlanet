@@ -160,16 +160,24 @@ namespace DungeonPlanet
             // Only draw the animation when we are active
             if (_active)
             {
-                spriteBatch.Draw(_spriteSheet, _destinationRect, _sourceRect, _color);
+                spriteBatch.Draw(_spriteSheet, destinationRectangle: _destinationRect, sourceRectangle: _sourceRect, color: _color, effects: Effect);
             }
         }
+        internal SpriteEffects Effect { get; set; }
         internal int FrameHeight
         {
             get { return _frameHeight; }
+            set { _frameHeight = value; }
         }
         internal int FrameWidth
         {
             get { return _frameWidth; }
+            set { _frameWidth = value; }
+        }
+        internal int FrameCount
+        {
+            get { return _frameCount; }
+            set { _frameCount = value; }
         }
         internal Vector2 Position
         {
@@ -180,6 +188,16 @@ namespace DungeonPlanet
         {
             get { return _currentFrameLin; }
             set { _currentFrameLin = value; }
+        }
+        internal int FrameTime
+        {
+            get { return _frameTime; }
+            set { _frameTime = value; }
+        }
+        internal int CurrentFrameCol
+        {
+            get { return _currentFrameCol; }
+            set { _currentFrameCol = value; }
         }
     }
 }

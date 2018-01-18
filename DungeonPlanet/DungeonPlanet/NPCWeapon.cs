@@ -22,6 +22,7 @@ namespace DungeonPlanet
         Icon _redBullet;
         Icon _blueBullet;
         Icon _greenBullet;
+        Animation _animation;
         bool _alreadyBuy { get; set; }
 
         Panel NPCPanel { get; set; }
@@ -31,6 +32,8 @@ namespace DungeonPlanet
         {
             _lib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 100);
             _spritebatch = spriteBatch;
+            _animation = new Animation();
+            _animation.Initialize(texture, position, 33, 60, 0, 0, 2, 300, Color.White, 1, true, true);
             _player = Player.CurrentPlayer;
             _redBullet = new Icon(IconType.OrbRed, Anchor.Auto);
             _blueBullet = new Icon(IconType.OrbBlue, Anchor.Auto);
@@ -76,6 +79,8 @@ namespace DungeonPlanet
 
         public void Update(GameTime gameTime)
         {
+            _animation.Update(gameTime);
+            _animation.Position = new Vector2(_lib.Position.X, _lib.Position.Y + 30);
             KeyboardState keyboardState = Keyboard.GetState();
 
             MouseState mouseState = Mouse.GetState();
@@ -166,6 +171,10 @@ namespace DungeonPlanet
                     _greenBullet = null;
                 }
             }
+        }
+        public override void Draw()
+        {
+            _animation.Draw(SpriteBatch);
         }
     }
 }
