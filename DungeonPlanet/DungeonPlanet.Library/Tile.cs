@@ -13,6 +13,7 @@ namespace DungeonPlanet.Library
         public Vector2 Position { get; set; }
         public Rectangle Bounds { get; set; }
         public bool IsBlocked { get; set; }
+
         public Tile(Vector2 position, Rectangle bounds, bool isBlocked)
         {
             Position = position;

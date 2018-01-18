@@ -52,7 +52,7 @@ namespace DungeonPlanet
         // Determines if the animation will keep playing or deactivate after one run
         bool _looping;
         bool _reverseLooping;
-
+        int _basecol;
         // Width of a given frame
         Vector2 _position;
         bool _flag = true;
@@ -72,6 +72,7 @@ namespace DungeonPlanet
             _spriteSheet = texture;
 
             _currentFrameCol = currentFrameCol;
+            _basecol = currentFrameCol;
             _currentFrameLin = currentFrameLin;
             // Set the time to zero
             _elapsedTime = 0;
@@ -102,7 +103,7 @@ namespace DungeonPlanet
                     // If the currentFrame is equal to frameCount reset currentFrame to zero
                     if (_currentFrameCol == _frameCount)
                     {
-                        _currentFrameCol = 0;
+                        _currentFrameCol = _basecol;
                         // If we are not looping deactivate the animation
                         if (_looping == false)
                             _active = false;
@@ -133,7 +134,7 @@ namespace DungeonPlanet
                     {
                         _flag = false;                      
                     }
-                    else if(_currentFrameCol == 0 && _flag == false)
+                    else if(_currentFrameCol == _basecol && _flag == false)
                     {
                         _flag = true;
                     }

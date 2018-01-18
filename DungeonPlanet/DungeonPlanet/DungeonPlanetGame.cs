@@ -114,9 +114,10 @@ namespace DungeonPlanet
             _hubBackground003 = Content.Load<Texture2D>("hub003");
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
+            Texture2D TankShot = Content.Load<Texture2D>("TankShot");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
-            _bossTexture = Content.Load<Texture2D>("boss");
+            _bossTexture = Content.Load<Texture2D>("Tank");
             _weaponTexture = Content.Load<Texture2D>("playerGun");
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
@@ -166,7 +167,7 @@ namespace DungeonPlanet
 
             if (Level.ActualState == Level.State.Hub)
             {
-                //MediaPlayer.Play(backgroundHubSong);
+                MediaPlayer.Play(backgroundHubSong);
             }
 
             if (Level.ActualState == Level.State.Level)
@@ -303,7 +304,7 @@ namespace DungeonPlanet
             _energyBar.Value = _player.PlayerInfo.Energy;
             _money.Text = string.Format("Coins : {0}", _player.PlayerInfo.Money);
             CheckKeyboardAndReact();
-
+            
         }
 
         private bool IsOnScreen(Vector2 position)
@@ -412,7 +413,7 @@ namespace DungeonPlanet
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
             _camera.Zoom = 1.25f;
-            _camera.Zoom = 0.5f;
+            //_camera.Zoom = 0.5f;
         }
 
         private void WriteDebugInformation()
