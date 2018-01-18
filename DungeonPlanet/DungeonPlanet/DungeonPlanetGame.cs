@@ -116,6 +116,8 @@ namespace DungeonPlanet
             _hubBackground003 = Content.Load<Texture2D>("hub003");
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
+            Texture2D narrator = Content.Load<Texture2D>("NPCNarrator");
+            Texture2D marchand = Content.Load<Texture2D>("NPCMerchand");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _bossTexture = Content.Load<Texture2D>("boss");
@@ -136,10 +138,10 @@ namespace DungeonPlanet
             _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
-            _NPCMarchand = new NPCMarchand(_playerTexture, new Vector2(500, 200), _spriteBatch);
+            _NPCMarchand = new NPCMarchand(marchand, new Vector2(500, 200), _spriteBatch);
             _NPCWeapon = new NPCWeapon(weapon, new Vector2(250, 200), _spriteBatch);
             _NPCWise = new NPCTheWise(theWise, new Vector2(1300, 200), _spriteBatch);
-            _NPCNarrator = new NPCNarrator(_playerTexture, new Vector2(1500, 200), _spriteBatch);
+            _NPCNarrator = new NPCNarrator(narrator, new Vector2(1500, 200), _spriteBatch);
             _door = new Door[5];
             for (int x = 0; x < _door.Length; x++)
             {
