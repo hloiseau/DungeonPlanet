@@ -4992,13 +4992,6 @@
 /processorParam:Quality=Best
 /build:GunSoundEfect.mp3
 
-<<<<<<< HEAD
-#begin GrandpaSingingJhonny.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:GrandpaSingingJhonny.mp3
-=======
 #begin PlayerSprite.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -5046,5 +5039,60 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:playerGun.png
->>>>>>> b408096ff95ac8db59694a73f285c671b3067674
+
+<<<<<<< HEAD
+#begin GrandpaSingingJhonny.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:GrandpaSingingJhonny.mp3
+=======
+#begin pouet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pouet.png
+
+#begin hub001.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:hub001.png
+
+#begin hub002.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:hub002.png
+
+#begin hub003.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:hub003.png
+>>>>>>> a18ea0fd8fe9b18853b8b317874b5b1014683bcc
 

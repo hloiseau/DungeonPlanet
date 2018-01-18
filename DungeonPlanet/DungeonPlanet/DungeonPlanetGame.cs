@@ -18,6 +18,11 @@ namespace DungeonPlanet
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private Texture2D _hubBackground001;
+        private Texture2D _hubBackground002;
+        private Texture2D _hubBackground003;
+
         private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Texture2D _fireTexture, _fireBossTexture;
@@ -104,6 +109,9 @@ namespace DungeonPlanet
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _tileTexture = Content.Load<Texture2D>("tile");
             _playerTexture = Content.Load<Texture2D>("PlayerSprite");
+            _hubBackground001 = Content.Load<Texture2D>("hub001");
+            _hubBackground002 = Content.Load<Texture2D>("hub002");
+            _hubBackground003 = Content.Load<Texture2D>("hub003");
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
             _enemyTexture = Content.Load<Texture2D>("enemy");
@@ -158,7 +166,7 @@ namespace DungeonPlanet
 
             if (Level.ActualState == Level.State.Hub)
             {
-                MediaPlayer.Play(backgroundHubSong);
+                //MediaPlayer.Play(backgroundHubSong);
             }
 
             if (Level.ActualState == Level.State.Level)
@@ -368,10 +376,14 @@ namespace DungeonPlanet
             base.Draw(gameTime);
             if (Level.ActualState == Level.State.Hub)
             {
+                _spriteBatch.Draw(_hubBackground001, new Vector2(-1000, -550), Color.White);
+                _spriteBatch.Draw(_hubBackground002, new Vector2(766, -550), Color.White);
+                _spriteBatch.Draw(_hubBackground003, new Vector2(2461, -550), Color.White);
                 _NPCWise.Draw();
                 _NPCWeapon.Draw();
                 _NPCMarchand.Draw();
                 _NPCNarrator.Draw();
+
                 for (int x = 0; x < (int)PlayerInfo.Progress; x++)
                 {
                     _door[x].Draw();
@@ -399,7 +411,7 @@ namespace DungeonPlanet
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
             _camera.Zoom = 1.25f;
-            //_camera.Zoom = 0.25f;
+            _camera.Zoom = 0.5f;
         }
 
         private void WriteDebugInformation()
