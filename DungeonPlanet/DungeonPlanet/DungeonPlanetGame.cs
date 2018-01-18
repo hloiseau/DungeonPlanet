@@ -33,6 +33,7 @@ namespace DungeonPlanet
 
         private SoundEffect GunSoundEfect;
         private SoundEffect GrandpaSingingJhonny;
+        private SoundEffect GrandpaSingingGanon;
 
         private Player _player;
         private NPCMarchand _NPCMarchand;
@@ -61,6 +62,7 @@ namespace DungeonPlanet
         private int oldcount;
         private string oldsing;
         int _elpasedtime;
+        int Singingtime;
         public PlayerInfo PlayerInfo
         {
             get { return _player.PlayerInfo; }
@@ -152,6 +154,7 @@ namespace DungeonPlanet
 
             GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
             GrandpaSingingJhonny = Content.Load<SoundEffect>("GrandpaSingingJhonny");
+            GrandpaSingingGanon = Content.Load<SoundEffect>("Ganon");
             
             backgroundBossSong = Content.Load<Song>("backgroundBossSong");
             backgroundHubSong = Content.Load<Song>("backgroundHubSong");
@@ -166,7 +169,7 @@ namespace DungeonPlanet
 
             if (Level.ActualState == Level.State.Hub)
             {
-                //MediaPlayer.Play(backgroundHubSong);
+                MediaPlayer.Play(backgroundHubSong);
             }
 
             if (Level.ActualState == Level.State.Level)
@@ -220,21 +223,34 @@ namespace DungeonPlanet
                 _NPCWeapon.Update(gameTime);
                 _NPCWise.Update(gameTime);
                 _NPCNarrator.Update(gameTime);
-                if (NPCTheWise.jhonny != oldsing && NPCTheWise.jhonny == "Allumer le feux !!! hey, tu sais tu peux acheter des munitions enflammees chez l armurier.")
+                if (NPCTheWise.SingingLine != oldsing && NPCTheWise.SingingLine == "Allumer le feux !!! hey, tu sais tu peux acheter des munitions enflammees chez l armurier.")
                 {
                     MediaPlayer.Pause();
                     GrandpaSingingJhonny.Play();
                     _elpasedtime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    int jhonnytime = 2000;
-                    if (_elpasedtime > jhonnytime)
-                    {
-                        MediaPlayer.Resume();
-                    }
-                    oldsing = NPCTheWise.jhonny;
+                    Singingtime = _elpasedtime + 2500;
+                    oldsing = NPCTheWise.SingingLine;
+                }
+                if (NPCTheWise.SingingLine != oldsing && NPCTheWise.SingingLine == "SEUL LINK PEUT VAINCRE GANON !! ... Au fait c'est qui ganon ?")
+                {
+                    MediaPlayer.Pause();
+                    GrandpaSingingGanon.Play();
+                    _elpasedtime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    Singingtime = _elpasedtime + 3000;
+                    oldsing = NPCTheWise.SingingLine;
                 }
                 else 
                 {
-                    oldsing = NPCTheWise.jhonny;
+                    oldsing = NPCTheWise.SingingLine;
+                }
+
+                _elpasedtime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (Singingtime != null)
+                {
+                    if (_elpasedtime > Singingtime)
+                    {
+                        MediaPlayer.Resume();
+                    }
                 }
             }
             if (Level.ActualState == Level.State.Level)
@@ -412,7 +428,7 @@ namespace DungeonPlanet
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
             _camera.Zoom = 1.25f;
-            _camera.Zoom = 0.5f;
+            //_camera.Zoom = 0.5f;
         }
 
         private void WriteDebugInformation()

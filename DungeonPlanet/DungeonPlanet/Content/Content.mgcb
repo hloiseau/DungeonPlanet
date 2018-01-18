@@ -5094,3 +5094,9 @@
 /processorParam:TextureFormat=Color
 /build:hub003.png
 
+#begin Ganon.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Ganon.mp3
+
