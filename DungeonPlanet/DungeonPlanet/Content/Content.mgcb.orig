@@ -5040,13 +5040,12 @@
 /processorParam:TextureFormat=Color
 /build:playerGun.png
 
-<<<<<<< HEAD
 #begin GrandpaSingingJhonny.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:GrandpaSingingJhonny.mp3
-=======
+
 #begin pouet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -5094,5 +5093,48 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:hub003.png
->>>>>>> a18ea0fd8fe9b18853b8b317874b5b1014683bcc
+
+<<<<<<< HEAD
+#begin tank.png
+=======
+#begin Ganon.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Ganon.mp3
+
+#begin NPCNarrator.png
+>>>>>>> 090f75e4524b3e41826e74b2af055a48d470e2a6
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:tank.png
+
+#begin TankShot.png
+=======
+/build:NPCNarrator.png
+
+#begin NPCMerchand.png
+>>>>>>> 090f75e4524b3e41826e74b2af055a48d470e2a6
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:TankShot.png
+=======
+/build:NPCMerchand.png
+>>>>>>> 090f75e4524b3e41826e74b2af055a48d470e2a6
 

@@ -30,7 +30,7 @@ namespace DungeonPlanet.Library
             _wiseLine.Add("Un vieux proverbe dit que si vous nous notez bien vous aurez des potins. Noter qui ? J'en sais rien moi !");
             _wiseLine.Add("C etait mieux avant !");
             _wiseLine.Add("SEUL LINK PEUT VAINCRE GANON !! ... Au fait c'est qui ganon ?");
-            _wiseLine.Add("Cette planete est casse-pied pour parler. On peux pas utiliser d accents et d aspostrophes ! ");
+            _wiseLine.Add("Cette planete est pas pratique pour parler. On peux pas utiliser d accents et d aspostrophes ! ");
 
             int Numberlign = RandomNumber(_wiseLine.Count);
 

@@ -33,6 +33,7 @@ namespace DungeonPlanet
 
         private SoundEffect GunSoundEfect;
         private SoundEffect GrandpaSingingJhonny;
+        private SoundEffect GrandpaSingingGanon;
 
         private Player _player;
         private NPCMarchand _NPCMarchand;
@@ -61,6 +62,7 @@ namespace DungeonPlanet
         private int oldcount;
         private string oldsing;
         int _elpasedtime;
+        int Singingtime;
         public PlayerInfo PlayerInfo
         {
             get { return _player.PlayerInfo; }
@@ -115,6 +117,8 @@ namespace DungeonPlanet
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
             Texture2D TankShot = Content.Load<Texture2D>("TankShot");
+            Texture2D narrator = Content.Load<Texture2D>("NPCNarrator");
+            Texture2D marchand = Content.Load<Texture2D>("NPCMerchand");
             _enemyTexture = Content.Load<Texture2D>("enemy");
             _enemyTexture2 = Content.Load<Texture2D>("enemy2");
             _bossTexture = Content.Load<Texture2D>("Tank");
@@ -135,10 +139,10 @@ namespace DungeonPlanet
             _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this);
             _boss = new Boss(_bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
-            _NPCMarchand = new NPCMarchand(_playerTexture, new Vector2(500, 200), _spriteBatch);
+            _NPCMarchand = new NPCMarchand(marchand, new Vector2(500, 200), _spriteBatch);
             _NPCWeapon = new NPCWeapon(weapon, new Vector2(250, 200), _spriteBatch);
             _NPCWise = new NPCTheWise(theWise, new Vector2(1300, 200), _spriteBatch);
-            _NPCNarrator = new NPCNarrator(_playerTexture, new Vector2(1500, 200), _spriteBatch);
+            _NPCNarrator = new NPCNarrator(narrator, new Vector2(1500, 200), _spriteBatch);
             _door = new Door[5];
             for (int x = 0; x < _door.Length; x++)
             {
@@ -153,6 +157,7 @@ namespace DungeonPlanet
 
             GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
             GrandpaSingingJhonny = Content.Load<SoundEffect>("GrandpaSingingJhonny");
+            GrandpaSingingGanon = Content.Load<SoundEffect>("Ganon");
             
             backgroundBossSong = Content.Load<Song>("backgroundBossSong");
             backgroundHubSong = Content.Load<Song>("backgroundHubSong");
@@ -221,21 +226,34 @@ namespace DungeonPlanet
                 _NPCWeapon.Update(gameTime);
                 _NPCWise.Update(gameTime);
                 _NPCNarrator.Update(gameTime);
-                if (NPCTheWise.jhonny != oldsing && NPCTheWise.jhonny == "Allumer le feux !!! hey, tu sais tu peux acheter des munitions enflammees chez l armurier.")
+                if (NPCTheWise.SingingLine != oldsing && NPCTheWise.SingingLine == "Allumer le feux !!! hey, tu sais tu peux acheter des munitions enflammees chez l armurier.")
                 {
                     MediaPlayer.Pause();
                     GrandpaSingingJhonny.Play();
                     _elpasedtime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    int jhonnytime = 2000;
-                    if (_elpasedtime > jhonnytime)
-                    {
-                        MediaPlayer.Resume();
-                    }
-                    oldsing = NPCTheWise.jhonny;
+                    Singingtime = _elpasedtime + 2500;
+                    oldsing = NPCTheWise.SingingLine;
+                }
+                if (NPCTheWise.SingingLine != oldsing && NPCTheWise.SingingLine == "SEUL LINK PEUT VAINCRE GANON !! ... Au fait c'est qui ganon ?")
+                {
+                    MediaPlayer.Pause();
+                    GrandpaSingingGanon.Play();
+                    _elpasedtime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    Singingtime = _elpasedtime + 3000;
+                    oldsing = NPCTheWise.SingingLine;
                 }
                 else 
                 {
-                    oldsing = NPCTheWise.jhonny;
+                    oldsing = NPCTheWise.SingingLine;
+                }
+
+                _elpasedtime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (Singingtime != null)
+                {
+                    if (_elpasedtime > Singingtime)
+                    {
+                        MediaPlayer.Resume();
+                    }
                 }
             }
             if (Level.ActualState == Level.State.Level)
