@@ -93,93 +93,87 @@ namespace DungeonPlanet.Library
                 {
                     if ((_direction & Path.Direction.Last) == Path.Direction.None) //if this is Not a "last" direction
                     {
-                        if (!(a >= _columns / 3 && a <= 2 * (_columns / 3))) //so diff 6 >= x <= 12 (far left or far right case)
-                        {
-                            if (_ctx.GetNext(0, 2) == 0) // if random = 0
-                            {
-                                GeneratePlatform(a, b);
-                                _oldMove = "plat";
-                            }
-                            else
-                            {
-                                if (((_direction & Path.Direction.Left) == Path.Direction.None && a < _columns / 3) || ((_direction & Path.Direction.Right) == Path.Direction.None && a >= 2 * (_columns / 3))) // if  this is not left direction and x < 6 ||  if  this is not right direction and x >= 12
-                                {
-                                    GenerateStairs(a, b);
-                                    _oldMove = "stairs";
-                                }
-                                else
-                                {
-                                    GenerateBlock(a, b);
-                                    _oldMove = "bloc";
-                                }
-                            }
-                        }
-                        else // so  x < 6 || 12 < x (midle case)
-                        {
-                            if (_ctx.GetNext(0, 2) == 0) //same as the 1rst one random  = 0
-                            {
-                                GeneratePlatform(a, b);
-                                _oldMove = "plat";
-                            }
-                            else
-                            {
-                                if ((_oldMove != "piramid" && (_direction & Path.Direction.Bottom) == Path.Direction.None && b < _rows / 2) || (_oldMove != "piramid" && (_direction & Path.Direction.Top) == Path.Direction.None && b >= _rows / 2)) // if  this is not botom direction and y < 6 ||  if  this is not top direction and y >= 6
-                                {
-                                    GeneratePyramid(a, b);
-                                    _oldMove = "piramid";
-                                }
-                                else
-                                {
-                                    GenerateBlock(a, b);
-                                    _oldMove = "bloc";
-                                }
-                            }
-                        }
+                        GenerateStuf(a,b);
                     }
                     else
                     {
-                        //spawn exit dor.
-                        // int _test_x = Level._levelRows;
-                        if (_xLevel != 0)
-                        {
-                            _dorX = (((_xLevel + 1) * (64 * 20)) - (64 * 11));
-                        }
-                        else
-                        {
-                            _dorX = _xLevel + (64 * 10);
-                        }
-
-                        _dorY = (((_yLevel + 1) * (64 * 14)) - (64 * 4));
-                        /*
-                        Tiles[7, 7].IsBlocked = true;
-                        Tiles[7, 8].IsBlocked = true;
-                        Tiles[7, 9].IsBlocked = true;
-                        Tiles[7, 10].IsBlocked = true;
-                        Tiles[7, 11].IsBlocked = true;
-
-                        Tiles[8, 7].IsBlocked = true;
-                        Tiles[9, 7].IsBlocked = true;
-                        Tiles[10, 7].IsBlocked = true;
-                        Tiles[11, 7].IsBlocked = true;
-                        Tiles[12, 7].IsBlocked = true;
-
-                        Tiles[7, 12].IsBlocked = true;
-                        Tiles[8, 12].IsBlocked = true;
-                        Tiles[9, 12].IsBlocked = true;
-                        Tiles[10, 12].IsBlocked = true;
-                        Tiles[11, 12].IsBlocked = true;
-                        Tiles[12, 12].IsBlocked = true;
-
-                        Tiles[12, 7].IsBlocked = true;
-                        Tiles[12, 8].IsBlocked = true;
-                        Tiles[12, 9].IsBlocked = true;
-                        Tiles[12, 10].IsBlocked = true;
-                        Tiles[12, 11].IsBlocked = true;
-                        */
+                        GenerateDor(a, b);
                     }
                 }
             }
             Tiles[1, 1].IsBlocked = false;
+            Tiles[1, 2].IsBlocked = false;
+            Tiles[2, 1].IsBlocked = false;
+            Tiles[2, 2].IsBlocked = false;
+        }
+
+        private void GenerateDor(int a, int b)
+        {
+            if (a == 7 && b == 7)
+            {
+                if (_xLevel != 0)
+                {
+                    _dorX = (((_xLevel + 1) * (64 * 20)) - (64 * 11));
+                }
+                else
+                {
+                    _dorX = _xLevel + (64 * 10);
+                }
+
+                _dorY = (((_yLevel + 1) * (64 * 14)) - (64 * 4));
+
+            }
+            else
+            {
+                GenerateStuf(a, b);
+            }
+            
+        }
+
+        private void GenerateStuf(int a, int b)
+        {
+            if (!(a >= _columns / 3 && a <= 2 * (_columns / 3))) //so diff 6 >= x <= 12 (far left or far right case)
+            {
+                if (_ctx.GetNext(0, 2) == 0) // if random = 0
+                {
+                    GeneratePlatform(a, b);
+                    _oldMove = "plat";
+                }
+                else
+                {
+                    if (((_direction & Path.Direction.Left) == Path.Direction.None && a < _columns / 3) || ((_direction & Path.Direction.Right) == Path.Direction.None && a >= 2 * (_columns / 3))) // if  this is not left direction and x < 6 ||  if  this is not right direction and x >= 12
+                    {
+                        GenerateStairs(a, b);
+                        _oldMove = "stairs";
+                    }
+                    else
+                    {
+                        GenerateBlock(a, b);
+                        _oldMove = "bloc";
+                    }
+                }
+            }
+            else // so  x < 6 || 12 < x (midle case)
+            {
+                if (_ctx.GetNext(0, 2) == 0) //same as the 1rst one random  = 0
+                {
+                    GeneratePlatform(a, b);
+                    _oldMove = "plat";
+                }
+                else
+                {
+                    if ((_oldMove != "piramid" && (_direction & Path.Direction.Bottom) == Path.Direction.None && b < _rows / 2) || (_oldMove != "piramid" && (_direction & Path.Direction.Top) == Path.Direction.None && b >= _rows / 2)) // if  this is not botom direction and y < 6 ||  if  this is not top direction and y >= 6
+                    {
+                        GeneratePyramid(a, b);
+                        _oldMove = "piramid";
+                    }
+                    else
+                    {
+                        GenerateBlock(a, b);
+                        _oldMove = "bloc";
+                    }
+                }
+            }
         }
 
         private void GenerateStairs(int x, int y)
