@@ -132,7 +132,8 @@ namespace DungeonPlanet
                     if (_currentFrameCol == _frameCount && _flag == true)
                     {
                         _flag = false;                      
-                    } else if(_currentFrameCol == 0 && _flag == false)
+                    }
+                    else if(_currentFrameCol == 0 && _flag == false)
                     {
                         _flag = true;
                     }
