@@ -4998,12 +4998,6 @@
 /processorParam:ColorKeyColor=255,0,255,255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
-#begin GrandpaSingingJhonny.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:GrandpaSingingJhonny.mp3
-
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
@@ -5045,4 +5039,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:playerGun.png
+
+#begin GrandpaSingingJhonny.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:GrandpaSingingJhonny.mp3
 

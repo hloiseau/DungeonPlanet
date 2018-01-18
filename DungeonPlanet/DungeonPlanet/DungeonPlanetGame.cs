@@ -27,6 +27,7 @@ namespace DungeonPlanet
         private Song backgroundLevelSong;
 
         private SoundEffect GunSoundEfect;
+        private SoundEffect GrandpaSingingJhonny;
 
         private Player _player;
         private NPCMarchand _NPCMarchand;
@@ -53,6 +54,8 @@ namespace DungeonPlanet
         public static List<Boss> Bosses { get; private set; }
         public List<Item> Items { get; set; }
         private int oldcount;
+        private string oldsing;
+        int _elpasedtime;
         public PlayerInfo PlayerInfo
         {
             get { return _player.PlayerInfo; }
@@ -140,7 +143,8 @@ namespace DungeonPlanet
             _camera.LoadContent();
 
             GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
-
+            GrandpaSingingJhonny = Content.Load<SoundEffect>("GrandpaSingingJhonny");
+            
             backgroundBossSong = Content.Load<Song>("backgroundBossSong");
             backgroundHubSong = Content.Load<Song>("backgroundHubSong");
             backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
@@ -208,6 +212,22 @@ namespace DungeonPlanet
                 _NPCWeapon.Update(gameTime);
                 _NPCWise.Update(gameTime);
                 _NPCNarrator.Update(gameTime);
+                if (NPCTheWise.jhonny != oldsing && NPCTheWise.jhonny == "Allumer le feux !!! hey, tu sais tu peux acheter des munitions enflammees chez l armurier.")
+                {
+                    MediaPlayer.Pause();
+                    GrandpaSingingJhonny.Play();
+                    _elpasedtime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    int jhonnytime = 2000;
+                    if (_elpasedtime > jhonnytime)
+                    {
+                        MediaPlayer.Resume();
+                    }
+                    oldsing = NPCTheWise.jhonny;
+                }
+                else 
+                {
+                    oldsing = NPCTheWise.jhonny;
+                }
             }
             if (Level.ActualState == Level.State.Level)
             {
@@ -378,8 +398,8 @@ namespace DungeonPlanet
             _spriteBatch.End();
             _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
-            //_camera.Zoom = 1.25f;
-            //_camera.Zoom = 0.5f;
+            _camera.Zoom = 1.25f;
+            //_camera.Zoom = 0.25f;
         }
 
         private void WriteDebugInformation()

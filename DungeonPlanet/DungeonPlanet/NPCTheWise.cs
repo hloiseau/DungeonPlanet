@@ -21,6 +21,7 @@ namespace DungeonPlanet
         EnemyLib ReferenceLib { get; set; }
         NPCDialogLib Lib { get; set; }
         string Sentence { get; set; }
+        public static string jhonny { get; set; }
         Panel NPCPanel { get; set; }
         Animation _animation;
 
@@ -51,6 +52,7 @@ namespace DungeonPlanet
             NPCPanel.AddChild(new Header("Le vieux Sage", Anchor.TopLeft));
             NPCPanel.AddChild(new HorizontalLine());
             Sentence = Lib.ChooseSentenceForWise();
+            jhonny = Sentence;
 
             Paragraph paragraph = new Paragraph(Sentence);
             NPCPanel.AddChild(paragraph);
