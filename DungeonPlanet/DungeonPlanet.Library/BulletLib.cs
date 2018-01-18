@@ -26,7 +26,13 @@ namespace DungeonPlanet.Library
             _height = height;
             _width = width;
         }
- 
+        public BulletLib(Vector2 direction, Vector2 position, int height, int width)
+        {
+            _direction = direction;
+            _position = position;
+            _height = height;
+            _width = width;
+        }
         public void Timer(float gameTime)
         {
             _timer += gameTime;

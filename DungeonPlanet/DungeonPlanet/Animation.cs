@@ -165,7 +165,27 @@ namespace DungeonPlanet
                 spriteBatch.Draw(_spriteSheet, destinationRectangle: _destinationRect, sourceRectangle: _sourceRect, color: _color, effects: Effect);
             }
         }
+
+        public void Draw(SpriteBatch spriteBatch, float rotation)
+        {
+            // Only draw the animation when we are active
+            if (_active)
+            {
+                spriteBatch.Draw(_spriteSheet, destinationRectangle: _destinationRect, sourceRectangle: _sourceRect,  color: _color, rotation: rotation, effects: Effect);
+            }
+        }
         internal SpriteEffects Effect { get; set; }
+
+        internal bool Looping
+        {
+            get { return _looping; }
+            set { _looping = value; }
+        }
+        internal bool IsActive
+        {
+            get { return _active; }
+            set { _active = value; }
+        }
         internal int FrameHeight
         {
             get { return _frameHeight; }

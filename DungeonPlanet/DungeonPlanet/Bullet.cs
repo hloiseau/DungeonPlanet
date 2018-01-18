@@ -15,6 +15,7 @@ namespace DungeonPlanet
         Vector2 _origin;
         List<Enemy> _enemys = DungeonPlanetGame.Enemys;
         List<Boss> _bosses;
+        Animation _animation;
         public BulletLib BulletLib { get; set; }
 
         public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx, List<Boss> bosses)
@@ -34,11 +35,29 @@ namespace DungeonPlanet
             base.position = new Vector2(base.position.X, base.position.Y);
             BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(base.position.X, base.position.Y), texture.Height, texture.Width);
         }
+        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, Vector2 distance)
+          : base(texture, position, spritebatch)
+        {
+            _animation = new Animation();
+            _animation.Initialize(texture, position, 85, 12, 0, 0, 5, 75, Color.White, 2, true, false);
+            _animation.Effect = SpriteEffects.FlipHorizontally;
+            _origin = new Vector2(1, 12);
+            _rotation = (float)Math.Atan2(distance.Y, distance.X);
+            System.Numerics.Vector2 direction = new System.Numerics.Vector2((float)Math.Cos(_rotation), (float)Math.Sin(_rotation));
+            base.position = new Vector2(base.position.X, base.position.Y);
+            BulletLib = new BulletLib(direction, new System.Numerics.Vector2(base.position.X, base.position.Y), 12, 85);
+        }
+
 
         public void Update(GameTime gameTime)
         {
             BulletLib.Timer((float)gameTime.ElapsedGameTime.TotalSeconds);
             position += new Vector2(BulletLib.PositionUpdate().X,BulletLib.PositionUpdate().Y);
+            if (_animation != null)
+            {
+                _animation.Update(gameTime);
+                _animation.Position = position;
+            }
         }
         public bool HasTouchedEnemy()
         {
@@ -113,6 +132,18 @@ namespace DungeonPlanet
             return false;
         }
 
+        public bool HasTouchedPlayer(BossLib bossLib)
+        {
+            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(Player.CurrentPlayer.PlayerLib.Bounds))
+            {
+                bossLib.MakeDamage(Player.CurrentPlayer.PlayerLib);
+                Player.CurrentPlayer.PlayerInfo.Life -= 10;
+                return true;
+            }
+            return false;
+        }
+
+
         public bool HasTouchedShield()
         {
             if (Player.CurrentPlayer.Shield.IsActive)
@@ -162,7 +193,14 @@ namespace DungeonPlanet
         }
         public override void Draw()
         {
-            SpriteBatch.Draw(Texture, position, null, Color.White, _rotation, _origin, 1, SpriteEffects.None, 0);
+            if(_animation!= null)
+            {
+                _animation.Draw(SpriteBatch, _rotation);
+            }
+            else
+            {
+                SpriteBatch.Draw(Texture, position, null, Color.White, _rotation, _origin, 1, SpriteEffects.None, 0);
+            }
         }
     }
 }
