@@ -21,18 +21,21 @@ namespace DungeonPlanet
         Player _player;
         Icon _button;
         Icon _button2;
+        Animation _animation;
 
         Panel NPCPanel { get; set; }
         public NPCMarchand(Texture2D texture, Vector2 position, SpriteBatch spriteBatch)
             : base(texture, position, spriteBatch)
         {
-            _lib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 100);
+            _lib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width - 50, texture.Height, 100);
+            _animation = new Animation();
+            _animation.Initialize(texture, position, 40, 34, 0, 0, 2, 150, Color.White, 1, true, true);
             _spritebatch = spriteBatch;
             _player = Player.CurrentPlayer;
             _button = new Icon(IconType.PotionRed, Anchor.Auto);
             _button2 = new Icon(IconType.Apple, Anchor.Auto);
 
-        }
+        }   
 
         public void ShowMessage()
         {
@@ -60,6 +63,8 @@ namespace DungeonPlanet
 
         public void Update(GameTime gameTime)
         {
+            _animation.Update(gameTime);
+            _animation.Position = new Vector2(_lib.Position.X, _lib.Position.Y+19);
             KeyboardState keyboardState = Keyboard.GetState();
 
             MouseState mouseState = Mouse.GetState();
@@ -135,6 +140,11 @@ namespace DungeonPlanet
                     _button = null;
                 }
             }
+        }
+
+        public override void Draw()
+        {
+            _animation.Draw(SpriteBatch);
         }
     }
 }
