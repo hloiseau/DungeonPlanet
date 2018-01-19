@@ -29,7 +29,6 @@ namespace DungeonPlanet
             _tilesLookList = new List<TilesLook>();
             CreateNewBoard();
             Board.CurrentBoard = this;
-
         }
 
         public void CreateNewBoard()
