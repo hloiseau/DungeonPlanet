@@ -31,7 +31,7 @@ namespace DungeonPlanet
         private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Texture2D _fireTexture, _fireBossTexture;
-
+        private Texture2D _end;
         private Song backgroundHubSong;
         private Song backgroundBossSong;
         private Song backgroundLevelSong;
@@ -39,6 +39,8 @@ namespace DungeonPlanet
         private SoundEffect GunSoundEfect;
         private SoundEffect GrandpaSingingJhonny;
         private SoundEffect GrandpaSingingGanon;
+
+        private int _elapsedTime;
 
         private Player _player;
         private NPCMarchand _NPCMarchand;
@@ -76,11 +78,15 @@ namespace DungeonPlanet
 
         public DungeonPlanetGame()
         {
+
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.IsFullScreen = true;
+
             Content.RootDirectory = "Content";
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             //IsMouseVisible = true;
+            _graphics.IsFullScreen = true;
         }
         protected override void Initialize()
         {
@@ -98,8 +104,10 @@ namespace DungeonPlanet
             _energyBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
             _energyBar.ProgressFill.FillColor = Color.LightSteelBlue;
             _energyBar.Locked = true;
-            _money = new Paragraph("", offset: new Vector2(10, 10));
-            _money.Scale = 1;
+            _money = new Paragraph("", offset: new Vector2(10, 10))
+            {
+                Scale = 1
+            };
             UserInterface.Active.AddEntity(_healthBar);
             UserInterface.Active.AddEntity(_energyBar);
             UserInterface.Active.AddEntity(_money);
@@ -114,7 +122,7 @@ namespace DungeonPlanet
             Bosses = new List<Boss>();
             Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _tileTexture = Content.Load<Texture2D>("tile");
+            _tileTexture = Content.Load<Texture2D>("sprite texture LV1");
             _playerTexture = Content.Load<Texture2D>("PlayerSprite");
             _hubBackground001 = Content.Load<Texture2D>("hub001");
             _hubBackground002 = Content.Load<Texture2D>("hub002");
@@ -140,6 +148,7 @@ namespace DungeonPlanet
             _shieldTexture = Content.Load<Texture2D>("shield");
             _fireTexture = Content.Load<Texture2D>("fire");
             _fireBossTexture = Content.Load<Texture2D>("fireBoss");
+            _end = Content.Load<Texture2D>("end1");
 
             _board = new Board(_spriteBatch, _tileTexture, 2, 2);
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
@@ -226,6 +235,8 @@ namespace DungeonPlanet
 
         protected override void Update(GameTime gameTime)
         {
+
+
             MediaPlayer.IsRepeating = true;
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
@@ -233,6 +244,17 @@ namespace DungeonPlanet
             _player.Update(gameTime);
             _shield.Update(gameTime);
             _menu.Update();
+            if (Level.ActualState == Level.State.End)
+            {
+                _elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                if(_elapsedTime > 5000)
+                {
+                    RestartHub();
+                    _elapsedTime = 0;
+                }
+            }
+
             if (Level.ActualState == Level.State.Hub)
             {
                for(int x = 0; x < (int)PlayerInfo.Progress; x++)
@@ -362,6 +384,11 @@ namespace DungeonPlanet
             if (state.IsKeyDown(Keys.Escape) && !_previousState.IsKeyDown(Keys.Escape)) OpenMenu();
             if (state.IsKeyDown(Keys.F6)) RestartLevelOne();
             if (state.IsKeyDown(Keys.F7)) RestartBossRoom();
+            if (state.IsKeyDown(Keys.F9))
+            {
+                Level.ActualState = Level.State.End;
+                LoadContent();
+            }
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
             _previousState = state;
         }
@@ -414,6 +441,7 @@ namespace DungeonPlanet
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(_camera);
             base.Draw(gameTime);
+
             if (Level.ActualState == Level.State.Hub)
             {
                 _spriteBatch.Draw(_hubBackground001, new Vector2(-1000, -550), Color.White);
@@ -450,6 +478,15 @@ namespace DungeonPlanet
             foreach (Item item in Items)
             {
                 if (item != null) item.Draw();
+            }
+            if (Level.ActualState == Level.State.End)
+            {
+                //Vector2 position = new Vector2(_camera.GetBounds().X, _camera.GetBounds().Y) ;
+                Rectangle rectange = new Rectangle((int)_camera.GetBounds().X ,
+             (int)_camera.GetBounds().Y + 325,
+             (int)(_camera.GetBounds().Width),
+             (int)(_camera.GetBounds().Height));
+                _spriteBatch.Draw(_end, rectange, Color.White);
             }
             _spriteBatch.End();
             _spriteBatch.Draw(_camera.Debug);

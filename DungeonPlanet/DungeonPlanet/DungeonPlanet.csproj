@@ -64,6 +64,7 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteObject.cs" />
     <Compile Include="TextureInformation.cs" />
+    <Compile Include="TilesLook.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

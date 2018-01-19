@@ -64,11 +64,13 @@ namespace DungeonPlanet.Library
                     if ((x == 0 && (_direction & Path.Direction.Left) == Path.Direction.None) || (x == _columns - 1 && (_direction & Path.Direction.Right) == Path.Direction.None))
                     {
                         Tiles[x, y].IsBlocked = true;
+                        Tiles[x, y].Type = Tile.TypeSet.Wall;
                     }
 
                     if ((y == 0 && (_direction & Path.Direction.Top) == Path.Direction.None) || (y == _rows - 1 && (_direction & Path.Direction.Bottom) == Path.Direction.None))
                     {
                         Tiles[x, y].IsBlocked = true;
+                        Tiles[x, y].Type = Tile.TypeSet.Wall;
                     }
                 }
             }
@@ -187,6 +189,7 @@ namespace DungeonPlanet.Library
                 for (int a = -length / 2; a < length / 2; a++)
                 {
                     Tiles[Clamp(x + a + offset, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].IsBlocked = true;
+                    Tiles[Clamp(x + a + offset, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].Type = Tile.TypeSet.Platform;
                 }
             }
         }
@@ -206,6 +209,7 @@ namespace DungeonPlanet.Library
                     for (int a = -length / 2; a < length / 2; a++)
                     {
                         Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].IsBlocked = true;
+                        Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].Type = Tile.TypeSet.Platform;
                     }
                 }
                 else
@@ -216,6 +220,7 @@ namespace DungeonPlanet.Library
                     for (int a = -length / 2; a < length / 2; a--)
                     {
                         Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].IsBlocked = true;
+                        Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].Type = Tile.TypeSet.Platform;
                     }
                 }
             }
@@ -241,6 +246,22 @@ namespace DungeonPlanet.Library
                     Tiles[y + 3, x + 5].IsBlocked = true;
                     Tiles[y + 4, x + 5].IsBlocked = true;
                     Tiles[y + 5, x + 5].IsBlocked = true;
+
+
+                    Tiles[y + 2, x + 3].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 3, x + 3].Type = Tile.TypeSet.Platform;
+
+                    Tiles[y + 1, x + 4].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 2, x + 4].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 3, x + 4].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 4, x + 4].Type = Tile.TypeSet.Platform;
+
+                    Tiles[y + 0, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 1, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 2, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 3, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 4, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 5, x + 5].Type = Tile.TypeSet.Platform;
                 }
             }
         }
@@ -255,15 +276,32 @@ namespace DungeonPlanet.Library
                 for (int i = 0; i < length; i++)
                 {
                     Tiles[x + i, y + flor].IsBlocked = true;
+                    Tiles[x + i, y + flor].Type = Tile.TypeSet.Platform;
                     if (length <= 3)
                     {
-                        if (leftOrRight == 0) Tiles[x + length + i, y + flor - length].IsBlocked = true;
-                        else Tiles[x - length + i, y + flor - length].IsBlocked = true;
+                        if (leftOrRight == 0)
+                        {
+                            Tiles[x + length + i, y + flor - length].IsBlocked = true;
+                            Tiles[x + length + i, y + flor - length].Type = Tile.TypeSet.Platform;
+                        }
+                        else
+                        {
+                            Tiles[x - length + i, y + flor - length].IsBlocked = true;
+                            Tiles[x - length + i, y + flor - length].Type = Tile.TypeSet.Platform;
+                        }
                     }
                     else
                     {
-                        if (leftOrRight == 0) Tiles[x + 3 + i, y + flor - 3].IsBlocked = true;
-                        else Tiles[x - 3 + i, y + flor - 3].IsBlocked = true;
+                        if (leftOrRight == 0)
+                        {
+                            Tiles[x + 3 + i, y + flor - 3].IsBlocked = true;
+                            Tiles[x + 3 + i, y + flor - 3].Type = Tile.TypeSet.Platform;
+                        }
+                        else
+                        {
+                            Tiles[x - 3 + i, y + flor - 3].IsBlocked = true;
+                            Tiles[x - 3 + i, y + flor - 3].Type = Tile.TypeSet.Platform;
+                        }
                     }
                 }
             }

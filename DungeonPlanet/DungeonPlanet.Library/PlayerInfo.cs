@@ -54,6 +54,10 @@ namespace DungeonPlanet.Library
                 /*catch 
                  * { 
                  * }*/
+                if(playerInfo.Progress == (Level.LevelID)6)
+                {
+                    Level.ActualState = Level.State.End;
+                }
                 playerInfo.Progress = (Level.LevelID)Case.Clamp((int)playerInfo.Progress, 1, 5);
                 return playerInfo;
             }

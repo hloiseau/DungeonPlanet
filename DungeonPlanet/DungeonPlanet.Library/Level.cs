@@ -28,7 +28,8 @@ namespace DungeonPlanet.Library
             Menu,
             Hub, 
             Level,
-            BossRoom
+            BossRoom,
+            End
         }
         public enum LevelID
         {
@@ -37,7 +38,7 @@ namespace DungeonPlanet.Library
             Two = 2,
             Three = 3,
             Four = 4,
-            Five = 5
+            Five = 5,
         }
         public Level()
         {
@@ -165,7 +166,6 @@ namespace DungeonPlanet.Library
                 return true;
             }
             else return false;
-           
         }
 
         public Vector2 WhereCanIGetTo(Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)

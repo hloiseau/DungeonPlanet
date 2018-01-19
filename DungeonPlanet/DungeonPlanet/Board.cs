@@ -19,23 +19,25 @@ namespace DungeonPlanet
         public Level Level { get; private set; }
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
+        List<TilesLook> _tilesLookList;
 
         public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
         {
-
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
             Level = new Level();
+            _tilesLookList = new List<TilesLook>();
             CreateNewBoard();
             Board.CurrentBoard = this;
+
         }
 
         public void CreateNewBoard()
         {
             Level.NewLevel();
+            ListInisilisation();
         }
-
-        public void Draw()
+        public void ListInisilisation()
         {
             if (Level.ActualState == Level.State.Hub || Level.ActualState == Level.State.BossRoom)
             {
@@ -43,12 +45,12 @@ namespace DungeonPlanet
                 {
                     if (tile.IsBlocked)
                     {
-                        Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
-                        sprite.Draw();
+                        TilesLook tileLook = new TilesLook(TileTexture, tile.Position.X, tile.Position.Y, tile.Type, Color.White);
+                        _tilesLookList.Add(tileLook);
                     }
                 }
             }
-            else if (Level.ActualState == Level.State.Level)
+            if (Level.ActualState == Level.State.Level)
             {
                 foreach (Case Case in Level.Cases)
                 {
@@ -56,10 +58,22 @@ namespace DungeonPlanet
                     {
                         if (tile.IsBlocked)
                         {
-                            Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
-                            sprite.Draw();
+                            TilesLook tileLook = new TilesLook(TileTexture, tile.Position.X, tile.Position.Y, tile.Type, Color.White);
+                            _tilesLookList.Add(tileLook);
                         }
                     }
+                }
+            }
+        }
+        public void Draw()
+        {
+            if (Level.ActualState == Level.State.Hub 
+                || Level.ActualState == Level.State.BossRoom
+                || Level.ActualState == Level.State.Level )
+            {
+                foreach (var t in _tilesLookList)
+                {
+                    t.Draw(SpriteBatch);
                 }
             }
         }
