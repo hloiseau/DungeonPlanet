@@ -76,6 +76,7 @@ namespace DungeonPlanet
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             //IsMouseVisible = true;
+            _graphics.IsFullScreen = true;
         }
         protected override void Initialize()
         {
@@ -109,7 +110,7 @@ namespace DungeonPlanet
             Bosses = new List<Boss>();
             Items = new List<Item>();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _tileTexture = Content.Load<Texture2D>("tile");
+            _tileTexture = Content.Load<Texture2D>("sprite texture LV1");
             _playerTexture = Content.Load<Texture2D>("PlayerSprite");
             _hubBackground001 = Content.Load<Texture2D>("hub001");
             _hubBackground002 = Content.Load<Texture2D>("hub002");

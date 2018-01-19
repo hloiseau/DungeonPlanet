@@ -165,7 +165,6 @@ namespace DungeonPlanet.Library
                 return true;
             }
             else return false;
-           
         }
 
         public Vector2 WhereCanIGetTo(Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
