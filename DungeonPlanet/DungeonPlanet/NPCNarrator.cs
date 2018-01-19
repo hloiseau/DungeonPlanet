@@ -27,9 +27,9 @@ namespace DungeonPlanet
         public NPCNarrator(Texture2D texture, Vector2 position, SpriteBatch spriteBatch)
             : base(texture, position, spriteBatch)
         {
-            ReferenceLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 100);
+            ReferenceLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width-550, texture.Height, 100);
             _animation = new Animation();
-            _animation.Initialize(texture, position, 58, 58, 0, 0, 10, 100, Color.White, 1, true, true);
+            _animation.Initialize(texture, position, 60, 58, 0, 0, 10, 100, Color.White, 1, true, true);
             _spritebatch = spriteBatch;
             _player = Player.CurrentPlayer;
             Lib = new NPCDialogLib();
