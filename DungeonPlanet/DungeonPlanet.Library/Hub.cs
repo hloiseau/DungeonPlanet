@@ -36,7 +36,7 @@ namespace DungeonPlanet.Library
                 {
                     Vector2 tilePosition = new Vector2(x * 64, y * 64);
                     Rectangle tileBounds = new Rectangle((int)tilePosition.X, (int)tilePosition.Y, 64, 64);
-                    Tile tile = new Tile(tilePosition, tileBounds, /*_rnd.Next(5) == 0*/ false);
+                    Tile tile = new Tile(tilePosition, tileBounds, /*_rnd.Next(5) == 0*/ false, Tile.TypeSet.Platform);
                     Tiles[x, y] = tile;
                 }
             }
