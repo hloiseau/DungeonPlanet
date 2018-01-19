@@ -16,6 +16,7 @@ namespace DungeonPlanet
         List<Enemy> _enemys = DungeonPlanetGame.Enemys;
         List<Boss> _bosses;
         Animation _animation;
+        Animation _animationFireWave;
         public BulletLib BulletLib { get; set; }
 
         public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, WeaponLib ctx, List<Boss> bosses)
@@ -35,7 +36,7 @@ namespace DungeonPlanet
             base.position = new Vector2(base.position.X, base.position.Y);
             BulletLib = new BulletLib(ctx, new System.Numerics.Vector2(base.position.X, base.position.Y), texture.Height, texture.Width);
         }
-        public Bullet(Texture2D texture, Vector2 position, SpriteBatch spritebatch, Vector2 distance)
+        public Bullet(Texture2D texture, Texture2D textureFireWave, Vector2 position, SpriteBatch spritebatch, Vector2 distance)
           : base(texture, position, spritebatch)
         {
             _animation = new Animation();
@@ -45,9 +46,11 @@ namespace DungeonPlanet
             _rotation = (float)Math.Atan2(distance.Y, distance.X);
             System.Numerics.Vector2 direction = new System.Numerics.Vector2((float)Math.Cos(_rotation), (float)Math.Sin(_rotation));
             base.position = new Vector2(base.position.X, base.position.Y);
+            _animationFireWave = new Animation();
+            _animationFireWave.Initialize(textureFireWave, position, 37, 120, 0, 0, 6, 25, Color.White, 2, false, false);
             BulletLib = new BulletLib(direction, new System.Numerics.Vector2(base.position.X, base.position.Y), 12, 85);
         }
-
+        
 
         public void Update(GameTime gameTime)
         {
@@ -56,7 +59,9 @@ namespace DungeonPlanet
             if (_animation != null)
             {
                 _animation.Update(gameTime);
-                _animation.Position = position;
+                _animation.Position = new Vector2(position.X +200, position.Y +30); ;
+                _animationFireWave.Update(gameTime);
+                _animationFireWave.Position = new Vector2(position.X, position.Y-60);
             }
         }
         public bool HasTouchedEnemy()
@@ -164,10 +169,21 @@ namespace DungeonPlanet
                 {
                     if (tile.IsBlocked)
                     {
-                        if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                        if(_animation != null)
                         {
-                            return true;
+                            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, 85, 12).IntersectsWith(tile.Bounds))
+                            {
+                                return true;
+                            }
                         }
+                        else
+                        {
+                            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                            {
+                                return true;
+                            }
+                        }
+                       
                     }
                 }
                 return false;
@@ -196,6 +212,7 @@ namespace DungeonPlanet
             if(_animation!= null)
             {
                 _animation.Draw(SpriteBatch, _rotation);
+                _animationFireWave.Draw(SpriteBatch);
             }
             else
             {
