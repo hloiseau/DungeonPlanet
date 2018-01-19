@@ -45,7 +45,7 @@ namespace DungeonPlanet
             _animation.Update(gameTime);
             _animation.Position = new Vector2(BossLib.Position.X, BossLib.Position.Y+7);
             _elapsedTime += (int)gameTime.ElapsedGameTime.Milliseconds;
-            if (_elapsedTime >= 5000 )
+            if (_elapsedTime >= 5000)
             {
                 _animation.CurrentFrameLin = 1;
                 _animation.CurrentFrameCol = 0;
