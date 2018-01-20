@@ -53,7 +53,7 @@ namespace DungeonPlanet
             PlayerLib.IsDead(PlayerInfo.Life);
 
             position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y);
-            _animation.Position = new Vector2(PlayerLib.Position.X, PlayerLib.Position.Y + 35);
+            _animation.Position = new Vector2(PlayerLib.Position.X+20, PlayerLib.Position.Y + 35);
             _animation.Update(gameTime);
             Weapon.Update(gameTime);
             CheckMovementAndUpdateAnimation();

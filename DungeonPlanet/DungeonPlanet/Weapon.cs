@@ -67,7 +67,7 @@ namespace DungeonPlanet
             }
             else
             {
-                position = new Vector2(PlayerLib.Position.X , PlayerLib.Position.Y + 25);
+                position = new Vector2(PlayerLib.Position.X + 23 , PlayerLib.Position.Y + 25);
                 if (Player.CurrentPlayer.Animation.Effect == SpriteEffects.FlipHorizontally) _effect = SpriteEffects.FlipVertically;
                 else _effect = SpriteEffects.None;
                 WeaponLib.Update(_currentMouse.X - _ctx.GraphicsDevice.Viewport.Width / 2, _currentMouse.Y - _ctx.GraphicsDevice.Viewport.Height / 2);
