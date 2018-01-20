@@ -24,23 +24,22 @@ namespace DungeonPlanet
         Level.State _previousState;
         public Menu(DungeonPlanetGame ctx)
         {
-            if (Level.ActualState == Level.State.Menu)
-            {
-                _ctx = ctx;
-                _panel = new Panel(new Vector2(1300, 750));
-                UserInterface.Active.AddEntity(_panel);
-                _panel.AddChild(new Header("Dungeon Planet"));
-                _continue = new Button("Reprendre", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
-                _panel.AddChild(_continue);
-                _newGame = new Button("Nouvelle Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
-                _panel.AddChild(_newGame);
-                _loadGame = new Button("Charger Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
-                _panel.AddChild(_loadGame);
-                _options = new Button("Option", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
-                _panel.AddChild(_options);
-                _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
-                _panel.AddChild(_quit);
-            }
+
+            _ctx = ctx;
+            _panel = new Panel(new Vector2(1300, 750));
+            UserInterface.Active.AddEntity(_panel);
+            _panel.AddChild(new Header("Dungeon Planet"));
+            _continue = new Button("Reprendre", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _panel.AddChild(_continue);
+            _newGame = new Button("Nouvelle Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _panel.AddChild(_newGame);
+            _loadGame = new Button("Charger Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _panel.AddChild(_loadGame);
+            _options = new Button("Option", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _panel.AddChild(_options);
+            _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _panel.AddChild(_quit);
+
         }
         internal Level.State PreviousState
         {

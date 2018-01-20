@@ -5094,9 +5094,18 @@
 /processorParam:TextureFormat=Color
 /build:hub003.png
 
-<<<<<<< HEAD
 #begin tank.png
-=======
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tank.png
+
 #begin Ganon.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -5104,7 +5113,6 @@
 /build:Ganon.mp3
 
 #begin NPCNarrator.png
->>>>>>> 090f75e4524b3e41826e74b2af055a48d470e2a6
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -5114,15 +5122,49 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:tank.png
-
-#begin TankShot.png
-=======
 /build:NPCNarrator.png
 
 #begin NPCMerchand.png
->>>>>>> 090f75e4524b3e41826e74b2af055a48d470e2a6
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:NPCMerchand.png
+
+#begin TankBullet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TankBullet.png
+
+#begin TankFirewave.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TankFirewave.png
+
+<<<<<<< HEAD
+#begin end1.png
+=======
+#begin sprite texture LV1.png
+>>>>>>> 4b2ceb9cceedb03d79e390db62c7c43e7e86d6cc
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -5133,8 +5175,8 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 <<<<<<< HEAD
-/build:TankShot.png
+/build:end1.png
 =======
-/build:NPCMerchand.png
->>>>>>> 090f75e4524b3e41826e74b2af055a48d470e2a6
+/build:sprite texture LV1.png
+>>>>>>> 4b2ceb9cceedb03d79e390db62c7c43e7e86d6cc
 

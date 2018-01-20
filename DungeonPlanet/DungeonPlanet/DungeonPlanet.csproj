@@ -55,6 +55,7 @@
     <Compile Include="Menu.cs" />
     <Compile Include="NPCNarrator.cs" />
     <Compile Include="NPCTheWise.cs" />
+    <Compile Include="NPCWeaponSeller.cs" />
     <Compile Include="NPCWeapon.cs" />
     <Compile Include="Shield.cs" />
     <Compile Include="NPCMarchand.cs" />

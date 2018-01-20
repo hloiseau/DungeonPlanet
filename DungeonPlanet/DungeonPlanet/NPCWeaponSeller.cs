@@ -12,32 +12,30 @@ using GeonBit.UI.Entities;
 
 namespace DungeonPlanet
 {
-    public class NPCWeapon : Sprite
+    public class NPCWeaponSeller : Sprite
     {
         SpriteBatch _spritebatch;
         EnemyLib _lib;
         Header _header;
         Header _headerMessage;
         Player _player;
-        Icon _redBullet;
-        Icon _blueBullet;
-        Icon _greenBullet;
+        Image _shotgun;
+        Image _launcher;
         Animation _animation;
         bool _alreadyBuy { get; set; }
 
         Panel NPCPanel { get; set; }
 
-        public NPCWeapon(Texture2D texture, Vector2 position, SpriteBatch spriteBatch)
+        public NPCWeaponSeller(Texture2D texture, Texture2D shotgun, Texture2D launcher, Vector2 position, SpriteBatch spriteBatch)
             : base(texture, position, spriteBatch)
         {
             _lib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 100);
             _spritebatch = spriteBatch;
             _animation = new Animation();
-            _animation.Initialize(texture, position, 33, 60, 0, 0, 2, 300, Color.White, 1, true, true);
+            _animation.Initialize(texture, position, 55, 64, 0, 0, 5, 150, Color.White, 0.9f, true, true);
             _player = Player.CurrentPlayer;
-            _redBullet = new Icon(IconType.OrbRed, Anchor.Auto);
-            _blueBullet = new Icon(IconType.OrbBlue, Anchor.Auto);
-            _greenBullet = new Icon(IconType.OrbGreen, Anchor.Auto);
+            _shotgun = new Image(shotgun, new Vector2(100, 50));
+            _launcher = new Image(launcher, new Vector2(100, 50));
             _alreadyBuy = false;
         }
 
@@ -52,35 +50,34 @@ namespace DungeonPlanet
             UserInterface.Active.AddEntity(_headerMessage);
             NPCPanel = new Panel(size: new Vector2(500, 500), skin: PanelSkin.Golden, anchor: Anchor.Center, offset: new Vector2(10, 10));
             UserInterface.Active.AddEntity(NPCPanel);
-            NPCPanel.AddChild(new Header("Magasin", Anchor.AutoCenter));
-            _redBullet = new Icon(IconType.OrbRed, Anchor.Auto);
-            _blueBullet = new Icon(IconType.OrbBlue, Anchor.Auto);
-            _greenBullet = new Icon(IconType.OrbGreen, Anchor.Auto);
+            NPCPanel.AddChild(new Header("Prototype", Anchor.AutoCenter));
+           /* _shotgun = new Image(_shotgunTexture, new Vector2(100, 50));
+            _launcher = new Image(_launcherTexture, new Vector2(100, 50));*/
 
             HorizontalLine hz1 = new HorizontalLine();
-            HorizontalLine hz2 = new HorizontalLine();
 
-            Paragraph redText = new Paragraph("Emflamme l'ennemi");
-            Paragraph blueText = new Paragraph("Des munitions basiques");
-            Paragraph greenText = new Paragraph("Ralenti l'ennemi");
-
-            NPCPanel.AddChild(new Label(" 10 $", Anchor.Auto));
-            NPCPanel.AddChild(_blueBullet);
-            NPCPanel.AddChild(blueText);
-            NPCPanel.AddChild(hz1);
-            NPCPanel.AddChild(new Label(" 250 $", Anchor.Auto));
-            NPCPanel.AddChild(_redBullet);
-            NPCPanel.AddChild(redText);
-            NPCPanel.AddChild(hz2);
-            NPCPanel.AddChild(new Label(" 100 $", Anchor.Auto));
-            NPCPanel.AddChild(_greenBullet);
-            NPCPanel.AddChild(greenText);
+            Paragraph redText = new Paragraph("Transforme votre arme en un puissant Lance Roquette");
+            Paragraph blueText = new Paragraph("transforme votre arme en Shotgun");
+            if((Player.CurrentPlayer.PlayerInfo.Unlocked & PlayerInfo.WeaponState.Shotgun) == 0)
+            {
+                NPCPanel.AddChild(new Label(" 500 $", Anchor.Auto));
+                NPCPanel.AddChild(_shotgun);
+                NPCPanel.AddChild(blueText);
+                NPCPanel.AddChild(hz1);
+            }
+            if ((Player.CurrentPlayer.PlayerInfo.Unlocked & PlayerInfo.WeaponState.Launcher) == 0)
+            {
+                NPCPanel.AddChild(new Label(" 1000 $", Anchor.Auto));
+                NPCPanel.AddChild(_launcher);
+                NPCPanel.AddChild(redText);
+            }
+                    
         }
 
         public void Update(GameTime gameTime)
         {
             _animation.Update(gameTime);
-            _animation.Position = new Vector2(_lib.Position.X, _lib.Position.Y + 30);
+            _animation.Position = new Vector2(_lib.Position.X, _lib.Position.Y + 36);
             KeyboardState keyboardState = Keyboard.GetState();
 
             MouseState mouseState = Mouse.GetState();
@@ -91,37 +88,26 @@ namespace DungeonPlanet
             _lib.StopMovingIfBlocked();
             position = new Vector2(_lib.Position.X, _lib.Position.Y);
 
-            if (_blueBullet != null)
+            if (_launcher != null)
             {
-                _blueBullet.OnClick = (Entity btn) =>
+                _launcher.OnClick = (Entity btn) =>
                 {
-                    if(_player.PlayerInfo.Money - 10 >= 0)
+                    if(_player.PlayerInfo.Money - 1000 >= 0)
                     {
-                        _player.PlayerInfo.Money -= 10;
-                        PlayerInfo.ActualBullet = PlayerInfo.BulletState.None;
+                        _player.PlayerInfo.Money -= 1000;
+                        Player.CurrentPlayer.PlayerInfo.Unlocked |= PlayerInfo.WeaponState.Launcher;
                     }
                    
                 };
             }
-            if (_redBullet != null)
+            if (_shotgun != null)
             {
-                _redBullet.OnClick = (Entity btn) =>
+                _shotgun.OnClick = (Entity btn) =>
                 {
-                    if (_player.PlayerInfo.Money - 250 >= 0)
+                    if (_player.PlayerInfo.Money - 500 >= 0)
                     {
-                        _player.PlayerInfo.Money -= 250;
-                        PlayerInfo.ActualBullet = PlayerInfo.BulletState.Fire;
-                    }
-                };
-            }
-            if (_greenBullet != null)
-            {
-                _greenBullet.OnClick = (Entity btn) =>
-                {
-                    if (_player.PlayerInfo.Money - 100 >= 0)
-                    {
-                        _player.PlayerInfo.Money -= 100;
-                        PlayerInfo.ActualBullet = PlayerInfo.BulletState.Slime;
+                        _player.PlayerInfo.Money -= 500;
+                        Player.CurrentPlayer.PlayerInfo.Unlocked |= PlayerInfo.WeaponState.Shotgun;
                     }
                 };
             }
@@ -148,9 +134,7 @@ namespace DungeonPlanet
                     UserInterface.Active.RemoveEntity(NPCPanel);
                     NPCPanel = null;
                     _headerMessage = null;
-                    _redBullet = null;
-                    _blueBullet = null;
-                    _greenBullet = null;
+                    
                 }
                 if (_header != null)
                 {
@@ -166,9 +150,7 @@ namespace DungeonPlanet
                     UserInterface.Active.RemoveEntity(NPCPanel);
                     NPCPanel = null;
                     _headerMessage = null;
-                    _redBullet = null;
-                    _blueBullet = null;
-                    _greenBullet = null;
+
                 }
             }
         }
