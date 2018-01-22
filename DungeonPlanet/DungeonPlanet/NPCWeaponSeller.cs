@@ -169,7 +169,7 @@ namespace DungeonPlanet
                 }
                
             }
-            else if (NPCPanel != null && keyboardState.IsKeyDown(Keys.R))
+            else if (NPCPanel != null && (keyboardState.IsKeyDown(Keys.R) || keyboardState.IsKeyDown(Keys.Escape)))
             {
                 if (NPCPanel.Visible)
                 {
