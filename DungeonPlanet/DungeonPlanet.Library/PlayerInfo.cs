@@ -36,9 +36,9 @@ namespace DungeonPlanet.Library
         public PlayerInfo()
         {
             Life = 100;
-            Money = 1000;
+            Money = 0;
             Energy = 100;
-            Progress = Level.LevelID.Five;
+            Progress = Level.LevelID.One;
         }
        
         public void Save(string filePath)

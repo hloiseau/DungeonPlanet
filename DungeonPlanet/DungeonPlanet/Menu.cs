@@ -31,7 +31,6 @@ namespace DungeonPlanet
         Level.State _previousState;
         public Menu(DungeonPlanetGame ctx)
         {
-
             _ctx = ctx;
             _panel = new Panel(new Vector2(1300, 750));
             UserInterface.Active.AddEntity(_panel);

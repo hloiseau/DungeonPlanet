@@ -59,12 +59,12 @@ namespace DungeonPlanet.Library
                     rows = 8;
                     break;
                 case LevelID.Four:
-                    columns = 4;
-                    rows = 4;
+                    columns = 6;
+                    rows = 6;
                     break;
                 case LevelID.Five:
-                    columns = 4;
-                    rows = 4;
+                    columns = 7;
+                    rows = 7;
                     break;
                 default:
                     columns = 0;
