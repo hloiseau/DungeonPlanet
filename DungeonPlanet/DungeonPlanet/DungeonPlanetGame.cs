@@ -28,7 +28,7 @@ namespace DungeonPlanet
         private Sprite _setOfBullet;
         private Sprite _setOfFood;
 
-        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture;
+        private Texture2D _tileTexture, _playerTexture, _enemyTexture, _enemyTexture2, _bossTexture, _weaponTexture, _bulletTexture, _bulletETexture, _enemyWeaponTexture;
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Texture2D _fireTexture, _fireBossTexture;
 
@@ -129,10 +129,11 @@ namespace DungeonPlanet
             Texture2D nugget = Content.Load<Texture2D>("Nugget");
             Texture2D bullet = Content.Load<Texture2D>("ItemSetBullet");
             Texture2D food = Content.Load<Texture2D>("ItemSetFood");
-            _enemyTexture = Content.Load<Texture2D>("enemy");
-            _enemyTexture2 = Content.Load<Texture2D>("enemy2");
+            _enemyTexture = Content.Load<Texture2D>("blueSoldier");
+            _enemyTexture2 = Content.Load<Texture2D>("whiteSkeleton");
             _bossTexture = Content.Load<Texture2D>("Tank");
             _weaponTexture = Content.Load<Texture2D>("playerGun");
+            _enemyWeaponTexture = Content.Load<Texture2D>("enemyGun");
             _bulletTexture = Content.Load<Texture2D>("bullet");
             _bulletETexture = Content.Load<Texture2D>("bulletE");
             _mediTexture = Content.Load<Texture2D>("Medipack");
@@ -145,8 +146,8 @@ namespace DungeonPlanet
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
-            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture);
-            _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this);
+            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150);
+            _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _enemyWeaponTexture, _bulletETexture, this, 25, 50, 7, 150);
             _boss = new Boss(tankBullet, tankFirewave, _bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
 
@@ -201,12 +202,12 @@ namespace DungeonPlanet
 
                     if (Level.CurrentBoard.GetNext(0, 2) == 0)
                     {
-                        enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "CQC", _fireTexture);
+                        enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150);
 
                     }
                     else
                     {
-                        enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this);
+                        enemy = new Enemy(_enemyTexture2, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "DIST", _fireTexture, _weaponTexture, _bulletETexture, this, 25, 50, 7, 150);
                     }
 
                     Enemys.Add(enemy);
@@ -219,7 +220,7 @@ namespace DungeonPlanet
                     Items.Add(mediPack);
                 }
                 _player.Shield = _shield;
-                MediaPlayer.Play(backgroundLevelSong);
+                //MediaPlayer.Play(backgroundLevelSong);
             }
         }
         public void Reload() => LoadContent();
