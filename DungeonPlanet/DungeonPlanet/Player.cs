@@ -150,7 +150,7 @@ namespace DungeonPlanet
         private void CheckKeyboardAndUpdateMovement()
         {
             KeyboardState keyboardState = Keyboard.GetState();
-
+            int movementXPosition = (_animation.Effect == SpriteEffects.FlipHorizontally) ? -20 : 20;
 
             if (keyboardState.IsKeyDown(Keys.Q)) { PlayerLib.Left(); }
             if (keyboardState.IsKeyDown(Keys.D)) { PlayerLib.Right(); }
@@ -158,7 +158,7 @@ namespace DungeonPlanet
             if (keyboardState.IsKeyDown(Keys.B) && !_previousKey.IsKeyDown(Keys.B) && PlayerInfo.Energy >= 50 )
             {
                 Bomb bomb = new Bomb(_texturebomb, position, _spritebatch, 0, this, _enemys);
-                bomb.ItemLib.Movement = System.Numerics.Vector2.UnitX * 20;
+                bomb.ItemLib.Movement = System.Numerics.Vector2.UnitX * movementXPosition;
                 _bombs.Add(bomb);
                 PlayerInfo.Energy -= 50;
             }
