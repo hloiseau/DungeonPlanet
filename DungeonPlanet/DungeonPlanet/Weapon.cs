@@ -12,10 +12,13 @@ namespace DungeonPlanet
 {
     public class Weapon : Sprite
     {
+
         EnemyLib _enemyLib;
         internal WeaponLib WeaponLib { get; set; }
         Vector2 _origin;
         MouseState _currentMouse;
+        KeyboardState _keyboardState;
+
         public List<Bullet> Bullets { get; }
         public List<Bullet> BulletsEnemy { get; }
         Texture2D _bulletTexture;
@@ -23,10 +26,13 @@ namespace DungeonPlanet
         DungeonPlanetGame _ctx;
         List<Boss> _bosses;
         SpriteEffects _effect;
+        PlayerInfo.WeaponState ActualState { get; set; }
+        
 
         public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Boss> bosses)
             : base(weaponTexture, position, spritebatch)
         {
+            
             _origin = new Vector2(-2, 7);
             WeaponLib = new WeaponLib();
             Bullets = new List<Bullet>();
@@ -71,25 +77,85 @@ namespace DungeonPlanet
         private void CheckMouseAndUpdateMovement()
         {
             _currentMouse = Mouse.GetState();
-
-            Bullet bullet;
-
-            if (_currentMouse.LeftButton == ButtonState.Pressed)
+            _keyboardState = Keyboard.GetState();
+            if (_keyboardState.IsKeyDown(Keys.D1))
             {
-                if (_enemyLib == null)
+                ActualState = PlayerInfo.WeaponState.Normal;
+            }
+
+            if (_keyboardState.IsKeyDown(Keys.D2) && (_ctx.PlayerInfo.Unlocked & PlayerInfo.WeaponState.Shotgun) != 0)
+            {
+                ActualState = PlayerInfo.WeaponState.Shotgun;
+            }
+
+            if (_keyboardState.IsKeyDown(Keys.D3) && (_ctx.PlayerInfo.Unlocked & PlayerInfo.WeaponState.Launcher) != 0)
+            {
+                ActualState = PlayerInfo.WeaponState.Launcher;
+            }
+
+            if (ActualState == PlayerInfo.WeaponState.Normal)
+            {
+                if (_currentMouse.LeftButton == ButtonState.Pressed)
                 {
-                    if (_time >= 15)
+                    if (_enemyLib == null)
                     {
-                        bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib, _bosses);
-                        Bullets.Add(bullet);
-                        _time = 0;
-                    }
-                    else
-                    {
-                        _time += 1;
+                        if (_time >= 15)
+                        {
+                            Bullet bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib, _bosses);
+                            Bullets.Add(bullet);
+                            _time = 0;
+                        }
+                        else
+                        {
+                            _time += 1;
+                        }
                     }
                 }
             }
+            if (ActualState == PlayerInfo.WeaponState.Shotgun)
+            {
+                if (_currentMouse.LeftButton == ButtonState.Pressed)
+                {
+                    if (_enemyLib == null)
+                    {
+                        if (_time >= 20 && Player.CurrentPlayer.PlayerInfo.Energy >= 40)
+                        {
+                            for (int x = 0; x < 5; x++)
+                            {
+                                Bullet bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib.Rotation -0.1f * (x-2), _bosses);
+                                Bullets.Add(bullet);
+                            }
+                            Player.CurrentPlayer.PlayerInfo.Energy -= 40;
+                            _time = 0;
+                        }
+                        else
+                        {
+                            _time += 1;
+                        }
+                    }
+                }
+            }
+            if (ActualState == PlayerInfo.WeaponState.Launcher)
+            {
+                if (_currentMouse.LeftButton == ButtonState.Pressed)
+                {
+                    if (_enemyLib == null)
+                    {
+                        if (_time >= 100 && Player.CurrentPlayer.PlayerInfo.Energy >= 80)
+                        {
+                            Bullet bullet = new Bullet(_ctx.TankBullet, _ctx.TankFirewave, new Vector2(position.X - 37.5f, position.Y - 20), SpriteBatch, WeaponLib.Rotation, _bosses);
+                            Bullets.Add(bullet);
+                            Player.CurrentPlayer.PlayerInfo.Energy -= 80;
+                            _time = 0;
+                        }
+                        else
+                        {
+                            _time += 1;
+                        }
+                    }
+                }
+            }
+
         }
 
         public void ShootingEnemy()

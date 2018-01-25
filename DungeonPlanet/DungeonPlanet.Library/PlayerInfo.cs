@@ -14,20 +14,29 @@ namespace DungeonPlanet.Library
         public int Life { get; set; }
         public int Money { get; set; }
         public int Energy { get; set; }
-        public WeaponState SerializableWeapon { get { return ActualWeapon; } set { ActualWeapon = value; } }
-        public static WeaponState ActualWeapon;
-        public enum WeaponState
+        public BulletState SerializableBullet { get { return ActualBullet; } set { ActualBullet = value; } }
+        public static BulletState ActualBullet;
+        public enum BulletState
         {
             None,
             Fire,
             Slime
         }
+
+        [Flags]
+        public enum WeaponState
+        {
+            Normal = 0,
+            Shotgun = 1,
+            Launcher = 2
+        }
         public Level.LevelID Progress { get; set; }
+        public WeaponState Unlocked { get; set; }
 
         public PlayerInfo()
         {
             Life = 100;
-            Money = 100;
+            Money = 1000;
             Energy = 100;
             Progress = Level.LevelID.Five;
         }

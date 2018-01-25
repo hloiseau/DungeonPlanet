@@ -98,7 +98,7 @@ namespace DungeonPlanet
                     if(_player.PlayerInfo.Money - 10 >= 0)
                     {
                         _player.PlayerInfo.Money -= 10;
-                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.None;
+                        PlayerInfo.ActualBullet = PlayerInfo.BulletState.None;
                     }
                    
                 };
@@ -110,7 +110,7 @@ namespace DungeonPlanet
                     if (_player.PlayerInfo.Money - 250 >= 0)
                     {
                         _player.PlayerInfo.Money -= 250;
-                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Fire;
+                        PlayerInfo.ActualBullet = PlayerInfo.BulletState.Fire;
                     }
                 };
             }
@@ -121,7 +121,7 @@ namespace DungeonPlanet
                     if (_player.PlayerInfo.Money - 100 >= 0)
                     {
                         _player.PlayerInfo.Money -= 100;
-                        PlayerInfo.ActualWeapon = PlayerInfo.WeaponState.Slime;
+                        PlayerInfo.ActualBullet = PlayerInfo.BulletState.Slime;
                     }
                 };
             }
@@ -158,7 +158,7 @@ namespace DungeonPlanet
                     _header = null;
                 }
             }
-            else if (NPCPanel != null && keyboardState.IsKeyDown(Keys.R))
+            else if (NPCPanel != null && (keyboardState.IsKeyDown(Keys.R) || keyboardState.IsKeyDown(Keys.Escape)))
             {
                 if (NPCPanel != null)
                 {

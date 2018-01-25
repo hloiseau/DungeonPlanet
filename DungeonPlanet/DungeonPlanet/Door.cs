@@ -50,7 +50,6 @@ namespace DungeonPlanet
                     _ctx.RestartLevelOne();
                     if (_header != null)
                     {
-                        UserInterface.Active.RemoveEntity(_header);
                         _header = null;
                     }
                 }

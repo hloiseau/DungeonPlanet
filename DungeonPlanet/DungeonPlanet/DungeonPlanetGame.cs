@@ -19,6 +19,8 @@ namespace DungeonPlanet
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        int _elapsedTime;
+
         private Texture2D _hubBackground001;
         private Texture2D _hubBackground002;
         private Texture2D _hubBackground003;
@@ -32,6 +34,10 @@ namespace DungeonPlanet
         private Texture2D _mediTexture, _bombTexture, _shieldTexture;
         private Texture2D _fireTexture, _fireBossTexture;
 
+        internal Texture2D TankFirewave { get; private set; }
+        internal Texture2D TankBullet { get; private set; }
+        Texture2D _end;
+
         private Song backgroundHubSong;
         private Song backgroundBossSong;
         private Song backgroundLevelSong;
@@ -43,6 +49,7 @@ namespace DungeonPlanet
         private Player _player;
         private NPCMarchand _NPCMarchand;
         private NPCWeapon _NPCWeapon;
+        private NPCWeaponSeller _NPCWeaponSeller;
         private NPCTheWise _NPCWise;
         private NPCNarrator _NPCNarrator;
         private Enemy _enemy;
@@ -77,10 +84,12 @@ namespace DungeonPlanet
         public DungeonPlanetGame()
         {
             _graphics = new GraphicsDeviceManager(this);
+            //_graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             //IsMouseVisible = true;
+            
         }
         protected override void Initialize()
         {
@@ -121,10 +130,13 @@ namespace DungeonPlanet
             _hubBackground003 = Content.Load<Texture2D>("hub003");
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
-            Texture2D tankBullet = Content.Load<Texture2D>("TankBullet");
-            Texture2D tankFirewave = Content.Load<Texture2D>("TankFirewave");
+            TankBullet = Content.Load<Texture2D>("TankBullet");
+            TankFirewave = Content.Load<Texture2D>("TankFirewave");
+            Texture2D shotgun = Content.Load<Texture2D>("Shotgun");
+            Texture2D launcher = Content.Load<Texture2D>("Lance Roquette");
             Texture2D narrator = Content.Load<Texture2D>("NPCNarrator");
             Texture2D marchand = Content.Load<Texture2D>("NPCMerchand");
+            Texture2D weaponSeller = Content.Load<Texture2D>("WeaponSeller");
             Texture2D cat = Content.Load<Texture2D>("Cat");
             Texture2D nugget = Content.Load<Texture2D>("Nugget");
             Texture2D bullet = Content.Load<Texture2D>("ItemSetBullet");
@@ -148,16 +160,17 @@ namespace DungeonPlanet
             _player.Shield = _shield;
             _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150);
             _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _enemyWeaponTexture, _bulletETexture, this, 25, 50, 7, 150);
-            _boss = new Boss(tankBullet, tankFirewave, _bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
+            _boss = new Boss(TankBullet, TankFirewave, _bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
 
             _NPCMarchand = new NPCMarchand(marchand, new Vector2(500, 200), _spriteBatch);
-            _NPCWeapon = new NPCWeapon(weapon, new Vector2(350, 200), _spriteBatch);
-            _NPCWise = new NPCTheWise(theWise, new Vector2(750, 200), _spriteBatch);
-            _NPCNarrator = new NPCNarrator(narrator, new Vector2(1000, 200), _spriteBatch);
+            _NPCWeapon = new NPCWeapon(weapon, new Vector2(300, 200), _spriteBatch);
+            _NPCWeaponSeller = new NPCWeaponSeller(weaponSeller, shotgun, launcher, new Vector2(1100, 200), _spriteBatch);
+            _NPCWise = new NPCTheWise(theWise, new Vector2(700, 200), _spriteBatch);
+            _NPCNarrator = new NPCNarrator(narrator, new Vector2(900, 200), _spriteBatch);
 
-            _cat = new SpriteObject(cat, new Vector2(1020, 200), _spriteBatch, 28, 16, 6, 210);
-            _nugget = new SpriteObject(nugget, new Vector2(972, 200), _spriteBatch, 18, 16, 10, 150);
+            _cat = new SpriteObject(cat, new Vector2(920, 200), _spriteBatch, 28, 16, 6, 210);
+            _nugget = new SpriteObject(nugget, new Vector2(872, 200), _spriteBatch, 18, 16, 10, 150);
             _setOfFood = new Sprite(food, new Vector2(450, 535), _spriteBatch);
             _setOfBullet = new Sprite(bullet, new Vector2(300, 545), _spriteBatch);
 
@@ -227,21 +240,36 @@ namespace DungeonPlanet
 
         protected override void Update(GameTime gameTime)
         {
+            _camera.Update(gameTime);
             MediaPlayer.IsRepeating = true;
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
-            _camera.Update(gameTime);
-            _player.Update(gameTime);
-            _shield.Update(gameTime);
+
+         
+
             _menu.Update();
-            if (Level.ActualState == Level.State.Hub)
+            if(Level.ActualState == Level.State.End)
             {
-               for(int x = 0; x < (int)PlayerInfo.Progress; x++)
+                _elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (_elapsedTime > 10000)
+                {
+                    PlayerInfo.Money += 10000;
+                    PlayerInfo.Life = 100;
+                    Level.ActualState = Level.State.Hub;
+                }
+            }
+         
+                if (Level.ActualState == Level.State.Hub)
+            {
+                _player.Update(gameTime);
+                _shield.Update(gameTime);
+                for (int x = 0; x < (int)PlayerInfo.Progress; x++)
                 {
                     if(_door[x] != null)_door[x].Update(gameTime);
                 }
                 _NPCMarchand.Update(gameTime);
                 _NPCWeapon.Update(gameTime);
+                _NPCWeaponSeller.Update(gameTime);
                 _NPCWise.Update(gameTime);
                 _nugget.Update(gameTime);
                 _NPCNarrator.Update(gameTime);
@@ -279,6 +307,8 @@ namespace DungeonPlanet
             }
             if (Level.ActualState == Level.State.Level)
             {
+                _player.Update(gameTime);
+                _shield.Update(gameTime);
                 _door2.Update(gameTime);
                 if (oldcount == null)
                 {
@@ -292,6 +322,8 @@ namespace DungeonPlanet
             }
             if (Level.ActualState == Level.State.BossRoom)
             {
+                _player.Update(gameTime);
+                _shield.Update(gameTime);
                 for (int i = 0; i < Bosses.Count; i++)
                 {
                     if (Bosses[i].BossLib.Life <= 0)
@@ -376,6 +408,21 @@ namespace DungeonPlanet
         }
         internal void RestartLevelOne()
         {
+            UserInterface.Active.Clear();
+            _healthBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
+            _healthBar.ProgressFill.FillColor = Color.Red;
+            _healthBar.Locked = true;
+            _energyBar = new ProgressBar(0, 100, size: new Vector2(400, 40), offset: new Vector2(10, 10));
+            _energyBar.ProgressFill.FillColor = Color.LightSteelBlue;
+            _energyBar.Locked = true;
+            _money = new Paragraph("", offset: new Vector2(10, 10))
+            {
+                Scale = 1
+            };
+            UserInterface.Active.AddEntity(_healthBar);
+            UserInterface.Active.AddEntity(_energyBar);
+            UserInterface.Active.AddEntity(_money);
+            _menu = new Menu(this);
             _player.PlayerInfo.Save(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\SaveDP.sav");
             Level.ActualState = Level.State.Level;
             LoadContent();
@@ -412,8 +459,11 @@ namespace DungeonPlanet
 
         protected override void Draw(GameTime gameTime)
         {
+
             GraphicsDevice.Clear(Color.Black);
+
             _spriteBatch.Begin(_camera);
+
             base.Draw(gameTime);
             if (Level.ActualState == Level.State.Hub)
             {
@@ -423,6 +473,7 @@ namespace DungeonPlanet
                 _NPCWise.Draw();
                 _setOfBullet.Draw();
                 _NPCWeapon.Draw();
+                _NPCWeaponSeller.Draw();
                 _setOfFood.Draw();
                 _NPCMarchand.Draw();
                 _nugget.Draw();
@@ -444,7 +495,7 @@ namespace DungeonPlanet
                 if (Bosses.Count == 0) _door[0].Draw();
             }
             _board.Draw();
-            WriteDebugInformation();
+            //WriteDebugInformation();
             _player.Draw();
             foreach (Enemy enemy in Enemys) enemy.Draw();
             foreach (Boss boss in Bosses) boss.Draw();
@@ -452,9 +503,22 @@ namespace DungeonPlanet
             {
                 if (item != null) item.Draw();
             }
+            
             _spriteBatch.End();
-            _spriteBatch.Draw(_camera.Debug);
             UserInterface.Active.Draw(_spriteBatch);
+            if(Level.ActualState == Level.State.End)
+            {
+                _spriteBatch.Begin(_camera);
+                Rectangle rectange = new Rectangle((int)_camera.GetBounds().X,
+             (int)_camera.GetBounds().Y + 325,
+             (int)(_camera.GetBounds().Width),
+             (int)(_camera.GetBounds().Height));
+                _spriteBatch.Draw(_end, rectange, Color.White);
+
+                _spriteBatch.End();
+            }
+
+            _spriteBatch.Draw(_camera.Debug);
             _camera.Zoom = 1.35f;
             //_camera.Zoom = 0.5f;
         }

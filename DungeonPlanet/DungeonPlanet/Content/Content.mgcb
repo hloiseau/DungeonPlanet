@@ -5233,6 +5233,7 @@
 /build:sprite texture LV1.png
 
 #begin enemyGun.png
+#begin Lance Roquette.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -5243,8 +5244,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:enemyGun.png
+/build:Lance Roquette.png
 
 #begin whiteSkeleton.png
+#begin Shotgun.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -5255,8 +5258,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:whiteSkeleton.png
+/build:Shotgun.png
 
 #begin blueSoldier.png
+#begin WeaponSeller.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -5267,4 +5272,5 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:blueSoldier.png
+/build:WeaponSeller.png
 
