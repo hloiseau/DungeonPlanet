@@ -21,27 +21,31 @@ namespace DungeonPlanet
         public Texture2D _textureWeapon;
         public SpriteBatch _spritebatch;
         public DungeonPlanetGame _ctx;
+
         public Sprite Fire { get; set; }
 
         Player _player;
         int _count;
         string _type;
+        Animation _animation;
 
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, int frameWidth, int frameHeight, int frameCount, int frameTime)
             : base(texture, position, spritebatch)
         {
-            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 30);
+            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 40, texture.Height, 30);
             _player = Player.CurrentPlayer;
             PlayerLib = Player.CurrentPlayer.PlayerLib;
             _count = 0;
             _type = type;
             _spritebatch = spritebatch;
             Fire = new Sprite(fireTexture, new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y), _spritebatch);
+            _animation = new Animation();
+            _animation.Initialize(texture, position, frameWidth, frameHeight, 0, 0, frameCount, frameTime, Color.White, 1, true, true);
         }
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, int frameWidth, int frameHeight, int frameCount, int frameTime)
            : base(texture, position, spritebatch)
         {
-            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), texture.Width, texture.Height, 30);
+            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 22, texture.Height, 30);
             _player = Player.CurrentPlayer;
             PlayerLib = Player.CurrentPlayer.PlayerLib;
             _count = 0;
@@ -52,10 +56,16 @@ namespace DungeonPlanet
             _ctx = ctx;
             WeaponA = new Weapon(_textureWeapon, _textureBullet, _ctx, base.position, _spritebatch, EnemyLib);
             Fire = new Sprite(fireTexture, new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y), _spritebatch);
+            _animation = new Animation();
+            _animation.Initialize(texture, position, frameWidth, frameHeight, 0, 0, frameCount, frameTime, Color.White, 1, true, true);
         }
 
         public void Update(GameTime gameTime)
         {
+            _animation.Update(gameTime);
+            if (WeaponA == null) _animation.Position = new Vector2(EnemyLib.Position.X + 20, EnemyLib.Position.Y + 25);
+            else _animation.Position = new Vector2(EnemyLib.Position.X+15, EnemyLib.Position.Y+25);
+
             if (_ctx != null) EnemyLib.Update(EnemyLib.Position.X - _ctx.GraphicsDevice.Viewport.Width / 2, EnemyLib.Position.Y - _ctx.GraphicsDevice.Viewport.Height / 2);
             CheckKeyboardAndUpdateMovement(gameTime);
             EnemyLib.AffectWithGravity();
@@ -70,6 +80,15 @@ namespace DungeonPlanet
 
         private void CheckKeyboardAndUpdateMovement(GameTime gameTime)
         {
+            if (EnemyLib.Movement.X < -1)
+            {
+                _animation.Effect = SpriteEffects.None;
+            }
+            else if (EnemyLib.Movement.X > 1)
+            {
+                _animation.Effect = SpriteEffects.FlipHorizontally;
+            }
+
             if (EnemyLib.Vision.IntersectsWith(PlayerLib.Bounds))
             {
                 if (_type == "CQC")
@@ -140,9 +159,9 @@ namespace DungeonPlanet
         }
         public override void Draw()
         {
-            base.Draw();
             if (WeaponA != null) WeaponA.Draw();
             if (EnemyLib.State == 1) Fire.Draw();
+            _animation.Draw(SpriteBatch);
         }
     }
 }
