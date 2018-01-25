@@ -17,6 +17,17 @@ namespace DungeonPlanet
     public class DungeonPlanetGame : Game
     {
         private GraphicsDeviceManager _graphics;
+        public GraphicsDeviceManager Graphics
+        {
+            get
+            {
+                return _graphics;
+            }
+            set
+            {
+                _graphics = value;
+            }
+        }
         private SpriteBatch _spriteBatch;
 
         int _elapsedTime;
@@ -75,6 +86,7 @@ namespace DungeonPlanet
         private string oldsing;
         int _elpasedtime;
         int Singingtime;
+
         public PlayerInfo PlayerInfo
         {
             get { return _player.PlayerInfo; }
@@ -203,7 +215,7 @@ namespace DungeonPlanet
 
             if (Level.ActualState == Level.State.Hub)
             {
-                //MediaPlayer.Play(backgroundHubSong);
+                MediaPlayer.Play(backgroundHubSong);
             }
 
             if (Level.ActualState == Level.State.Level)

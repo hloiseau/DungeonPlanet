@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using DungeonPlanet.Library;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
 
@@ -20,6 +22,11 @@ namespace DungeonPlanet
         Button _options;
         Button _quit;
         Button _continue;
+        Panel _pOption;
+        CheckBox _fullscreen;
+        Slider _music;
+        Slider _effect;
+        Button _return;
         DungeonPlanetGame _ctx;
         Level.State _previousState;
         public Menu(DungeonPlanetGame ctx)
@@ -29,16 +36,47 @@ namespace DungeonPlanet
             _panel = new Panel(new Vector2(1300, 750));
             UserInterface.Active.AddEntity(_panel);
             _panel.AddChild(new Header("Dungeon Planet"));
-            _continue = new Button("Reprendre", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _panel.AddChild(new LineSpace());
+            _panel.AddChild(new HorizontalLine());
+            _panel.AddChild(new LineSpace());
+            _continue = new Button("Reprendre", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 120));
             _panel.AddChild(_continue);
-            _newGame = new Button("Nouvelle Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _newGame = new Button("Nouvelle Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 120));
             _panel.AddChild(_newGame);
-            _loadGame = new Button("Charger Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _loadGame = new Button("Charger Partie", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 120));
             _panel.AddChild(_loadGame);
-            _options = new Button("Option", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _options = new Button("Option", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 120));
             _panel.AddChild(_options);
-            _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 125));
+            _quit = new Button("Quitter", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(1000, 120));
             _panel.AddChild(_quit);
+
+            _pOption = new Panel(new Vector2(1300, 750));
+            UserInterface.Active.AddEntity(_pOption);
+            _pOption.AddChild(new Header("Options"));
+            _fullscreen = new CheckBox("Pleine Ecran");
+            _pOption.AddChild(new LineSpace());
+            _pOption.AddChild(new HorizontalLine());
+            _pOption.AddChild(new LineSpace());
+            _pOption.AddChild(_fullscreen);
+            _fullscreen.Checked = _ctx.Graphics.IsFullScreen;
+            _pOption.AddChild(new LineSpace());
+            _pOption.AddChild(new HorizontalLine());
+            _pOption.AddChild(new LineSpace());
+            _pOption.AddChild(new Paragraph("Volume de la musique"));
+            _music = new Slider(0, 100);
+            _pOption.AddChild(_music);
+            _music.Value = (int)MediaPlayer.Volume * 100;
+            _pOption.AddChild(new HorizontalLine());
+            _pOption.AddChild(new Paragraph("Volume des effets sonores"));
+            _effect = new Slider(0, 100);
+            _pOption.AddChild(_effect);
+            _effect.Value = (int)SoundEffect.MasterVolume * 100;
+            _pOption.AddChild(new LineSpace());
+            _pOption.AddChild(new HorizontalLine());
+            _pOption.AddChild(new LineSpace());
+            _return = new Button("Retour");
+            _pOption.AddChild(_return);
+            _pOption.Visible = false;
 
         }
         internal Level.State PreviousState
@@ -65,6 +103,7 @@ namespace DungeonPlanet
                 if (Level.ActualState != Level.State.Menu)
                 {
                     _panel.Visible = false;
+                    _pOption.Visible = false;
                     _continue.Visible = false;
                 }
                 else
@@ -84,6 +123,25 @@ namespace DungeonPlanet
                         _panel.Visible = false;
                         _continue.Visible = false;
                     };
+                    _options.OnClick = (Entity btn) =>
+                    {
+                        _panel.Visible = false;
+                        _pOption.Visible = true;
+                    };
+                    if (_pOption.Visible)
+                    {
+                        _return.OnClick = (Entity btn) =>
+                        {
+                            _panel.Visible = true;
+                            _pOption.Visible = false;
+                        };
+                        _fullscreen.OnValueChange = (Entity btn) =>
+                        {
+                            _ctx.Graphics.ToggleFullScreen();
+                        };
+                        SoundEffect.MasterVolume = (float)_effect.Value / 100;
+                        MediaPlayer.Volume = (float)_music.Value / 100;
+                    }
                     _quit.OnClick = (Entity btn) =>
                     {
                         _ctx.Exit();
