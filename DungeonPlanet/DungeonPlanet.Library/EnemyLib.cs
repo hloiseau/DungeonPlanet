@@ -31,7 +31,7 @@ namespace DungeonPlanet.Library
 
         public Rectangle Vision
         {
-            get { return new Rectangle((int)Position.X - 375, (int)Position.Y, _width * 20, _height); }
+            get { return new Rectangle((int)Position.X - (_width * 10), (int)Position.Y - (_height*10), _width * 20, _height *20); }
         }
 
         public EnemyLib(Vector2 position, int width, int height,int life)

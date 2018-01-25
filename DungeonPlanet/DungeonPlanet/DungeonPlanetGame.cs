@@ -153,6 +153,7 @@ namespace DungeonPlanet
             Texture2D nugget = Content.Load<Texture2D>("Nugget");
             Texture2D bullet = Content.Load<Texture2D>("ItemSetBullet");
             Texture2D food = Content.Load<Texture2D>("ItemSetFood");
+            _end = Content.Load<Texture2D>("end1");
             _enemyTexture = Content.Load<Texture2D>("blueSoldier");
             _enemyTexture2 = Content.Load<Texture2D>("whiteSkeleton");
             _bossTexture = Content.Load<Texture2D>("Tank");
