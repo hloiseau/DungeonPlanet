@@ -64,13 +64,13 @@ namespace DungeonPlanet.Library
                     if ((x == 0 && (_direction & Path.Direction.Left) == Path.Direction.None) || (x == _columns - 1 && (_direction & Path.Direction.Right) == Path.Direction.None))
                     {
                         Tiles[x, y].IsBlocked = true;
-                        Tiles[x, y].Type = Tile.TypeSet.Wall;
+                        Tiles[x, y].Type = Tile.TypeSet.Platform;
                     }
 
                     if ((y == 0 && (_direction & Path.Direction.Top) == Path.Direction.None) || (y == _rows - 1 && (_direction & Path.Direction.Bottom) == Path.Direction.None))
                     {
                         Tiles[x, y].IsBlocked = true;
-                        Tiles[x, y].Type = Tile.TypeSet.Wall;
+                        Tiles[x, y].Type = Tile.TypeSet.Platform;
                     }
                 }
             }

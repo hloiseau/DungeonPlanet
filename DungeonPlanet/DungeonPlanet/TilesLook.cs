@@ -56,16 +56,18 @@ namespace DungeonPlanet.Library
             _spriteSheet = texture;
 
             // Grab the correct frame in the image strip by multiplying the currentFrame index by the Frame width
-            if (tileType == Tile.TypeSet.Invisible)
-            {
-                _currentFrameCol = 1;
-                _currentFrameLin = 0;
-            }
+            
             if (tileType == Tile.TypeSet.External)
             {
                 _currentFrameCol = 0;
                 _currentFrameLin = 0;
             }
+            if (tileType == Tile.TypeSet.Invisible)
+            {
+                _currentFrameCol = 1;
+                _currentFrameLin = 0;
+            }
+
             if (tileType == Tile.TypeSet.Wall)
             {
                 _currentFrameCol = 0;
@@ -74,22 +76,28 @@ namespace DungeonPlanet.Library
             if (tileType == Tile.TypeSet.Platform)
             {
                 int i = Level.CurrentBoard.GetNext(0,6);
-                if (i <= 1)
+                if (i == 0)
                 {
                     _currentFrameCol = 1;
                     _currentFrameLin = 1;
                 }
-                if (i >= 2 && i <= 4)
+                if (i == 1)
                 {
                     _currentFrameCol = 2;
                     _currentFrameLin = 1;
                 }
-                if (i >= 5 && i <= 6)
+                if (i >= 2 && i <= 6)
                 {
                     _currentFrameCol = 3;
                     _currentFrameLin = 1;
                 }
             }
+            if (tileType == Tile.TypeSet.Background)
+            {
+                _currentFrameCol = 4;
+                _currentFrameLin = 1;
+            }
+
             _sourceRect = new Rectangle(_currentFrameCol * _frameWidth, _currentFrameLin * _frameHeight, _frameWidth, _frameHeight);
 
             // Grab the correct frame in the image strip by multiplying the currentFrame index by the frame width
