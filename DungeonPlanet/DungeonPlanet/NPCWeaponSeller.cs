@@ -161,13 +161,13 @@ namespace DungeonPlanet
                         _headerMessage.Visible = false;
 
                     }
-                    if (_header != null)
-                    {
-                        UserInterface.Active.RemoveEntity(_header);
-                        _header = null;
-                    }
+                   
                 }
-               
+                if (_header != null)
+                {
+                    UserInterface.Active.RemoveEntity(_header);
+                    _header = null;
+                }
             }
             else if (NPCPanel != null && (keyboardState.IsKeyDown(Keys.R) || keyboardState.IsKeyDown(Keys.Escape)))
             {
