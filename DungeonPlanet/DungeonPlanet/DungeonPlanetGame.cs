@@ -245,7 +245,7 @@ namespace DungeonPlanet
                     Items.Add(mediPack);
                 }
                 _player.Shield = _shield;
-                //MediaPlayer.Play(backgroundLevelSong);
+                MediaPlayer.Play(backgroundLevelSong);
             }
         }
         public void Reload() => LoadContent();

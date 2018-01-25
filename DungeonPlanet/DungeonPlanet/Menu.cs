@@ -65,12 +65,12 @@ namespace DungeonPlanet
             _pOption.AddChild(new Paragraph("Volume de la musique"));
             _music = new Slider(0, 100);
             _pOption.AddChild(_music);
-            _music.Value = (int)MediaPlayer.Volume * 100;
+            _music.Value = (int)(MediaPlayer.Volume * 100);
             _pOption.AddChild(new HorizontalLine());
             _pOption.AddChild(new Paragraph("Volume des effets sonores"));
             _effect = new Slider(0, 100);
             _pOption.AddChild(_effect);
-            _effect.Value = (int)SoundEffect.MasterVolume * 100;
+            _effect.Value = (int)(SoundEffect.MasterVolume * 100);
             _pOption.AddChild(new LineSpace());
             _pOption.AddChild(new HorizontalLine());
             _pOption.AddChild(new LineSpace());
