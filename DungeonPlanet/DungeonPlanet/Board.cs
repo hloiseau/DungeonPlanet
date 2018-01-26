@@ -20,15 +20,22 @@ namespace DungeonPlanet
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
         List<TilesLook> _tilesLookList;
-
-        public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
+        Rectangle _rectange;
+        DungeonPlanetGame _ctx;
+        public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows, DungeonPlanetGame ctx)
         {
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
             Level = new Level();
             _tilesLookList = new List<TilesLook>();
             CreateNewBoard();
-            Board.CurrentBoard = this;
+            CurrentBoard = this;
+            _ctx = ctx;
+            if(ctx._camera != null)
+            _rectange = new Rectangle((int)ctx._camera.GetBounds().X,
+             (int)ctx._camera.GetBounds().Y + 325,
+             (int)(ctx._camera.GetBounds().Width),
+             (int)(ctx._camera.GetBounds().Height));
         }
 
         public void CreateNewBoard()
@@ -44,6 +51,7 @@ namespace DungeonPlanet
                 {
                     if (tile.IsBlocked)
                     {
+
                         TilesLook tileLook = new TilesLook(TileTexture, tile.Position.X, tile.Position.Y, tile.Type, Color.White);
                         _tilesLookList.Add(tileLook);
                     }
@@ -70,8 +78,13 @@ namespace DungeonPlanet
                 || Level.ActualState == Level.State.BossRoom
                 || Level.ActualState == Level.State.Level )
             {
+                _rectange = new Rectangle((int)_ctx._camera.GetBounds().X,
+             (int)_ctx._camera.GetBounds().Y + 325,
+             (int)(_ctx._camera.GetBounds().Width),
+             (int)(_ctx._camera.GetBounds().Height));
                 foreach (var t in _tilesLookList)
                 {
+                    if(_rectange.Intersects(t.DestinationRectangle))
                     t.Draw(SpriteBatch);
                 }
             }

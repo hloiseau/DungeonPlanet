@@ -71,7 +71,7 @@ namespace DungeonPlanet
         private MediPack _mediPack;
         private Shield _shield;
         private SpriteFont _debugFont;
-        private Camera _camera;
+        internal Camera _camera;
         private ProgressBar _healthBar;
         private ProgressBar _energyBar;
         private Door[] _door;
@@ -167,7 +167,7 @@ namespace DungeonPlanet
             _fireTexture = Content.Load<Texture2D>("fire");
             _fireBossTexture = Content.Load<Texture2D>("fireBoss");
 
-            _board = new Board(_spriteBatch, _tileTexture, 2, 2);
+            _board = new Board(_spriteBatch, _tileTexture, 2, 2, this);
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
