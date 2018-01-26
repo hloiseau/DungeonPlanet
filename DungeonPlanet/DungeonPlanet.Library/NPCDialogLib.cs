@@ -39,9 +39,9 @@ namespace DungeonPlanet.Library
 
         public string ChooseSentenceForChronicler()
         {
-            _chroniclerLine.Add("Bonjour chere scientifique ! Que puis-je pour vous aujourd hui ?");
-            _chroniclerLine.Add("");
-            _chroniclerLine.Add("");
+            _chroniclerLine.Add("Bonjour chere scientifique ! Je vois que l'atterissage a ete brutal...");
+            _chroniclerLine.Add("Vous etes comme nous maintenant, bloque sur cette planete ! Le seul moyen de repartir est de recuperer le cristal au centre de la planete. Il vous permettra de repartir et de sauver votre monde !");
+            _chroniclerLine.Add("Pourquoi un cristal ? Il parait qu'au centre centre de cette planete, il se trouve un cristal d energie. Celle-ci semble assez puissante !");
 
             string toSay = _chroniclerLine[_cursor];
 

@@ -37,7 +37,7 @@ namespace DungeonPlanet
 
         public void ShowMessage()
         {
-            _header = new Header("Appuyer sur E pour parler", Anchor.AutoCenter);
+            _header = new Header("Appuyer sur E pour connaitre l histoire", Anchor.AutoCenter);
             UserInterface.Active.AddEntity(_header);
         }
 
