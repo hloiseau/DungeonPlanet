@@ -346,7 +346,7 @@ namespace DungeonPlanet
                     }
                     else
                     {
-                        if (IsOnScreen(Bosses[i].position))
+                       
                             Bosses[i].Update(gameTime);
                     }
                 }
@@ -363,14 +363,13 @@ namespace DungeonPlanet
                 }
                 else
                 {
-                    if (IsOnScreen(Enemys[i].position))
                         Enemys[i].Update(gameTime);
                 }
             }
 
             for (int i = 0; i < Items.Count; i++)
             {
-                if (IsOnScreen(Items[i].position))
+               
                     Items[i].Update(gameTime);
                 if (Items[i].IsFinished && !(Items[i] is Shield))
                 {
@@ -391,10 +390,13 @@ namespace DungeonPlanet
             
         }
 
-        private bool IsOnScreen(Vector2 position)
+        internal bool IsOnScreen(Rectangle position)
         {
-            _camera.ToScreen(ref position, out Vector2 screenPosition);
-            if (_camera.Position.X - _camera.Width / 2 > screenPosition.X || screenPosition.X < _camera.Position.X + _camera.Width / 2 || _camera.Position.Y - _camera.Height / 2 > screenPosition.Y || screenPosition.Y < _camera.Position.Y + _camera.Height / 2)
+            Rectangle rectange = new Rectangle((int)_camera.GetBounds().X,
+                        (int)_camera.GetBounds().Y + 325,
+                        (int)(_camera.GetBounds().Width),
+                        (int)(_camera.GetBounds().Height));
+            if (rectange.Intersects(position))
             {
                 return true;
             }
@@ -504,17 +506,16 @@ namespace DungeonPlanet
             }
             if (Level.ActualState == Level.State.BossRoom)
             {
-                foreach (Boss boss in Bosses) boss.Draw();
+                foreach (Boss boss in Bosses) if(IsOnScreen(new Rectangle(boss.BossLib.Bounds.X, boss.BossLib.Bounds.Y, boss.BossLib.Bounds.Width, boss.BossLib.Bounds.Height)))boss.Draw();
                 if (Bosses.Count == 0) _door[0].Draw();
             }
             _board.Draw();
             //WriteDebugInformation();
             _player.Draw();
-            foreach (Enemy enemy in Enemys) enemy.Draw();
-            foreach (Boss boss in Bosses) boss.Draw();
+            foreach (Enemy enemy in Enemys)  enemy.Draw();
             foreach (Item item in Items)
             {
-                if (item != null) item.Draw();
+                if (item != null && IsOnScreen(new Rectangle(item.ItemLib.Bounds.X, item.ItemLib.Bounds.Y, item.ItemLib.Bounds.Width, item.ItemLib.Bounds.Height))) item.Draw();
             }
             
             _spriteBatch.End();

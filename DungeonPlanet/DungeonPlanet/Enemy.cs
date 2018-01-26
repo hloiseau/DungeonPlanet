@@ -160,8 +160,12 @@ namespace DungeonPlanet
         public override void Draw()
         {
             if (WeaponA != null) WeaponA.Draw();
-            if (EnemyLib.State == 1) Fire.Draw();
-            _animation.Draw(SpriteBatch);
+            if(_ctx != null)
+            if (_ctx.IsOnScreen(new Rectangle(EnemyLib.Bounds.X, EnemyLib.Bounds.Y, EnemyLib.Bounds.Width, EnemyLib.Bounds.Height)))
+            {
+                if (EnemyLib.State == 1) Fire.Draw();
+                _animation.Draw(SpriteBatch);
+            }
         }
     }
 }

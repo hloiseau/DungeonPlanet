@@ -205,13 +205,14 @@ namespace DungeonPlanet
         {
             foreach (Bullet bullet in Bullets)
             {
-                bullet.Draw();
+                    bullet.Draw();
             }
             foreach (Bullet bulletE in BulletsEnemy)
             {
                 bulletE.Draw();
             }
-            SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, _effect, 0);
+
+                SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, _effect, 0);
 
         }
     }
