@@ -533,7 +533,7 @@ namespace DungeonPlanet
 
             _spriteBatch.Draw(_camera.Debug);
             _camera.Zoom = 1.35f;
-            //_camera.Zoom = 0.5f;
+            //_camera.Zoom = 0.25f;
         }
 
         private void WriteDebugInformation()
