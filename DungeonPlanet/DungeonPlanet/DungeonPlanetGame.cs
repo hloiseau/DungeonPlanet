@@ -101,7 +101,7 @@ namespace DungeonPlanet
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             //IsMouseVisible = true;
-            
+
         }
         protected override void Initialize()
         {
@@ -171,7 +171,7 @@ namespace DungeonPlanet
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
-            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150);
+            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150, this);
             _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _enemyWeaponTexture, _bulletETexture, this, 25, 50, 7, 150);
             _boss = new Boss(TankBullet, TankFirewave, _bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
@@ -190,8 +190,8 @@ namespace DungeonPlanet
             _door = new Door[5];
             for (int x = 0; x < _door.Length; x++)
             {
-                if(Level.ActualState == Level.State.Hub || (Level.ActualState == Level.State.BossRoom && x == 0))
-                _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1625 + x * 180, 200), _spriteBatch, this, (Level.LevelID)x+1);
+                if (Level.ActualState == Level.State.Hub || (Level.ActualState == Level.State.BossRoom && x == 0))
+                    _door[x] = new Door(Content.Load<Texture2D>("door"), new Vector2(1625 + x * 180, 200), _spriteBatch, this, (Level.LevelID)x + 1);
             }
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
@@ -202,7 +202,7 @@ namespace DungeonPlanet
             GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
             GrandpaSingingJhonny = Content.Load<SoundEffect>("GrandpaSingingJhonny");
             GrandpaSingingGanon = Content.Load<SoundEffect>("Ganon");
-            
+
             backgroundBossSong = Content.Load<Song>("backgroundBossSong");
             backgroundHubSong = Content.Load<Song>("backgroundHubSong");
             backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
@@ -228,7 +228,7 @@ namespace DungeonPlanet
 
                     if (Level.CurrentBoard.GetNext(0, 2) == 0)
                     {
-                        enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150);
+                        enemy = new Enemy(_enemyTexture, new Vector2(tile.Position.X, tile.Position.Y), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150, this);
 
                     }
                     else
@@ -257,11 +257,8 @@ namespace DungeonPlanet
             MediaPlayer.IsRepeating = true;
             base.Update(gameTime);
             UserInterface.Active.Update(gameTime);
-
-         
-
             _menu.Update();
-            if(Level.ActualState == Level.State.End)
+            if (Level.ActualState == Level.State.End)
             {
                 _elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (_elapsedTime > 10000)
@@ -271,14 +268,14 @@ namespace DungeonPlanet
                     Level.ActualState = Level.State.Hub;
                 }
             }
-         
-                if (Level.ActualState == Level.State.Hub)
+
+            if (Level.ActualState == Level.State.Hub)
             {
                 _player.Update(gameTime);
                 _shield.Update(gameTime);
                 for (int x = 0; x < (int)PlayerInfo.Progress; x++)
                 {
-                    if(_door[x] != null)_door[x].Update(gameTime);
+                    if (_door[x] != null) _door[x].Update(gameTime);
                 }
                 _NPCMarchand.Update(gameTime);
                 _NPCWeapon.Update(gameTime);
@@ -304,7 +301,7 @@ namespace DungeonPlanet
                     Singingtime = _elpasedtime + 3000;
                     oldsing = NPCTheWise.SingingLine;
                 }
-                else 
+                else
                 {
                     oldsing = NPCTheWise.SingingLine;
                 }
@@ -346,11 +343,11 @@ namespace DungeonPlanet
                     }
                     else
                     {
-                       
-                            Bosses[i].Update(gameTime);
+
+                        Bosses[i].Update(gameTime);
                     }
                 }
-                if (Bosses.Count == 0)_door[0].Update(gameTime);
+                if (Bosses.Count == 0) _door[0].Update(gameTime);
 
             }
 
@@ -363,14 +360,14 @@ namespace DungeonPlanet
                 }
                 else
                 {
-                        Enemys[i].Update(gameTime);
+                    Enemys[i].Update(gameTime);
                 }
             }
 
             for (int i = 0; i < Items.Count; i++)
             {
-               
-                    Items[i].Update(gameTime);
+
+                Items[i].Update(gameTime);
                 if (Items[i].IsFinished && !(Items[i] is Shield))
                 {
                     Items.Remove(Items[i]);
@@ -387,7 +384,7 @@ namespace DungeonPlanet
             _energyBar.Value = _player.PlayerInfo.Energy;
             _money.Text = string.Format("Coins : {0}", _player.PlayerInfo.Money);
             CheckKeyboardAndReact();
-            
+
         }
 
         internal bool IsOnScreen(Rectangle position)
@@ -506,21 +503,21 @@ namespace DungeonPlanet
             }
             if (Level.ActualState == Level.State.BossRoom)
             {
-                foreach (Boss boss in Bosses) if(IsOnScreen(new Rectangle(boss.BossLib.Bounds.X, boss.BossLib.Bounds.Y, boss.BossLib.Bounds.Width, boss.BossLib.Bounds.Height)))boss.Draw();
+                foreach (Boss boss in Bosses) boss.Draw();
                 if (Bosses.Count == 0) _door[0].Draw();
             }
             _board.Draw();
             //WriteDebugInformation();
             _player.Draw();
-            foreach (Enemy enemy in Enemys)  enemy.Draw();
+            foreach (Enemy enemy in Enemys) enemy.Draw();
             foreach (Item item in Items)
             {
                 if (item != null && IsOnScreen(new Rectangle(item.ItemLib.Bounds.X, item.ItemLib.Bounds.Y, item.ItemLib.Bounds.Width, item.ItemLib.Bounds.Height))) item.Draw();
             }
-            
+
             _spriteBatch.End();
             UserInterface.Active.Draw(_spriteBatch);
-            if(Level.ActualState == Level.State.End)
+            if (Level.ActualState == Level.State.End)
             {
                 _spriteBatch.Begin(_camera);
                 Rectangle rectange = new Rectangle((int)_camera.GetBounds().X,
@@ -555,7 +552,7 @@ namespace DungeonPlanet
                 DrawWithShadow(enemyLifeText, new Vector2(70, 640));
             }
             string bossLifeText = string.Format("BLife: {0}/200", _boss.BossLib.Life);
-            
+
             DrawWithShadow(positionInText, new Vector2(10, 0));
             DrawWithShadow(movementInText, new Vector2(10, 20));
             DrawWithShadow(isOnFirmGroundText, new Vector2(10, 40));

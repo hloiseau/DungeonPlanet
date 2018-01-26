@@ -29,13 +29,14 @@ namespace DungeonPlanet
         string _type;
         Animation _animation;
 
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, int frameWidth, int frameHeight, int frameCount, int frameTime)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, int frameWidth, int frameHeight, int frameCount, int frameTime, DungeonPlanetGame ctx)
             : base(texture, position, spritebatch)
         {
             EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 40, texture.Height, 30);
             _player = Player.CurrentPlayer;
             PlayerLib = Player.CurrentPlayer.PlayerLib;
             _count = 0;
+            _ctx = ctx;
             _type = type;
             _spritebatch = spritebatch;
             Fire = new Sprite(fireTexture, new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y), _spritebatch);
@@ -160,7 +161,6 @@ namespace DungeonPlanet
         public override void Draw()
         {
             if (WeaponA != null) WeaponA.Draw();
-            if(_ctx != null)
             if (_ctx.IsOnScreen(new Rectangle(EnemyLib.Bounds.X, EnemyLib.Bounds.Y, EnemyLib.Bounds.Width, EnemyLib.Bounds.Height)))
             {
                 if (EnemyLib.State == 1) Fire.Draw();
