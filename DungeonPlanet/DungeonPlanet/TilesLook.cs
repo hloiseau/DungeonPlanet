@@ -151,5 +151,9 @@ namespace DungeonPlanet.Library
             get { return _currentFrameCol; }
             set { _currentFrameCol = value; }
         }
+        internal Rectangle DestinationRectangle
+        {
+            get { return _destinationRect; }
+        }
     }
 }
