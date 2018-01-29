@@ -26,7 +26,7 @@ namespace DungeonPlanet.Library
         public enum State
         {
             Menu,
-            Hub, 
+            Hub,
             Level,
             BossRoom,
             End
@@ -71,7 +71,7 @@ namespace DungeonPlanet.Library
                     rows = 0;
                     break;
             };
-                
+
             _columns = columns;
             _rows = rows;
 
@@ -86,13 +86,13 @@ namespace DungeonPlanet.Library
 
         public void NewLevel()
         {
-            if(ActualState == State.Hub || ActualState == State.BossRoom)
+            if (ActualState == State.Hub || ActualState == State.BossRoom)
             {
                 Hub.InitializeAllTilesAndBlockSomeRandomly();
                 Hub.SetAllBorderTilesBlocked();
                 Hub.SetTopLeftTileUnblocked();
             }
-            else if(ActualState == State.Level)
+            else if (ActualState == State.Level)
             {
                 _path.InitializeBoard();
                 _path.CreatePath();
@@ -122,17 +122,17 @@ namespace DungeonPlanet.Library
                 }
             }
             return null;
-            
+
         }
         public Tile[,] Spawnable()
         {
-            Tile[,] emptyTiles = new Tile[_columns*20,_rows*14];
-            foreach(Case Case in Cases)
+            Tile[,] emptyTiles = new Tile[_columns * 20, _rows * 14];
+            foreach (Case Case in Cases)
             {
-                foreach(Tile tile in Case.Tiles)
+                foreach (Tile tile in Case.Tiles)
                 {
-                    if(!tile.IsBlocked)
-                    emptyTiles[(int)tile.Position.X / 64, (int)tile.Position.Y / 64] = tile;
+                    if (!tile.IsBlocked)
+                        emptyTiles[(int)tile.Position.X / 64, (int)tile.Position.Y / 64] = tile;
                 }
             }
             return emptyTiles;

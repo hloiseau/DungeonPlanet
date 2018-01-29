@@ -36,6 +36,12 @@ namespace DungeonPlanet
         private Texture2D _hubBackground002;
         private Texture2D _hubBackground003;
 
+        private Texture2D _levelBackground01;
+        private Texture2D _levelBackground02;
+        private Texture2D _levelBackground03;
+        private Texture2D _levelBackground04;
+        private Texture2D _levelBackground05;
+
         private SpriteObject _cat;
         private SpriteObject _nugget;
         private Sprite _setOfBullet;
@@ -51,7 +57,11 @@ namespace DungeonPlanet
 
         private Song backgroundHubSong;
         private Song backgroundBossSong;
-        private Song backgroundLevelSong;
+        private Song backgroundLevel1Song;
+        private Song backgroundLevel2Song;
+        private Song backgroundLevel3Song;
+        private Song backgroundLevel4Song;
+        private Song backgroundLevel5Song;
 
         private SoundEffect GunSoundEfect;
         private SoundEffect GrandpaSingingJhonny;
@@ -140,6 +150,13 @@ namespace DungeonPlanet
             _hubBackground001 = Content.Load<Texture2D>("hub001");
             _hubBackground002 = Content.Load<Texture2D>("hub002");
             _hubBackground003 = Content.Load<Texture2D>("hub003");
+
+            _levelBackground01 = Content.Load<Texture2D>("level01");
+            _levelBackground02 = Content.Load<Texture2D>("level02");
+            //_levelBackground03 = Content.Load<Texture2D>("level03");
+            //_levelBackground04 = Content.Load<Texture2D>("level04");
+            //_levelBackground05 = Content.Load<Texture2D>("level05");
+
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
             TankBullet = Content.Load<Texture2D>("TankBullet");
@@ -205,7 +222,11 @@ namespace DungeonPlanet
 
             backgroundBossSong = Content.Load<Song>("backgroundBossSong");
             backgroundHubSong = Content.Load<Song>("backgroundHubSong");
-            backgroundLevelSong = Content.Load<Song>("backgroundLevelSong");
+            backgroundLevel1Song = Content.Load<Song>("backgroundLevel1Song");
+            backgroundLevel2Song = Content.Load<Song>("backgroundLevel2Song");
+            backgroundLevel3Song = Content.Load<Song>("backgroundLevel3Song");
+            backgroundLevel4Song = Content.Load<Song>("backgroundLevel4Song");
+            backgroundLevel5Song = Content.Load<Song>("backgroundLevel5Song");
 
 
             if (Level.ActualState == Level.State.BossRoom)
@@ -246,7 +267,27 @@ namespace DungeonPlanet
                     Items.Add(mediPack);
                 }
                 _player.Shield = _shield;
-                MediaPlayer.Play(backgroundLevelSong);
+
+                if (Level.ID == Level.LevelID.One)
+                {
+                    MediaPlayer.Play(backgroundLevel1Song);
+                }
+                else if (Level.ID == Level.LevelID.Two)
+                {
+                    MediaPlayer.Play(backgroundLevel2Song);
+                }
+                else if (Level.ID == Level.LevelID.Three)
+                {
+                    MediaPlayer.Play(backgroundLevel3Song);
+                }
+                else if (Level.ID == Level.LevelID.Four)
+                {
+                    MediaPlayer.Play(backgroundLevel4Song);
+                }
+                else if (Level.ID == Level.LevelID.Five)
+                {
+                    MediaPlayer.Play(backgroundLevel5Song);
+                }
             }
         }
         public void Reload() => LoadContent();
@@ -469,9 +510,23 @@ namespace DungeonPlanet
             _player.PlayerLib.Movement = System.Numerics.Vector2.Zero;
         }
 
+        int test2048 = 0;
+
+        void DrawLevelBackground()
+        {
+            Vector2 _spawnPoint;
+            _spawnPoint = new Vector2(-2048, -2048);
+            for (int i = 0; i <= (Level._levelRows * 3); i++)
+            {
+                for (int j = 0; j <= (Level._levelColumns * 4); j++)
+                {
+                    _spriteBatch.Draw(_levelBackground01, new Vector2((_levelBackground01.Height * j) + _spawnPoint.X, _spawnPoint.Y + (_levelBackground01.Width * i)), Color.White);
+                }
+            }
+        }
+
         protected override void Draw(GameTime gameTime)
         {
-
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(_camera);
@@ -499,6 +554,7 @@ namespace DungeonPlanet
             }
             if (Level.ActualState == Level.State.Level)
             {
+                DrawLevelBackground();
                 _door2.Draw();
             }
             if (Level.ActualState == Level.State.BossRoom)
