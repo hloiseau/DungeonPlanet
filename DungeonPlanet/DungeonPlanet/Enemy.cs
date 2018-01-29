@@ -29,10 +29,10 @@ namespace DungeonPlanet
         string _type;
         Animation _animation;
 
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, int frameWidth, int frameHeight, int frameCount, int frameTime, DungeonPlanetGame ctx)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, int frameWidth, int frameHeight,int numberLin, int frameCount, int frameTime, DungeonPlanetGame ctx)
             : base(texture, position, spritebatch)
         {
-            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 40, texture.Height, 30);
+            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 40, 55, 30);
             _player = Player.CurrentPlayer;
             PlayerLib = Player.CurrentPlayer.PlayerLib;
             _count = 0;
@@ -41,12 +41,12 @@ namespace DungeonPlanet
             _spritebatch = spritebatch;
             Fire = new Sprite(fireTexture, new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y), _spritebatch);
             _animation = new Animation();
-            _animation.Initialize(texture, position, frameWidth, frameHeight, 0, 0, frameCount, frameTime, Color.White, 1, true, true);
+            _animation.Initialize(texture, position, frameWidth, frameHeight, 0, numberLin, frameCount, frameTime, Color.White, 1, true, true);
         }
-        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, int frameWidth, int frameHeight, int frameCount, int frameTime)
+        public Enemy(Texture2D texture, Vector2 position, SpriteBatch spritebatch, string type, Texture2D fireTexture, Texture2D textureWeapon, Texture2D textureBullet, DungeonPlanetGame ctx, int frameWidth, int frameHeight, int numberLin, int frameCount, int frameTime)
            : base(texture, position, spritebatch)
         {
-            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 22, texture.Height, 30);
+            EnemyLib = new EnemyLib(new System.Numerics.Vector2(position.X, position.Y), 22, 49, 30);
             _player = Player.CurrentPlayer;
             PlayerLib = Player.CurrentPlayer.PlayerLib;
             _count = 0;
@@ -58,7 +58,7 @@ namespace DungeonPlanet
             WeaponA = new Weapon(_textureWeapon, _textureBullet, _ctx, base.position, _spritebatch, EnemyLib);
             Fire = new Sprite(fireTexture, new Vector2(EnemyLib.Position.X, EnemyLib.Position.Y), _spritebatch);
             _animation = new Animation();
-            _animation.Initialize(texture, position, frameWidth, frameHeight, 0, 0, frameCount, frameTime, Color.White, 1, true, true);
+            _animation.Initialize(texture, position, frameWidth, frameHeight, 0, numberLin, frameCount, frameTime, Color.White, 1, true, true);
         }
 
         public void Update(GameTime gameTime)
