@@ -38,9 +38,9 @@ namespace DungeonPlanet.Library
             Life = 100;
             Money = 0;
             Energy = 100;
-            Progress = Level.LevelID.One;
+            Progress = Level.LevelID.Five;
         }
-       
+        
         public void Save(string filePath)
         {
             BinaryFormatter f = new BinaryFormatter();
