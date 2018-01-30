@@ -13,23 +13,71 @@ namespace DungeonPlanet.Library
     {
         int _columns;
         int _rows;
+        public static int _levelRows;
+        public static int _levelColumns;
         Path _path;
         Random _random = new Random();
         public Case[,] Cases { get; private set; }
         public Tile[,] EmptyTiles { get; private set; }
         public static Level CurrentBoard { get; private set; }
         public static State ActualState { get; set; }
+        public static LevelID ID { get; set; }
         public Hub Hub { get; private set; }
         public enum State
         {
             Menu,
-            Hub, 
-            LevelOne
+            Hub,
+            Level,
+            BossRoom,
+            End
         }
-        public Level(int columns, int rows)
+        public enum LevelID
         {
+            None = 0,
+            One = 1,
+            Two = 2,
+            Three = 3,
+            Four = 4,
+            Five = 5,
+        }
+        public Level()
+        {
+            int columns = 0;
+            int rows = 0;
+            switch (ID)
+            {
+                case LevelID.One:
+                    columns = 4;
+                    rows = 4;
+                    break;
+                case LevelID.Two:
+                    columns = 8;
+                    rows = 4;
+                    break;
+                case LevelID.Three:
+                    columns = 4;
+                    rows = 8;
+                    break;
+                case LevelID.Four:
+                    columns = 6;
+                    rows = 6;
+                    break;
+                case LevelID.Five:
+                    columns = 7;
+                    rows = 7;
+                    break;
+                default:
+                    columns = 0;
+                    rows = 0;
+                    break;
+            };
+
             _columns = columns;
             _rows = rows;
+
+            _levelColumns = columns;
+            _levelRows = rows;
+
             _path = new Path(columns, rows, this);
             Cases = new Case[columns, rows];
             Hub = new Hub(10, 40);
@@ -38,13 +86,13 @@ namespace DungeonPlanet.Library
 
         public void NewLevel()
         {
-            if(ActualState == State.Hub)
+            if (ActualState == State.Hub || ActualState == State.BossRoom)
             {
                 Hub.InitializeAllTilesAndBlockSomeRandomly();
                 Hub.SetAllBorderTilesBlocked();
                 Hub.SetTopLeftTileUnblocked();
             }
-            else if(ActualState == State.LevelOne)
+            else if (ActualState == State.Level)
             {
                 _path.InitializeBoard();
                 _path.CreatePath();
@@ -52,7 +100,7 @@ namespace DungeonPlanet.Library
                 {
                     for (int y = 0; y < _rows; y++)
                     {
-                        Cases[x, y] = new Case(14, 20, _path.Board[y, x], this, x, y);
+                        Cases[x, y] = new Case(14, 20, _path.Board[x, y], this, x, y);
                         Cases[x, y].InitializeAllTiles();
                         Cases[x, y].SetBorder();
                         Cases[x, y].PartsAnalysis();
@@ -74,17 +122,17 @@ namespace DungeonPlanet.Library
                 }
             }
             return null;
-            
+
         }
         public Tile[,] Spawnable()
         {
-            Tile[,] emptyTiles = new Tile[_columns*20,_rows*14];
-            foreach(Case Case in Cases)
+            Tile[,] emptyTiles = new Tile[_columns * 20, _rows * 14];
+            foreach (Case Case in Cases)
             {
-                foreach(Tile tile in Case.Tiles)
+                foreach (Tile tile in Case.Tiles)
                 {
-                    if(!tile.IsBlocked)
-                    emptyTiles[(int)tile.Position.X / 64, (int)tile.Position.Y / 64] = tile;
+                    if (!tile.IsBlocked)
+                        emptyTiles[(int)tile.Position.X / 64, (int)tile.Position.Y / 64] = tile;
                 }
             }
             return emptyTiles;
@@ -92,7 +140,7 @@ namespace DungeonPlanet.Library
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
         {
-            if (ActualState == State.Hub)
+            if (ActualState == State.Hub || ActualState == State.BossRoom)
             {
                 foreach (var tile in Hub.Tiles)
                 {
@@ -103,7 +151,7 @@ namespace DungeonPlanet.Library
                 }
                 return true;
             }
-            else if (ActualState == State.LevelOne)
+            else if (ActualState == State.Level)
             {
                 foreach (Case Case in Cases)
                 {
@@ -118,7 +166,6 @@ namespace DungeonPlanet.Library
                 return true;
             }
             else return false;
-           
         }
 
         public Vector2 WhereCanIGetTo(Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)

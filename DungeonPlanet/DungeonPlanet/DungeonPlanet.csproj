@@ -42,6 +42,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Animation.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Boss.cs" />
     <Compile Include="Bullet.cs" />
@@ -52,12 +53,19 @@
     <Compile Include="MediPack.cs" />
     <Compile Include="Bomb.cs" />
     <Compile Include="Menu.cs" />
+    <Compile Include="NPCNarrator.cs" />
+    <Compile Include="NPCTheWise.cs" />
+    <Compile Include="NPCWeaponSeller.cs" />
+    <Compile Include="NPCWeapon.cs" />
     <Compile Include="Shield.cs" />
-    <Compile Include="NPC.cs" />
+    <Compile Include="NPCMarchand.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="SpriteObject.cs" />
+    <Compile Include="TextureInformation.cs" />
+    <Compile Include="TilesLook.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

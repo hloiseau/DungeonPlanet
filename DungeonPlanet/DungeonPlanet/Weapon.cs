@@ -12,22 +12,28 @@ namespace DungeonPlanet
 {
     public class Weapon : Sprite
     {
+
         EnemyLib _enemyLib;
         internal WeaponLib WeaponLib { get; set; }
         Vector2 _origin;
         MouseState _currentMouse;
+        KeyboardState _keyboardState;
+
         public List<Bullet> Bullets { get; }
         public List<Bullet> BulletsEnemy { get; }
         Texture2D _bulletTexture;
         int _time;
         DungeonPlanetGame _ctx;
         List<Boss> _bosses;
+        SpriteEffects _effect;
+        PlayerInfo.WeaponState ActualState { get; set; }
+        
 
         public Weapon(Texture2D weaponTexture, Texture2D bulletTexture, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Boss> bosses)
             : base(weaponTexture, position, spritebatch)
         {
-            _origin = new Vector2(5, 20);
-            base.position = new Vector2(PlayerLib.Position.X + 28, PlayerLib.Position.Y + 28);
+            
+            _origin = new Vector2(-2, 7);
             WeaponLib = new WeaponLib();
             Bullets = new List<Bullet>();
             BulletsEnemy = new List<Bullet>();
@@ -40,8 +46,7 @@ namespace DungeonPlanet
            : base(weaponTexture, position, spritebatch)
         {
             _enemyLib = enemyLib;
-            _origin = new Vector2(5, 20);
-            base.position = new Vector2(_enemyLib.Position.X + 28, _enemyLib.Position.Y + 28);
+            _origin = new Vector2(-2, 7);
             WeaponLib = new WeaponLib();
             Bullets = new List<Bullet>();
             BulletsEnemy = new List<Bullet>();
@@ -62,7 +67,9 @@ namespace DungeonPlanet
             }
             else
             {
-                position = new Vector2(PlayerLib.Position.X + 28, PlayerLib.Position.Y + 28);
+                position = new Vector2(PlayerLib.Position.X + 23 , PlayerLib.Position.Y + 25);
+                if (Player.CurrentPlayer.Animation.Effect == SpriteEffects.FlipHorizontally) _effect = SpriteEffects.FlipVertically;
+                else _effect = SpriteEffects.None;
                 WeaponLib.Update(_currentMouse.X - _ctx.GraphicsDevice.Viewport.Width / 2, _currentMouse.Y - _ctx.GraphicsDevice.Viewport.Height / 2);
             }
         }
@@ -70,25 +77,85 @@ namespace DungeonPlanet
         private void CheckMouseAndUpdateMovement()
         {
             _currentMouse = Mouse.GetState();
-
-            Bullet bullet;
-
-            if (_currentMouse.LeftButton == ButtonState.Pressed)
+            _keyboardState = Keyboard.GetState();
+            if (_keyboardState.IsKeyDown(Keys.D1))
             {
-                if (_enemyLib == null)
+                ActualState = PlayerInfo.WeaponState.Normal;
+            }
+
+            if (_keyboardState.IsKeyDown(Keys.D2) && (_ctx.PlayerInfo.Unlocked & PlayerInfo.WeaponState.Shotgun) != 0)
+            {
+                ActualState = PlayerInfo.WeaponState.Shotgun;
+            }
+
+            if (_keyboardState.IsKeyDown(Keys.D3) && (_ctx.PlayerInfo.Unlocked & PlayerInfo.WeaponState.Launcher) != 0)
+            {
+                ActualState = PlayerInfo.WeaponState.Launcher;
+            }
+
+            if (ActualState == PlayerInfo.WeaponState.Normal)
+            {
+                if (_currentMouse.LeftButton == ButtonState.Pressed)
                 {
-                    if (_time >= 15)
+                    if (_enemyLib == null)
                     {
-                        bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib, _bosses);
-                        Bullets.Add(bullet);
-                        _time = 0;
-                    }
-                    else
-                    {
-                        _time += 1;
+                        if (_time >= 15)
+                        {
+                            Bullet bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib, _bosses);
+                            Bullets.Add(bullet);
+                            _time = 0;
+                        }
+                        else
+                        {
+                            _time += 1;
+                        }
                     }
                 }
             }
+            if (ActualState == PlayerInfo.WeaponState.Shotgun)
+            {
+                if (_currentMouse.LeftButton == ButtonState.Pressed)
+                {
+                    if (_enemyLib == null)
+                    {
+                        if (_time >= 20 && Player.CurrentPlayer.PlayerInfo.Energy >= 40)
+                        {
+                            for (int x = 0; x < 5; x++)
+                            {
+                                Bullet bullet = new Bullet(_bulletTexture, position, SpriteBatch, WeaponLib.Rotation -0.1f * (x-2), _bosses);
+                                Bullets.Add(bullet);
+                            }
+                            Player.CurrentPlayer.PlayerInfo.Energy -= 40;
+                            _time = 0;
+                        }
+                        else
+                        {
+                            _time += 1;
+                        }
+                    }
+                }
+            }
+            if (ActualState == PlayerInfo.WeaponState.Launcher)
+            {
+                if (_currentMouse.LeftButton == ButtonState.Pressed)
+                {
+                    if (_enemyLib == null)
+                    {
+                        if (_time >= 100 && Player.CurrentPlayer.PlayerInfo.Energy >= 80)
+                        {
+                            Bullet bullet = new Bullet(_ctx.TankBullet, _ctx.TankFirewave, new Vector2(position.X - 37.5f, position.Y - 20), SpriteBatch, WeaponLib.Rotation, _bosses);
+                            Bullets.Add(bullet);
+                            Player.CurrentPlayer.PlayerInfo.Energy -= 80;
+                            _time = 0;
+                        }
+                        else
+                        {
+                            _time += 1;
+                        }
+                    }
+                }
+            }
+
         }
 
         public void ShootingEnemy()
@@ -136,15 +203,17 @@ namespace DungeonPlanet
 
         public override void Draw()
         {
-            SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, SpriteEffects.None, 0);
             foreach (Bullet bullet in Bullets)
             {
-                bullet.Draw();
+                    bullet.Draw();
             }
             foreach (Bullet bulletE in BulletsEnemy)
             {
                 bulletE.Draw();
             }
+
+                SpriteBatch.Draw(Texture, position, null, Color.White, WeaponLib.Rotation, _origin, 1, _effect, 0);
+
         }
     }
 }

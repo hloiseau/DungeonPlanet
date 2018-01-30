@@ -17,7 +17,11 @@ namespace DungeonPlanet.Library
         public Tile[,] Tiles { get; private set; }
         int _xTilesOffset;
         int _yTilesOffset;
+        int _xLevel;
+        int _yLevel;
         string _oldMove;
+        public static int _dorX;
+        public static int _dorY;
 
 
         public Case(int rows, int columns, Path.Direction direction, Level ctx, int xOffset, int yOffset)
@@ -27,6 +31,8 @@ namespace DungeonPlanet.Library
             _ctx = ctx;
             _xTilesOffset = xOffset * 20;
             _yTilesOffset = yOffset * 14;
+            _xLevel = xOffset;
+            _yLevel = yOffset;
             _direction = direction;
             Tiles = new Tile[columns, rows];
         }
@@ -58,11 +64,13 @@ namespace DungeonPlanet.Library
                     if ((x == 0 && (_direction & Path.Direction.Left) == Path.Direction.None) || (x == _columns - 1 && (_direction & Path.Direction.Right) == Path.Direction.None))
                     {
                         Tiles[x, y].IsBlocked = true;
+                        Tiles[x, y].Type = Tile.TypeSet.Platform;
                     }
 
                     if ((y == 0 && (_direction & Path.Direction.Top) == Path.Direction.None) || (y == _rows - 1 && (_direction & Path.Direction.Bottom) == Path.Direction.None))
                     {
                         Tiles[x, y].IsBlocked = true;
+                        Tiles[x, y].Type = Tile.TypeSet.Platform;
                     }
                 }
             }
@@ -85,51 +93,89 @@ namespace DungeonPlanet.Library
             {
                 for (int b = 1; b < _columns / 1.1; b += _columns / 3) // so b + 6
                 {
-                    if (!(a >= _columns / 3 && a <= 2 * (_columns / 3))) //so diff 6 >= x <= 12 (far left or far right case)
+                    if ((_direction & Path.Direction.Last) == Path.Direction.None) //if this is Not a "last" direction
                     {
-                        if (_ctx.GetNext(0,2) == 0) // if random = 0
-                        {
-                            GeneratePlatform(a, b);
-                            _oldMove = "plat";
-                        }
-                        else
-                        {
-                            if (((_direction & Path.Direction.Left) == Path.Direction.None && a < _columns / 3) || ((_direction & Path.Direction.Right) == Path.Direction.None && a >= 2 * (_columns / 3))) // if  this is not left direction and x < 6 ||  if  this is not right direction and x >= 12
-                            {
-                                GenerateStairs(a, b);
-                                _oldMove = "stairs";
-                            }
-                            else
-                            {
-                                GenerateBlock(a, b);
-                                _oldMove = "bloc";
-                            }
-                        }
+                        GenerateStuf(a,b);
                     }
-                    else // so  x < 6 || 12 < x (midle case)
+                    else
                     {
-                        if (_ctx.GetNext(0, 2) == 0) //same as the 1rst one random  = 0
-                        {
-                            GeneratePlatform(a, b);
-                            _oldMove = "plat";
-                        }
-                        else
-                        {
-                            if ((_oldMove != "piramid" && (_direction & Path.Direction.Bottom) == Path.Direction.None && b < _rows / 2) || (_oldMove != "piramid" && (_direction & Path.Direction.Top) == Path.Direction.None && b >= _rows / 2)) // if  this is not botom direction and y < 6 ||  if  this is not top direction and y >= 6
-                            {
-                                GeneratePyramid(a, b);
-                                _oldMove = "piramid";
-                            }
-                            else
-                            {
-                                GenerateBlock(a, b);
-                                _oldMove = "bloc";
-                            }
-                        }
+                        GenerateDor(a, b);
                     }
                 }
             }
             Tiles[1, 1].IsBlocked = false;
+            Tiles[1, 2].IsBlocked = false;
+            Tiles[2, 1].IsBlocked = false;
+            Tiles[2, 2].IsBlocked = false;
+        }
+
+        private void GenerateDor(int a, int b)
+        {
+            if (a == 7 && b == 7)
+            {
+                if (_xLevel != 0)
+                {
+                    _dorX = (((_xLevel + 1) * (64 * 20)) - (64 * 11));
+                }
+                else
+                {
+                    _dorX = _xLevel + (64 * 10);
+                }
+
+                _dorY = (((_yLevel + 1) * (64 * 14)) - (64 * 4));
+
+            }
+            else
+            {
+                GenerateStuf(a, b);
+            }
+            
+        }
+
+        private void GenerateStuf(int a, int b)
+        {
+            if (!(a >= _columns / 3 && a <= 2 * (_columns / 3))) //so diff 6 >= x <= 12 (far left or far right case)
+            {
+                if (_ctx.GetNext(0, 2) == 0) // if random = 0
+                {
+                    GeneratePlatform(a, b);
+                    _oldMove = "plat";
+                }
+                else
+                {
+                    if (((_direction & Path.Direction.Left) == Path.Direction.None && a < _columns / 3) || ((_direction & Path.Direction.Right) == Path.Direction.None && a >= 2 * (_columns / 3))) // if  this is not left direction and x < 6 ||  if  this is not right direction and x >= 12
+                    {
+                        GenerateStairs(a, b);
+                        _oldMove = "stairs";
+                    }
+                    else
+                    {
+                        GenerateBlock(a, b);
+                        _oldMove = "bloc";
+                    }
+                }
+            }
+            else // so  x < 6 || 12 < x (midle case)
+            {
+                if (_ctx.GetNext(0, 2) == 0) //same as the 1rst one random  = 0
+                {
+                    GeneratePlatform(a, b);
+                    _oldMove = "plat";
+                }
+                else
+                {
+                    if ((_oldMove != "piramid" && (_direction & Path.Direction.Bottom) == Path.Direction.None && b < _rows / 2) || (_oldMove != "piramid" && (_direction & Path.Direction.Top) == Path.Direction.None && b >= _rows / 2)) // if  this is not botom direction and y < 6 ||  if  this is not top direction and y >= 6
+                    {
+                        GeneratePyramid(a, b);
+                        _oldMove = "piramid";
+                    }
+                    else
+                    {
+                        GenerateBlock(a, b);
+                        _oldMove = "bloc";
+                    }
+                }
+            }
         }
 
         private void GenerateStairs(int x, int y)
@@ -143,6 +189,7 @@ namespace DungeonPlanet.Library
                 for (int a = -length / 2; a < length / 2; a++)
                 {
                     Tiles[Clamp(x + a + offset, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].IsBlocked = true;
+                    Tiles[Clamp(x + a + offset, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].Type = Tile.TypeSet.Platform;
                 }
             }
         }
@@ -162,6 +209,7 @@ namespace DungeonPlanet.Library
                     for (int a = -length / 2; a < length / 2; a++)
                     {
                         Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].IsBlocked = true;
+                        Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].Type = Tile.TypeSet.Platform;
                     }
                 }
                 else
@@ -172,6 +220,7 @@ namespace DungeonPlanet.Library
                     for (int a = -length / 2; a < length / 2; a--)
                     {
                         Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].IsBlocked = true;
+                        Tiles[Clamp(x + a, 0, _columns - 1), Clamp(y + b, 0, _rows - 1)].Type = Tile.TypeSet.Platform;
                     }
                 }
             }
@@ -197,6 +246,22 @@ namespace DungeonPlanet.Library
                     Tiles[y + 3, x + 5].IsBlocked = true;
                     Tiles[y + 4, x + 5].IsBlocked = true;
                     Tiles[y + 5, x + 5].IsBlocked = true;
+
+
+                    Tiles[y + 2, x + 3].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 3, x + 3].Type = Tile.TypeSet.Platform;
+
+                    Tiles[y + 1, x + 4].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 2, x + 4].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 3, x + 4].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 4, x + 4].Type = Tile.TypeSet.Platform;
+
+                    Tiles[y + 0, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 1, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 2, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 3, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 4, x + 5].Type = Tile.TypeSet.Platform;
+                    Tiles[y + 5, x + 5].Type = Tile.TypeSet.Platform;
                 }
             }
         }
@@ -211,15 +276,32 @@ namespace DungeonPlanet.Library
                 for (int i = 0; i < length; i++)
                 {
                     Tiles[x + i, y + flor].IsBlocked = true;
+                    Tiles[x + i, y + flor].Type = Tile.TypeSet.Platform;
                     if (length <= 3)
                     {
-                        if (leftOrRight == 0) Tiles[x + length + i, y + flor - length].IsBlocked = true;
-                        else Tiles[x - length + i, y + flor - length].IsBlocked = true;
+                        if (leftOrRight == 0)
+                        {
+                            Tiles[x + length + i, y + flor - length].IsBlocked = true;
+                            Tiles[x + length + i, y + flor - length].Type = Tile.TypeSet.Platform;
+                        }
+                        else
+                        {
+                            Tiles[x - length + i, y + flor - length].IsBlocked = true;
+                            Tiles[x - length + i, y + flor - length].Type = Tile.TypeSet.Platform;
+                        }
                     }
                     else
                     {
-                        if (leftOrRight == 0) Tiles[x + 3 + i, y + flor - 3].IsBlocked = true;
-                        else Tiles[x - 3 + i, y + flor - 3].IsBlocked = true;
+                        if (leftOrRight == 0)
+                        {
+                            Tiles[x + 3 + i, y + flor - 3].IsBlocked = true;
+                            Tiles[x + 3 + i, y + flor - 3].Type = Tile.TypeSet.Platform;
+                        }
+                        else
+                        {
+                            Tiles[x - 3 + i, y + flor - 3].IsBlocked = true;
+                            Tiles[x - 3 + i, y + flor - 3].Type = Tile.TypeSet.Platform;
+                        }
                     }
                 }
             }

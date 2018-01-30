@@ -17,6 +17,7 @@ namespace DungeonPlanet.Library
         public float Rotation { get; set; }
         public Vector2 Direction { get; set; }
         public int Life { get; set; }
+        public int State { get; set; }
         public bool IsShooting { get; set; }
         int _height;
         int _width;
@@ -30,7 +31,7 @@ namespace DungeonPlanet.Library
 
         public Rectangle Vision
         {
-            get { return new Rectangle((int)Position.X - 375, (int)Position.Y, _width * 20, _height); }
+            get { return new Rectangle((int)Position.X - (_width * 10), (int)Position.Y - (_height*10), _width * 20, _height *20); }
         }
 
         public EnemyLib(Vector2 position, int width, int height,int life)
@@ -76,9 +77,19 @@ namespace DungeonPlanet.Library
         {
             Movement -= Vector2.UnitX * .65f;
         }
+
+        public void LeftSlim()
+        {
+            Movement -= Vector2.UnitX * .3f;
+        }
         public void Right()
         {
             Movement += Vector2.UnitX * .65f;
+        }
+
+        public void RightSlim()
+        {
+            Movement += Vector2.UnitX * .3f;
         }
 
         public void Timer(float gameTime)
@@ -101,6 +112,23 @@ namespace DungeonPlanet.Library
                 playerLib.Movement -= Vector2.UnitY * 5f;
             }
         }
+
+        public void MakeDamageWithSlim(PlayerLib playerLib)
+        {
+            if (GetDistanceTo(PlayerLib.Position).X < 0.1)
+            {
+                Movement += Vector2.UnitX * 20f;
+                playerLib.Movement -= Vector2.UnitX * 10f;
+                playerLib.Movement -= Vector2.UnitY * 5f;
+            }
+            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
+            {
+                Movement -= Vector2.UnitX * 20f;
+                playerLib.Movement += Vector2.UnitX * 10f;
+                playerLib.Movement -= Vector2.UnitY * 5f;
+            }
+        }
+
         public void GotDamage()
         {
             if (GetDistanceTo(PlayerLib.Position).X > 0.1)
@@ -114,6 +142,22 @@ namespace DungeonPlanet.Library
                 Movement -= Vector2.UnitX * 50f;
                 this.Movement += Vector2.UnitX * 10f;
                 this.Movement -= Vector2.UnitY * 5f;
+            }
+        }
+
+        public void GotDammageWithSlim()
+        {
+            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
+            {
+                Movement -= Vector2.UnitX * 50f;
+                this.Movement += Vector2.UnitX * 5f;
+                this.Movement += Vector2.UnitY * 5f;
+            }
+            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
+            {
+                Movement += Vector2.UnitX * 50f;
+                this.Movement -= Vector2.UnitX * 5f;
+                this.Movement += Vector2.UnitY * 5f;
             }
         }
 

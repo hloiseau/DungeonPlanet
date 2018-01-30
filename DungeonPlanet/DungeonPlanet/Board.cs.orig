@@ -11,12 +11,14 @@ namespace DungeonPlanet
 {
     public class Board
     {
+
         public Texture2D TileTexture { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
-        private Random _rnd = new Random();
         public static Board CurrentBoard { get; private set; }
         public Sprite _sprite;
         public Level Level { get; private set; }
+        public static List<Enemy> Enemys { get; private set; }
+        public static List<Boss> Bosses { get; private set; }
 
         public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
         {
@@ -24,10 +26,10 @@ namespace DungeonPlanet
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
 <<<<<<< HEAD
-            Level = new Level(5, 5);
-=======
             Level = new Level(2, 2);
->>>>>>> 8c5ba45e4475ac3b6df63d9d3d2a5a70ce79b9b4
+=======
+            Level = new Level(4, 4);
+>>>>>>> 0f63bf6aa16117a1450aa7800190511292b02749
             CreateNewBoard();
             Board.CurrentBoard = this;
         }
@@ -39,14 +41,28 @@ namespace DungeonPlanet
 
         public void Draw()
         {
-            foreach(Case Case in Level.Cases)
+            if (Level.ActualState == Level.State.Hub)
             {
-                foreach (var tile in Case.Tiles)
+                foreach (var tile in Level.Hub.Tiles)
                 {
                     if (tile.IsBlocked)
                     {
                         Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
                         sprite.Draw();
+                    }
+                }
+            }
+            else if (Level.ActualState == Level.State.LevelOne)
+            {
+                foreach (Case Case in Level.Cases)
+                {
+                    foreach (var tile in Case.Tiles)
+                    {
+                        if (tile.IsBlocked)
+                        {
+                            Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
+                            sprite.Draw();
+                        }
                     }
                 }
             }

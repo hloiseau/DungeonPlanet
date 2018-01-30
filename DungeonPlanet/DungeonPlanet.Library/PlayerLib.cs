@@ -16,6 +16,14 @@ namespace DungeonPlanet.Library
 
         int _height;
         int _width;
+
+        public PlayerLib(Vector2 position, int width, int height)
+        {
+            Position = position;
+            _height = height;
+            _width = width;
+        }
+
         public Rectangle Bounds
         {
             get { return new Rectangle((int)Position.X, (int)Position.Y, _width, _height); }
@@ -25,13 +33,7 @@ namespace DungeonPlanet.Library
         {
             return life <= 0;
         }
-        public PlayerLib(Vector2 position, int width, int height)
-        {
-            Position = position;
-            _height = height;
-            _width = width;
-        }
-
+        
         public void MoveAsFarAsPossible(float gameTime)
         {
             OldPosition = Position;
@@ -52,7 +54,13 @@ namespace DungeonPlanet.Library
         public void SimulateFriction()
         {
             if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .1f; }
-            else { Movement -= Movement * Vector2.One * .02f; }
+            else
+            {
+                Vector2 movement = Movement;
+                movement.X -= Movement.X * Vector2.One.X * .04f;
+                movement.Y -= Movement.Y * Vector2.One.Y * .01f;
+                Movement = movement;
+            }
         }
 
         public bool IsOnFirmGround()
@@ -72,10 +80,7 @@ namespace DungeonPlanet.Library
         {
             Movement += Vector2.UnitX;
         }
-        public void Jump()
-        {
-            Movement = -Vector2.UnitY * 20; 
-        }
+        public void Jump() => Movement = -Vector2.UnitY * 25;
         public void StopMovingIfBlocked()
         {
             Vector2 lastMovement = Position - OldPosition;

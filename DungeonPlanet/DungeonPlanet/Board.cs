@@ -19,36 +19,45 @@ namespace DungeonPlanet
         public Level Level { get; private set; }
         public static List<Enemy> Enemys { get; private set; }
         public static List<Boss> Bosses { get; private set; }
-
-        public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows)
+        List<TilesLook> _tilesLookList;
+        Rectangle _rectange;
+        DungeonPlanetGame _ctx;
+        public Board(SpriteBatch spritebatch, Texture2D tileTexture, int columns, int rows, DungeonPlanetGame ctx)
         {
-
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-            Level = new Level(4, 4);
+            Level = new Level();
+            _tilesLookList = new List<TilesLook>();
             CreateNewBoard();
-            Board.CurrentBoard = this;
+            CurrentBoard = this;
+            _ctx = ctx;
+            if(ctx._camera != null)
+            _rectange = new Rectangle((int)ctx._camera.GetBounds().X,
+             (int)ctx._camera.GetBounds().Y + 325,
+             (int)(ctx._camera.GetBounds().Width),
+             (int)(ctx._camera.GetBounds().Height));
         }
 
         public void CreateNewBoard()
         {
             Level.NewLevel();
+            ListInisilisation();
         }
-
-        public void Draw()
+        public void ListInisilisation()
         {
-            if (Level.ActualState == Level.State.Hub)
+            if (Level.ActualState == Level.State.Hub || Level.ActualState == Level.State.BossRoom)
             {
                 foreach (var tile in Level.Hub.Tiles)
                 {
                     if (tile.IsBlocked)
                     {
-                        Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
-                        sprite.Draw();
+
+                        TilesLook tileLook = new TilesLook(TileTexture, tile.Position.X, tile.Position.Y, tile.Type, Color.White);
+                        _tilesLookList.Add(tileLook);
                     }
                 }
             }
-            else if (Level.ActualState == Level.State.LevelOne)
+            if (Level.ActualState == Level.State.Level)
             {
                 foreach (Case Case in Level.Cases)
                 {
@@ -56,10 +65,27 @@ namespace DungeonPlanet
                     {
                         if (tile.IsBlocked)
                         {
-                            Sprite sprite = new Sprite(TileTexture, new Vector2(tile.Position.X, tile.Position.Y), SpriteBatch);
-                            sprite.Draw();
+                            TilesLook tileLook = new TilesLook(TileTexture, tile.Position.X, tile.Position.Y, tile.Type, Color.White);
+                            _tilesLookList.Add(tileLook);
                         }
                     }
+                }
+            }
+        }
+        public void Draw()
+        {
+            if (Level.ActualState == Level.State.Hub 
+                || Level.ActualState == Level.State.BossRoom
+                || Level.ActualState == Level.State.Level )
+            {
+                _rectange = new Rectangle((int)_ctx._camera.GetBounds().X,
+             (int)_ctx._camera.GetBounds().Y + 325,
+             (int)(_ctx._camera.GetBounds().Width),
+             (int)(_ctx._camera.GetBounds().Height));
+                foreach (var t in _tilesLookList)
+                {
+                    if(_rectange.Intersects(t.DestinationRectangle))
+                    t.Draw(SpriteBatch);
                 }
             }
         }

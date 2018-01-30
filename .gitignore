@@ -303,3 +303,6 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+/DungeonPlanet/DungeonPlanet/DungeonPlanetGame.cs.orig
+/DungeonPlanet/DungeonPlanet/DungeonPlanetGame.cs.orig
+/DungeonPlanet/DungeonPlanet/Content/Content.mgcb.orig

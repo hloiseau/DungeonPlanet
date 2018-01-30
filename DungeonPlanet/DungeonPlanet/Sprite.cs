@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DungeonPlanet
 {
+    [Serializable]
     public class Sprite
     {
         public Vector2 position { get; set; }

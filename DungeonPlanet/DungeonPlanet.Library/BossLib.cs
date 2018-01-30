@@ -14,6 +14,7 @@ namespace DungeonPlanet.Library
         public Vector2 Position { get; set; }
         public Vector2 OldPosition { get; set; }
         public int Life { get; set; }
+        public int State { get; set; }
 
         int _height;
         int _width;
@@ -25,7 +26,7 @@ namespace DungeonPlanet.Library
 
         public Rectangle Vision
         {
-            get { return new Rectangle((int)Position.X - 425, (int)Position.Y, _width * 3, _height); }
+            get { return new Rectangle((int)Position.X - 450, (int)Position.Y, _width * 3, _height); }
         }
 
         public BossLib(Vector2 position, int width, int height, int life)
@@ -75,11 +76,19 @@ namespace DungeonPlanet.Library
 
         public void Left()
         {
-            Movement -= Vector2.UnitX * .50f;
+            Movement -= Vector2.UnitX * .70f;
+        }
+        public void LeftSlim()
+        {
+            Movement -= Vector2.UnitX * .60f;
         }
         public void Right()
         {
-            Movement += Vector2.UnitX * .50f;
+            Movement += Vector2.UnitX * .65f;
+        }
+        public void RightSlim()
+        {
+            Movement += Vector2.UnitX * .60f;
         }
         public void MakeDamage(PlayerLib playerLib)
         {
