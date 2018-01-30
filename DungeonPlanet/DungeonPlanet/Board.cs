@@ -84,7 +84,7 @@ namespace DungeonPlanet
              (int)(_ctx._camera.GetBounds().Height));
                 foreach (var t in _tilesLookList)
                 {
-                    if(_rectange.Intersects(t.DestinationRectangle))
+                    if(_rectange.Intersects(t.DestinationRectangle) || _ctx._camera.Zoom == 0.2f)
                     t.Draw(SpriteBatch);
                 }
             }

@@ -18,14 +18,8 @@ namespace DungeonPlanet
         private GraphicsDeviceManager _graphics;
         public GraphicsDeviceManager Graphics
         {
-            get
-            {
-                return _graphics;
-            }
-            set
-            {
-                _graphics = value;
-            }
+            get => _graphics;
+            set => _graphics = value;
         }
         private SpriteBatch _spriteBatch;
 
@@ -214,7 +208,10 @@ namespace DungeonPlanet
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
-            _camera = new Camera(GraphicsDevice);
+            _camera = new Camera(GraphicsDevice)
+            {
+                Zoom = 1.35f
+            };
             _camera.LoadContent();
 
             GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
@@ -460,6 +457,21 @@ namespace DungeonPlanet
             if (state.IsKeyDown(Keys.Escape) && !_previousState.IsKeyDown(Keys.Escape)) OpenMenu();
             if (state.IsKeyDown(Keys.F6)) RestartLevelOne();
             if (state.IsKeyDown(Keys.F7)) RestartBossRoom();
+            if (state.IsKeyDown(Keys.F2) && !_previousState.IsKeyDown(Keys.F2))
+            {
+                _camera.Zoom = _camera.Zoom == 1.35f ? 0.2f :  1.35f;
+            }
+
+            if (state.IsKeyDown(Keys.F3))
+            {
+                PlayerInfo.Money = 5000;
+                PlayerInfo.Progress = Level.LevelID.Five;
+            }
+
+            if (state.IsKeyDown(Keys.F8))
+            {
+                Level.ActualState = Level.State.End;
+            }
             _camera.Debug.IsVisible = Keyboard.GetState().IsKeyDown(Keys.F1);
             _previousState = state;
         }
@@ -598,8 +610,6 @@ namespace DungeonPlanet
             }
 
             _spriteBatch.Draw(_camera.Debug);
-            _camera.Zoom = 1.35f;
-            //_camera.Zoom = 0.25f;
         }
 
         private void WriteDebugInformation()
