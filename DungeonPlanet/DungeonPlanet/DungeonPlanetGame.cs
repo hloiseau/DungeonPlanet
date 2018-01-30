@@ -229,7 +229,6 @@ namespace DungeonPlanet
             backgroundLevel4Song = Content.Load<Song>("backgroundLevel4Song");
             backgroundLevel5Song = Content.Load<Song>("backgroundLevel5Song");
 
-
             if (Level.ActualState == Level.State.BossRoom)
             {
                 Bosses.Add(_boss);
@@ -393,6 +392,15 @@ namespace DungeonPlanet
                     }
                 }
                 if (Bosses.Count == 0) _door[0].Update(gameTime);
+                if (oldcount == null)
+                {
+                    oldcount = Player.CurrentPlayer.Weapon.Bullets.Count;
+                }
+                if (Player.CurrentPlayer.Weapon.Bullets.Count > oldcount)
+                {
+                    GunSoundEfect.Play();
+                }
+                oldcount = Player.CurrentPlayer.Weapon.Bullets.Count;
 
             }
 
