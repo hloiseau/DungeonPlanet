@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Audio;
-using System.Diagnostics;
-using Comora;
+﻿using Comora;
 using DungeonPlanet.Library;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using System;
+using System.Collections.Generic;
 
 namespace DungeonPlanet
 {
@@ -153,6 +152,7 @@ namespace DungeonPlanet
             Texture2D nugget = Content.Load<Texture2D>("Nugget");
             Texture2D bullet = Content.Load<Texture2D>("ItemSetBullet");
             Texture2D food = Content.Load<Texture2D>("ItemSetFood");
+            Texture2D boom = Content.Load<Texture2D>("Boom");
             _end = Content.Load<Texture2D>("end1");
             _enemyTexture = Content.Load<Texture2D>("blueSoldier");
             _enemyTexture2 = Content.Load<Texture2D>("whiteSkeleton");
@@ -168,7 +168,7 @@ namespace DungeonPlanet
             _fireBossTexture = Content.Load<Texture2D>("fireBoss");
 
             _board = new Board(_spriteBatch, _tileTexture, 2, 2, this);
-            _player = new Player(_playerTexture, _weaponTexture, _bombTexture, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
+            _player = new Player(_playerTexture, _weaponTexture, _bombTexture, boom, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
             _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture, 41, 55, 8, 150, this);
@@ -368,7 +368,7 @@ namespace DungeonPlanet
             {
 
                 Items[i].Update(gameTime);
-                if (Items[i].IsFinished && !(Items[i] is Shield))
+                if (Items[i].IsFinished && !(Items[i] is Shield) && IsOnScreen(new Rectangle(Items[i].ItemLib.Bounds.X, Items[i].ItemLib.Bounds.Y, Items[i].ItemLib.Bounds.Width, Items[i].ItemLib.Bounds.Height)))
                 {
                     Items.Remove(Items[i]);
                 }

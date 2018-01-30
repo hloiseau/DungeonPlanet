@@ -14,7 +14,7 @@ namespace DungeonPlanet.Library
         int _columns;
         Level _ctx;
         Path.Direction _direction;
-        public Tile[,] Tiles { get; private set; }
+        public Tile[,] Tiles { get; }
         int _xTilesOffset;
         int _yTilesOffset;
         int _xLevel;
@@ -22,7 +22,7 @@ namespace DungeonPlanet.Library
         string _oldMove;
         public static int _dorX;
         public static int _dorY;
-
+        public Rectangle Border { get;}
 
         public Case(int rows, int columns, Path.Direction direction, Level ctx, int xOffset, int yOffset)
         {
@@ -31,6 +31,7 @@ namespace DungeonPlanet.Library
             _ctx = ctx;
             _xTilesOffset = xOffset * 20;
             _yTilesOffset = yOffset * 14;
+            Border = new Rectangle(_xTilesOffset*64, _yTilesOffset*64, 20*64, 14*64);
             _xLevel = xOffset;
             _yLevel = yOffset;
             _direction = direction;

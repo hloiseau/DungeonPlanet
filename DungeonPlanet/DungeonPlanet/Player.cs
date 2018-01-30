@@ -19,6 +19,7 @@ namespace DungeonPlanet
         public static Player CurrentPlayer { get; private set; }
         public Shield Shield { get; set; }
         Texture2D _texturebomb;
+        Texture2D _sfx;
         SpriteBatch _spritebatch;
         List<Enemy> _enemys;
         List<Bomb> _bombs;
@@ -26,14 +27,14 @@ namespace DungeonPlanet
         Animation _animation;
         int _animeState = 0;
 
-        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBomb, Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
+        public Player(Texture2D texturePlayer, Texture2D textureWeapon, Texture2D textureBomb, Texture2D sfx,Texture2D textureBullet, DungeonPlanetGame ctx, Vector2 position, SpriteBatch spritebatch, List<Enemy> enemys, List<Boss> bosses)
             : base(texturePlayer, position, spritebatch)
         {
             PlayerLib = new PlayerLib(new System.Numerics.Vector2(position.X, position.Y), 40, 64);
             PlayerInfo = new PlayerInfo();
             _animation = new Animation();
             _animation.Initialize(texturePlayer, position, 40, 64, 0, 0, 2, 150, Color.White, 1, true, false);
-            
+            _sfx = sfx;
             Weapon = new Weapon(textureWeapon, textureBullet, ctx, position, spritebatch, bosses);
             _bombs = new List<Bomb>();
             _texturebomb = textureBomb;
@@ -157,7 +158,7 @@ namespace DungeonPlanet
             if (keyboardState.IsKeyDown(Keys.Z) && PlayerLib.IsOnFirmGround()) { PlayerLib.Jump(); }
             if (keyboardState.IsKeyDown(Keys.B) && !_previousKey.IsKeyDown(Keys.B) && PlayerInfo.Energy >= 50 )
             {
-                Bomb bomb = new Bomb(_texturebomb, position, _spritebatch, 0, this, _enemys);
+                Bomb bomb = new Bomb(_texturebomb, _sfx, position, _spritebatch, 0, this, _enemys);
                 bomb.ItemLib.Movement = System.Numerics.Vector2.UnitX * movementXPosition;
                 _bombs.Add(bomb);
                 PlayerInfo.Energy -= 50;
