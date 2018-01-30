@@ -30,10 +30,6 @@ namespace DungeonPlanet
         private Texture2D _hubBackground003;
 
         private Texture2D _levelBackground01;
-        private Texture2D _levelBackground02;
-        private Texture2D _levelBackground03;
-        private Texture2D _levelBackground04;
-        private Texture2D _levelBackground05;
 
         private SpriteObject _cat;
         private SpriteObject _nugget;
@@ -145,11 +141,7 @@ namespace DungeonPlanet
             _hubBackground002 = Content.Load<Texture2D>("hub002");
             _hubBackground003 = Content.Load<Texture2D>("hub003");
 
-            _levelBackground01 = Content.Load<Texture2D>("level01");
-            _levelBackground02 = Content.Load<Texture2D>("level02");
-            //_levelBackground03 = Content.Load<Texture2D>("level03");
-            //_levelBackground04 = Content.Load<Texture2D>("level04");
-            //_levelBackground05 = Content.Load<Texture2D>("level05");
+            _levelBackground01 = Content.Load<Texture2D>("level02");
 
             Texture2D theWise = Content.Load<Texture2D>("NPCTheWise");
             Texture2D weapon = Content.Load<Texture2D>("NPCWeapon");
@@ -538,13 +530,27 @@ namespace DungeonPlanet
 
         void DrawLevelBackground()
         {
-            Vector2 _spawnPoint;
-            _spawnPoint = new Vector2(-2048, -2048);
-            for (int i = 0; i <= (Level._levelRows * 3); i++)
+            if (Level.ActualState == Level.State.Level)
             {
-                for (int j = 0; j <= (Level._levelColumns * 4); j++)
+                Vector2 _spawnPoint;
+                _spawnPoint = new Vector2(-2048, -2048);
+                for (int i = 0; i <= (Level._levelRows * 3); i++)
                 {
-                    _spriteBatch.Draw(_levelBackground01, new Vector2((_levelBackground01.Height * j) + _spawnPoint.X, _spawnPoint.Y + (_levelBackground01.Width * i)), Color.White);
+                    for (int j = 0; j <= (Level._levelColumns * 4); j++)
+                    {
+                        _spriteBatch.Draw(_levelBackground01, new Vector2((_levelBackground01.Height * j) + _spawnPoint.X, _spawnPoint.Y + (_levelBackground01.Width * i)), Color.White);
+                    }
+                }
+            }
+            else if (Level.ActualState == Level.State.Hub || Level.ActualState == Level.State.BossRoom)
+            {
+                Vector2 _spawnPoint = new Vector2(-2048, -2048);
+                for (int i = 0; i <= 5; i++)
+                {
+                    for (int j = 0; j <= 20; j++)
+                    {
+                        _spriteBatch.Draw(_levelBackground01, new Vector2((_levelBackground01.Height * j) + _spawnPoint.X, _spawnPoint.Y + (_levelBackground01.Width * i)), Color.White);
+                    }
                 }
             }
         }
@@ -558,9 +564,10 @@ namespace DungeonPlanet
             base.Draw(gameTime);
             if (Level.ActualState == Level.State.Hub)
             {
-                _spriteBatch.Draw(_hubBackground001, new Vector2(-1000, -550), Color.White);
-                _spriteBatch.Draw(_hubBackground002, new Vector2(766, -550), Color.White);
-                _spriteBatch.Draw(_hubBackground003, new Vector2(2461, -550), Color.White);
+                DrawLevelBackground();
+                _spriteBatch.Draw(_hubBackground001, new Vector2(-1000, -575), Color.White);
+                _spriteBatch.Draw(_hubBackground002, new Vector2(766, -575), Color.White);
+                _spriteBatch.Draw(_hubBackground003, new Vector2(2461, -575), Color.White);
                 _NPCWise.Draw();
                 _setOfBullet.Draw();
                 _NPCWeapon.Draw();
@@ -583,6 +590,7 @@ namespace DungeonPlanet
             }
             if (Level.ActualState == Level.State.BossRoom)
             {
+                DrawLevelBackground();
                 foreach (Boss boss in Bosses) boss.Draw();
                 if (Bosses.Count == 0) _door[0].Draw();
             }
