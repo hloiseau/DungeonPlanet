@@ -5236,6 +5236,23 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 
+<<<<<<< HEAD
+#begin enemyGun.png
+=======
+#begin Lance Roquette.png
+>>>>>>> 6d690f07989528787e8dfa29dfa03b6db1229642
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:enemyGun.png
+
 #begin Lance Roquette.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -5246,6 +5263,8 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+=======
+>>>>>>> 6d690f07989528787e8dfa29dfa03b6db1229642
 /build:Lance Roquette.png
 
 #begin whiteSkeleton.png
@@ -5296,8 +5315,12 @@
 /processorParam:TextureFormat=Color
 /build:WeaponSeller.png
 
+<<<<<<< HEAD
+#begin Boom.png
+=======
 #begin soldier.png
 #begin level01.png
+>>>>>>> 6d690f07989528787e8dfa29dfa03b6db1229642
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -5307,6 +5330,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:Boom.png
+=======
 /build:soldier.png
 /build:level01.png
 
@@ -5353,4 +5379,5 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:backgroundLevel5Song.mp3
+>>>>>>> 6d690f07989528787e8dfa29dfa03b6db1229642
 
