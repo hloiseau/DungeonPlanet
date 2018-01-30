@@ -51,7 +51,6 @@ namespace DungeonPlanet
                 {
                     if (tile.IsBlocked)
                     {
-
                         TilesLook tileLook = new TilesLook(TileTexture, tile.Position.X, tile.Position.Y, tile.Type, Color.White);
                         _tilesLookList.Add(tileLook);
                     }

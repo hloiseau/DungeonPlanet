@@ -530,7 +530,7 @@ namespace DungeonPlanet
                     }
                 }
             }
-            else if (Level.ActualState == Level.State.Hub)
+            else if (Level.ActualState == Level.State.Hub || Level.ActualState == Level.State.BossRoom)
             {
                 Vector2 _spawnPoint = new Vector2(-2048, -2048);
                 for (int i = 0; i <= 5; i++)
