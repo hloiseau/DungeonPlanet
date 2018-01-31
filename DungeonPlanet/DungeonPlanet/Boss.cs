@@ -81,7 +81,7 @@ namespace DungeonPlanet
             position = new Vector2(BossLib.Position.X, BossLib.Position.Y);
             BossLib.Life = MathHelper.Clamp(BossLib.Life, 0, 200);
 
-            if (BossLib != null && Fire != null) Fire.position = new Vector2(BossLib.Position.X, BossLib.Position.Y);
+            if (BossLib != null && Fire != null) Fire.position = new Vector2(BossLib.Position.X, BossLib.Position.Y-30);
         }
 
         private void BulletUpdate(GameTime gameTime)
