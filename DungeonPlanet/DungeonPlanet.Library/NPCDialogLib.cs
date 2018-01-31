@@ -27,7 +27,7 @@ namespace DungeonPlanet.Library
             _wiseLine.Add("Allumer le feux !!! hey, tu sais tu peux acheter des munitions enflammees chez l armurier.");
             _wiseLine.Add("I play DonjonPlanet every day I play Donjon...  Ho ho ho j adore cette chanson !");
             _wiseLine.Add("On m appelle l ovni tatata... J ai cette musique dans la tete depuis plus d'une heure et je ne l aime meme pas !");
-            _wiseLine.Add("Un vieux proverbe dit que si vous nous notez bien vous aurez des potins. Noter qui ? J'en sais rien moi !");
+            //_wiseLine.Add("Un vieux proverbe dit que si vous nous notez bien vous aurez des potins. Noter qui ? J'en sais rien moi !");
             _wiseLine.Add("C etait mieux avant !");
             _wiseLine.Add("SEUL LINK PEUT VAINCRE GANON !! ... Au fait c'est qui ganon ?");
             _wiseLine.Add("Cette planete est pas pratique pour parler. On peux pas utiliser d accents et d aspostrophes ! ");

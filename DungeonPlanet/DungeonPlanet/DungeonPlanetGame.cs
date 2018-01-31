@@ -86,6 +86,7 @@ namespace DungeonPlanet
         int _elpasedtime;
         int Singingtime;
         Random _random = new Random();
+        public bool DebugZoom { get; private set; }
 
         public PlayerInfo PlayerInfo
         {
@@ -200,8 +201,11 @@ namespace DungeonPlanet
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
-            _camera = new Camera(GraphicsDevice);
-            _camera.Zoom = 1.35f;
+            _camera = new Camera(GraphicsDevice)
+            {
+                Zoom = 1.35f
+            };
+            DebugZoom = false;
             _camera.LoadContent();
 
             GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
@@ -449,7 +453,8 @@ namespace DungeonPlanet
             if (state.IsKeyDown(Keys.F7)) RestartBossRoom();
             if (state.IsKeyDown(Keys.F2) && !_previousState.IsKeyDown(Keys.F2))
             {
-                _camera.Zoom = _camera.Zoom == 1.35f ? 0.2f :  1.35f;
+                DebugZoom = DebugZoom == false ? true :  false;
+                _camera.Zoom = DebugZoom ? 0.2f : 1.35f;
             }
 
             if (state.IsKeyDown(Keys.F3))
