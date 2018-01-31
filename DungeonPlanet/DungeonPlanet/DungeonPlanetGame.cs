@@ -532,8 +532,7 @@ namespace DungeonPlanet
         {
             if (Level.ActualState == Level.State.Level)
             {
-                Vector2 _spawnPoint;
-                _spawnPoint = new Vector2(-2048, -2048);
+                Vector2 _spawnPoint = new Vector2(-2048, -2048);
                 for (int i = 0; i <= (Level._levelRows * 3); i++)
                 {
                     for (int j = 0; j <= (Level._levelColumns * 4); j++)
