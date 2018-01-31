@@ -51,7 +51,7 @@ namespace DungeonPlanet
             _rotation = rotation;
             System.Numerics.Vector2 direction = new System.Numerics.Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
             base.position = new Vector2(base.position.X, base.position.Y);
-            BulletLib = new BulletLib(direction, new System.Numerics.Vector2(base.position.X, base.position.Y), 12, 85);
+            BulletLib = new BulletLib(direction, new System.Numerics.Vector2(base.position.X, base.position.Y), 8, 30);
             _bosses = bosses;
         }
 
@@ -100,7 +100,7 @@ namespace DungeonPlanet
         }
         public bool HasTouchedEnemy()
         {
-            foreach (Enemy enemy in _enemys)
+            foreach (var enemy in _enemys)
             {
                 if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(enemy.EnemyLib.Bounds))
                 {

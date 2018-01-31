@@ -95,11 +95,13 @@ namespace DungeonPlanet
 
         public DungeonPlanetGame()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            //_graphics.IsFullScreen = true;
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                IsFullScreen = true,
+                PreferredBackBufferWidth = 1920,
+                PreferredBackBufferHeight = 1080
+        };
             Content.RootDirectory = "Content";
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
             //IsMouseVisible = true;
 
         }
@@ -175,8 +177,6 @@ namespace DungeonPlanet
             _player = new Player(_playerTexture, _weaponTexture, _bombTexture, boom, _bulletTexture, this, new Vector2(80, 80), _spriteBatch, Enemys, Bosses);
             _shield = new Shield(_shieldTexture, new Vector2(_player.position.X, _player.position.Y), _spriteBatch, _player, Enemys);
             _player.Shield = _shield;
-            _enemy = new Enemy(_enemyTexture, new Vector2(500, 200), _spriteBatch, "CQC", _fireTexture, 41, 55, _random.Next(0,3),8, 150, this);
-            _enemy2 = new Enemy(_enemyTexture2, new Vector2(400, 100), _spriteBatch, "DIST", _fireTexture, _enemyWeaponTexture, _bulletETexture, this, 25, 50, _random.Next(0, 3), 7, 150);
             _boss = new Boss(TankBullet, TankFirewave, _bossTexture, new Vector2(1360, 200), _spriteBatch, _fireBossTexture);
             _mediPack = new MediPack(_mediTexture, new Vector2(300, 300), _spriteBatch, 45, _player);
 
@@ -200,10 +200,8 @@ namespace DungeonPlanet
             _door2 = new Door(Content.Load<Texture2D>("door"), new Vector2(Case._dorX, Case._dorY), _spriteBatch, this);
             //_bomb = new Bomb(_bombTexture, new Vector2(200, 300), _spriteBatch, 45, _player, Enemys);
             _debugFont = Content.Load<SpriteFont>("DebugFont");
-            _camera = new Camera(GraphicsDevice)
-            {
-                Zoom = 1.35f
-            };
+            _camera = new Camera(GraphicsDevice);
+            _camera.Zoom = 1.35f;
             _camera.LoadContent();
 
             GunSoundEfect = Content.Load<SoundEffect>("GunSoundEfect");
