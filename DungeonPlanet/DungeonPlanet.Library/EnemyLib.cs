@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DungeonPlanet.Library
 {
@@ -80,7 +76,7 @@ namespace DungeonPlanet.Library
 
         public void LeftSlim()
         {
-            Movement -= Vector2.UnitX * .3f;
+            Movement -= Vector2.UnitX * .40f;
         }
         public void Right()
         {
@@ -89,7 +85,7 @@ namespace DungeonPlanet.Library
 
         public void RightSlim()
         {
-            Movement += Vector2.UnitX * .3f;
+            Movement += Vector2.UnitX * .40f;
         }
 
         public void Timer(float gameTime)
@@ -131,15 +127,15 @@ namespace DungeonPlanet.Library
 
         public void GotDamage()
         {
-            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
+            if (GetDistanceTo(PlayerLib.Position).X < 0.1)
             {
-                Movement += Vector2.UnitX * 50f;
+                Movement += Vector2.UnitX * 20f;
                 this.Movement -= Vector2.UnitX * 10f;
                 this.Movement -= Vector2.UnitY * 5f;
             }
             if (GetDistanceTo(PlayerLib.Position).X > 0.1)
             {
-                Movement -= Vector2.UnitX * 50f;
+                Movement -= Vector2.UnitX * 20f;
                 this.Movement += Vector2.UnitX * 10f;
                 this.Movement -= Vector2.UnitY * 5f;
             }
@@ -147,17 +143,13 @@ namespace DungeonPlanet.Library
 
         public void GotDammageWithSlim()
         {
-            if (GetDistanceTo(PlayerLib.Position).X > 0.1)
+            if (GetDistanceTo(PlayerLib.Position).X < 0.1)
             {
-                Movement -= Vector2.UnitX * 50f;
-                this.Movement += Vector2.UnitX * 5f;
-                this.Movement += Vector2.UnitY * 5f;
+                Movement += Vector2.UnitX * 5f;
             }
             if (GetDistanceTo(PlayerLib.Position).X > 0.1)
             {
-                Movement += Vector2.UnitX * 50f;
-                this.Movement -= Vector2.UnitX * 5f;
-                this.Movement += Vector2.UnitY * 5f;
+                Movement -= Vector2.UnitX * 5f;
             }
         }
 

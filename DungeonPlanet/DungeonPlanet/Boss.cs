@@ -28,7 +28,7 @@ namespace DungeonPlanet
         public Boss(Texture2D textureBullet, Texture2D textureFireWave, Texture2D textureBoss, Vector2 position, SpriteBatch spritebatch, Texture2D fireBossTexture)
             : base(textureBoss, position, spritebatch)
         {
-            BossLib = new BossLib(new System.Numerics.Vector2(position.X, position.Y), 257, 100, 200);
+            BossLib = new BossLib(new System.Numerics.Vector2(position.X, position.Y), 257, 100, 1000);
             _player = Player.CurrentPlayer;
             _animation = new Animation();
             _animation.Initialize(textureBoss, new Vector2(position.X - 75, position.Y - 10), 257, 100, 1, 0, 4, 75, Color.White, 2, true, false);
@@ -81,7 +81,7 @@ namespace DungeonPlanet
             position = new Vector2(BossLib.Position.X, BossLib.Position.Y);
             BossLib.Life = MathHelper.Clamp(BossLib.Life, 0, 200);
 
-            if (BossLib != null && Fire != null) Fire.position = new Vector2(BossLib.Position.X, BossLib.Position.Y);
+            if (BossLib != null && Fire != null) Fire.position = new Vector2(BossLib.Position.X, BossLib.Position.Y-30);
         }
 
         private void BulletUpdate(GameTime gameTime)

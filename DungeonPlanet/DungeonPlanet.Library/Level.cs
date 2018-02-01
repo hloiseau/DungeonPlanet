@@ -23,6 +23,8 @@ namespace DungeonPlanet.Library
         public static State ActualState { get; set; }
         public static LevelID ID { get; set; }
         public Hub Hub { get; private set; }
+
+
         public enum State
         {
             Menu,
@@ -155,11 +157,14 @@ namespace DungeonPlanet.Library
             {
                 foreach (Case Case in Cases)
                 {
-                    foreach (var tile in Case.Tiles)
+                    if (rectangleToCheck.IntersectsWith(Case.Border))
                     {
-                        if (tile.IsBlocked && tile.Bounds.IntersectsWith(rectangleToCheck))
+                        foreach (var tile in Case.Tiles)
                         {
-                            return false;
+                            if (tile.IsBlocked && tile.Bounds.IntersectsWith(rectangleToCheck))
+                            {
+                                return false;
+                            }
                         }
                     }
                 }

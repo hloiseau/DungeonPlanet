@@ -51,7 +51,6 @@ namespace DungeonPlanet
                 {
                     if (tile.IsBlocked)
                     {
-
                         TilesLook tileLook = new TilesLook(TileTexture, tile.Position.X, tile.Position.Y, tile.Type, Color.White);
                         _tilesLookList.Add(tileLook);
                     }
@@ -84,7 +83,7 @@ namespace DungeonPlanet
              (int)(_ctx._camera.GetBounds().Height));
                 foreach (var t in _tilesLookList)
                 {
-                    if(_rectange.Intersects(t.DestinationRectangle))
+                    if(_rectange.Intersects(t.DestinationRectangle) || _ctx.DebugZoom)
                     t.Draw(SpriteBatch);
                 }
             }

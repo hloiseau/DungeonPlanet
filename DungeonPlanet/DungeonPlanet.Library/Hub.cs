@@ -44,12 +44,34 @@ namespace DungeonPlanet.Library
 
         public void SetAllBorderTilesBlocked()
         {
-            for (int x = 0; x < _columns; x++)
+            if (Level.ActualState == Level.State.Hub)
             {
-                for (int y = 0; y < _rows; y++)
+                for (int x = 0; x < _columns; x++)
                 {
-                    if (x == 0 || x == _columns - 1 || y == 0 || y == _rows - 1)
-                    { Tiles[x, y].IsBlocked = true; }
+                    for (int y = 0; y < _rows; y++)
+                    {
+                        if (x == 0 || x == _columns - 1 || y == 0 || y == _rows - 1)
+                        {
+                            Tiles[x, y].IsBlocked = true;
+                            Tiles[x, y].Type = Tile.TypeSet.Invisible;
+                        }
+                    }
+
+                    Tiles[x, 9].Type = Tile.TypeSet.Wall;
+                }
+            }
+            else
+            {
+                for (int x = 0; x < _columns; x++)
+                {
+                    for (int y = 0; y < _rows; y++)
+                    {
+                        if (x == 0 || x == _columns - 1 || y == 0 || y == _rows - 1)
+                        {
+                            Tiles[x, y].IsBlocked = true;
+                            Tiles[x, y].Type = Tile.TypeSet.Platform;
+                        }
+                    }
                 }
             }
         }

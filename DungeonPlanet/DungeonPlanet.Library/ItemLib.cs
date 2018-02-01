@@ -79,6 +79,7 @@ namespace DungeonPlanet.Library
         {
             Rectangle onePixelLower = Bounds;
             onePixelLower.Offset(0, 1);
+
             return !Level.CurrentBoard.HasRoomForRectangle(onePixelLower);
         }
         public void StopMovingIfBlocked()
