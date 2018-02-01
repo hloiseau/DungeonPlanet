@@ -102,7 +102,7 @@ namespace DungeonPlanet
         {
             foreach (var enemy in _enemys)
             {
-                if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(enemy.EnemyLib.Bounds))
+                if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, 18, 13).IntersectsWith(enemy.EnemyLib.Bounds))
                 {
                     if (_animationBullet != null)
                     {
@@ -136,13 +136,13 @@ namespace DungeonPlanet
         {
             foreach (Boss boss in _bosses)
             {
-                if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(boss.BossLib.Bounds))
+                if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, 18, 13).IntersectsWith(boss.BossLib.Bounds))
                 {
-
                     if (_animationBullet != null)
                     {
                         boss.BossLib.Life -= 40;
                     }
+
                     if (PlayerInfo.ActualBullet == PlayerInfo.BulletState.None)
                     {
                         boss.BossLib.Life -= 10;
@@ -237,7 +237,7 @@ namespace DungeonPlanet
                     {
                         if (tile.IsBlocked)
                         {
-                            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, Texture.Width, Texture.Height).IntersectsWith(tile.Bounds))
+                            if (new System.Drawing.Rectangle((int)position.X, (int)position.Y, 18, 13).IntersectsWith(tile.Bounds))
                             {
                                 return true;
                             }
